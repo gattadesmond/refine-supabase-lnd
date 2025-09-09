@@ -43,6 +43,12 @@ import {
   MembersEdit,
   MembersShow,
 } from "./pages/members";
+import {
+  TestList,
+  TestCreate,
+  TestEdit,
+  TestShow,
+} from "./pages/test";
 import { AppIcon } from "./components/app-icon";
 import { supabaseClient } from "./utility";
 import { ColorModeContextProvider } from "./contexts/color-mode";
@@ -71,7 +77,7 @@ function App() {
                   show: "/blog-posts/show/:id",
                   meta: {
                     canDelete: true,
-                    label: "Youtube Category 123"
+                    label: "Blog posts"
                   },
                 }, {
                   name: "categories",
@@ -88,6 +94,12 @@ function App() {
                   create: "/members/create",
                   edit: "/members/edit/:id",
                   show: "/members/show/:id"
+                }, {
+                  name: "test",
+                  list: "/test",
+                  create: "/test/create",
+                  edit: "/test/edit/:id",
+                  show: "/test/show/:id"
                 }]}
                 options={{
                   syncWithLocation: true,
@@ -133,6 +145,12 @@ function App() {
                       <Route path="create" element={<MembersCreate />} />
                       <Route path="edit/:id" element={<MembersEdit />} />
                       <Route path="show/:id" element={<MembersShow />} />
+                    </Route>
+                    <Route path="/test">
+                      <Route index element={<TestList />} />
+                      {/* <Route path="create" element={<TestCreate />} />
+                      <Route path="edit/:id" element={<TestEdit />} />
+                      <Route path="show/:id" element={<TestShow />} /> */}
                     </Route>
                     <Route path="*" element={<ErrorComponent />} />
                   </Route>

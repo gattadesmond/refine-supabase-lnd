@@ -25,12 +25,7 @@ import routerProvider, {
   UnsavedChangesNotifier,
   DocumentTitleHandler,
 } from "@refinedev/react-router";
-import {
-  BlogPostList,
-  BlogPostCreate,
-  BlogPostEdit,
-  BlogPostShow,
-} from "./pages/blog-posts";
+
 import {
   CategoryList,
   CategoryCreate,
@@ -43,12 +38,7 @@ import {
   MembersEdit,
   MembersShow,
 } from "./pages/members";
-import {
-  TestList,
-  TestCreate,
-  TestEdit,
-  TestShow,
-} from "./pages/test";
+
 import { AppIcon } from "./components/app-icon";
 import { supabaseClient } from "./utility";
 import { ColorModeContextProvider } from "./contexts/color-mode";
@@ -58,7 +48,7 @@ import authProvider from "./authProvider";
 function App() {
   return (
     <BrowserRouter>
-      <GitHubBanner />
+      {/* <GitHubBanner /> */}
       <RefineKbarProvider>
         <ColorModeContextProvider>
           <AntdApp>
@@ -70,16 +60,6 @@ function App() {
                 routerProvider={routerProvider}
                 notificationProvider={useNotificationProvider}
                 resources={[{
-                  name: "blog posts",
-                  list: "/blog-posts",
-                  create: "/blog-posts/create",
-                  edit: "/blog-posts/edit/:id",
-                  show: "/blog-posts/show/:id",
-                  meta: {
-                    canDelete: true,
-                    label: "Blog posts"
-                  },
-                }, {
                   name: "categories",
                   list: "/categories",
                   create: "/categories/create",
@@ -94,12 +74,6 @@ function App() {
                   create: "/members/create",
                   edit: "/members/edit/:id",
                   show: "/members/show/:id"
-                }, {
-                  name: "test",
-                  list: "/test",
-                  create: "/test/create",
-                  edit: "/test/edit/:id",
-                  show: "/test/show/:id"
                 }]}
                 options={{
                   syncWithLocation: true,
@@ -128,12 +102,7 @@ function App() {
                       index
                       element={<NavigateToResource resource="blog_posts" />}
                     />
-                    <Route path="/blog-posts">
-                      <Route index element={<BlogPostList />} />
-                      <Route path="create" element={<BlogPostCreate />} />
-                      <Route path="edit/:id" element={<BlogPostEdit />} />
-                      <Route path="show/:id" element={<BlogPostShow />} />
-                    </Route>
+
                     <Route path="/categories">
                       <Route index element={<CategoryList />} />
                       <Route path="create" element={<CategoryCreate />} />
@@ -146,12 +115,7 @@ function App() {
                       <Route path="edit/:id" element={<MembersEdit />} />
                       <Route path="show/:id" element={<MembersShow />} />
                     </Route>
-                    <Route path="/test">
-                      <Route index element={<TestList />} />
-                      {/* <Route path="create" element={<TestCreate />} />
-                      <Route path="edit/:id" element={<TestEdit />} />
-                      <Route path="show/:id" element={<TestShow />} /> */}
-                    </Route>
+
                     <Route path="*" element={<ErrorComponent />} />
                   </Route>
                   <Route

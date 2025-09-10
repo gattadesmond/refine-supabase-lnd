@@ -27,17 +27,36 @@ import routerProvider, {
 } from "@refinedev/react-router";
 
 import {
-  CategoryList,
-  CategoryCreate,
-  CategoryEdit,
-  CategoryShow,
-} from "./pages/categories";
-import {
   MembersList,
   MembersCreate,
   MembersEdit,
   MembersShow,
 } from "./pages/members";
+import {
+  CategoriesList,
+  CategoriesCreate,
+  CategoriesEdit,
+  CategoriesShow,
+} from "./pages/categories";
+
+import {
+  EventsList,
+  EventsCreate,
+  EventsEdit,
+  EventsShow,
+} from "./pages/events";
+import {
+  LearningMaterialsList,
+  LearningMaterialsCreate,
+  LearningMaterialsEdit,
+  LearningMaterialsShow,
+} from "./pages/learning_materials";
+import {
+  StoriesList,
+  StoriesCreate,
+  StoriesEdit,
+  StoriesShow,
+} from "./pages/stories";
 
 import { AppIcon } from "./components/app-icon";
 import { supabaseClient } from "./utility";
@@ -74,7 +93,27 @@ function App() {
                   create: "/members/create",
                   edit: "/members/edit/:id",
                   show: "/members/show/:id"
-                }]}
+                }, {
+                  name: "events",
+                  list: "/events",
+                  create: "/events/create",
+                  edit: "/events/edit/:id",
+                  show: "/events/show/:id"
+                }, {
+                  name: "learning_materials",
+                  list: "/learning_materials",
+                  create: "/learning_materials/create",
+                  edit: "/learning_materials/edit/:id",
+                  show: "/learning_materials/show/:id"
+                },
+                {
+                  name: "stories",
+                  list: "/stories",
+                  create: "/stories/create",
+                  edit: "/stories/edit/:id",
+                  show: "/stories/show/:id"
+                }
+              ]}
                 options={{
                   syncWithLocation: true,
                   warnWhenUnsavedChanges: true,
@@ -103,17 +142,35 @@ function App() {
                       element={<NavigateToResource resource="blog_posts" />}
                     />
 
-                    <Route path="/categories">
-                      <Route index element={<CategoryList />} />
-                      <Route path="create" element={<CategoryCreate />} />
-                      <Route path="edit/:id" element={<CategoryEdit />} />
-                      <Route path="show/:id" element={<CategoryShow />} />
-                    </Route>
                     <Route path="/members">
                       <Route index element={<MembersList />} />
                       <Route path="create" element={<MembersCreate />} />
                       <Route path="edit/:id" element={<MembersEdit />} />
                       <Route path="show/:id" element={<MembersShow />} />
+                    </Route>
+                    <Route path="/categories"> 
+                      <Route index element={<CategoriesList />} />
+                      <Route path="create" element={<CategoriesCreate />} />
+                      <Route path="edit/:id" element={<CategoriesEdit />} />
+                      <Route path="show/:id" element={<CategoriesShow />} />
+                    </Route>
+                    <Route path="/events">
+                      <Route index element={<EventsList />} />
+                      <Route path="create" element={<EventsCreate />} />
+                      <Route path="edit/:id" element={<EventsEdit />} />
+                      <Route path="show/:id" element={<EventsShow />} />
+                    </Route>
+                    <Route path="/learning_materials">
+                      <Route index element={<LearningMaterialsList />} />
+                      <Route path="create" element={<LearningMaterialsCreate />} />
+                      <Route path="edit/:id" element={<LearningMaterialsEdit />} />
+                      <Route path="show/:id" element={<LearningMaterialsShow />} />
+                    </Route>
+                    <Route path="/stories">
+                      <Route index element={<StoriesList />} />
+                      <Route path="create" element={<StoriesCreate />} />
+                      <Route path="edit/:id" element={<StoriesEdit />} />
+                      <Route path="show/:id" element={<StoriesShow />} />
                     </Route>
 
                     <Route path="*" element={<ErrorComponent />} />

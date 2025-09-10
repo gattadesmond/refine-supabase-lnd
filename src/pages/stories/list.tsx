@@ -61,13 +61,9 @@ export const StoriesList = () => {
 
                     render={(value: string) => {
                         return (
-                            <Typography.Text
-                                style={{
-                                    whiteSpace: "nowrap",
-                                }}
-                            >
+                            <div className="max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap">
                                 {value}
-                            </Typography.Text>
+                            </div>
                         );
                     }}
                 />
@@ -83,7 +79,9 @@ export const StoriesList = () => {
                     render={(value: string) => <DateField value={value} />}
                 />
 
-                {/* <Table.Column dataIndex="description" title="Description" /> */}
+                <Table.Column dataIndex="description" title="Description" render={(value: string) => <div className="max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap">
+                    {value}
+                </div>} />
                 <Table.Column dataIndex="status" title="Status" />
                 <Table.Column
                     dataIndex={["featured"]}

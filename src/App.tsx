@@ -114,7 +114,7 @@ function App() {
                   edit: "/stories/edit/:id",
                   show: "/stories/show/:id"
                 }
-              ]}
+                ]}
                 options={{
                   syncWithLocation: true,
                   warnWhenUnsavedChanges: true,
@@ -133,7 +133,15 @@ function App() {
                           Header={Header}
                           Sider={(props) => <ThemedSider {...props} fixed />}
                         >
-                          <Outlet />
+                          <div
+                            style={{
+                              maxWidth: "1200px",
+                              marginLeft: "auto",
+                              marginRight: "auto",
+                            }}
+                          >
+                            <Outlet />
+                          </div>
                         </ThemedLayout>
                       </Authenticated>
                     }
@@ -149,7 +157,7 @@ function App() {
                       <Route path="edit/:id" element={<MembersEdit />} />
                       <Route path="show/:id" element={<MembersShow />} />
                     </Route>
-                    <Route path="/categories"> 
+                    <Route path="/categories">
                       <Route index element={<CategoriesList />} />
                       <Route path="create" element={<CategoriesCreate />} />
                       <Route path="edit/:id" element={<CategoriesEdit />} />

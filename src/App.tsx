@@ -15,6 +15,7 @@ import {
   ThemedSider,
 } from "@refinedev/antd";
 import "@refinedev/antd/dist/reset.css";
+import "./index.css";
 
 import { dataProvider, liveProvider } from "@refinedev/supabase";
 import { App as AntdApp } from "antd";

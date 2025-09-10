@@ -1,0 +1,105 @@
+# Refine + Ant Design + Tailwind CSS Project Rules
+
+## Project Overview
+This is a Refine-based project using:
+- **Refine** as the main framework
+- **Ant Design** for UI components
+- **Tailwind CSS** with `tw-` prefix for layout and styling
+- **Supabase** as backend
+- **TypeScript** for type safety
+
+## Development Rules
+
+### 1. Refine Framework
+- **ALWAYS** reference Refine documentation when implementing features
+- Use Refine's built-in hooks and components whenever possible
+- Follow Refine's patterns for:
+  - Data providers
+  - Auth providers
+  - Resource definitions
+  - Routing
+  - CRUD operations
+
+### 2. UI Components
+- **PRIMARY**: Use Ant Design components for all UI elements
+- Available Ant Design components:
+  - Form components (Form, Input, Select, DatePicker, etc.)
+  - Layout components (Layout, Row, Col, Card, etc.)
+  - Data display (Table, List, Descriptions, etc.)
+  - Feedback (Modal, Message, Notification, etc.)
+  - Navigation (Menu, Breadcrumb, Pagination, etc.)
+  - Other (Button, Icon, Avatar, Badge, etc.)
+
+### 3. Styling and Layout
+- **USE Tailwind CSS with `tw-` prefix** for:
+  - Layout and spacing (padding, margin, width, height)
+  - Grid and flexbox layouts
+  - Colors and backgrounds
+  - Typography (font sizes, weights, colors)
+  - Borders and shadows
+  - Responsive design
+- **DO NOT** use Tailwind for component styling - use Ant Design components instead
+- **DO NOT** use regular CSS classes without `tw-` prefix
+
+### 4. Code Structure
+- Follow Refine's page structure:
+  - `list.tsx` - List view with table
+  - `create.tsx` - Create form
+  - `edit.tsx` - Edit form
+  - `show.tsx` - Detail view
+- Use TypeScript interfaces for data types
+- Implement proper error handling with Refine's error components
+
+### 5. Examples
+
+#### ✅ Correct Usage:
+```tsx
+import { List, useTable, CreateButton } from "@refinedev/antd";
+import { Table, Card, Row, Col } from "antd";
+
+export const MyList = () => {
+  const { tableProps } = useTable();
+  
+  return (
+    <div className="tw-p-4">
+      <Card className="tw-shadow-lg">
+        <div className="tw-flex tw-justify-between tw-items-center tw-mb-4">
+          <h2 className="tw-text-2xl tw-font-bold tw-text-gray-800">
+            My Resources
+          </h2>
+          <CreateButton />
+        </div>
+        <Table {...tableProps} />
+      </Card>
+    </div>
+  );
+};
+```
+
+#### ❌ Incorrect Usage:
+```tsx
+// Don't use regular CSS classes
+<div className="p-4 bg-blue-500">
+
+// Don't create custom UI components when Ant Design has them
+<button>Click me</button> // Use <Button> from antd instead
+
+// Don't use Tailwind for component styling
+<Table className="tw-bg-white tw-border" /> // Use Ant Design's Table props
+```
+
+### 6. File Organization
+- Keep Refine pages in their respective folders
+- Use Ant Design's theme customization if needed
+- Import Tailwind classes only for layout and spacing
+- Always use `tw-` prefix for Tailwind classes
+
+### 7. Documentation References
+- Refine: https://refine.dev/docs/
+- Ant Design: https://ant.design/components/overview
+- Tailwind CSS: https://tailwindcss.com/docs
+
+## Quick Reference Commands
+- `yarn dev` - Start development server
+- `yarn build` - Build for production
+- `yarn refine` - Run Refine CLI commands

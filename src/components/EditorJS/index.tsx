@@ -5,6 +5,10 @@ import List from '@editorjs/list';
 import Paragraph from '@editorjs/paragraph';
 import Quote from '@editorjs/quote';
 import Code from '@editorjs/code';
+import Embed from '@editorjs/embed';
+import Raw from '@editorjs/raw';
+import Table from '@editorjs/table';
+import SimpleImage from '@editorjs/simple-image';
 
 interface EditorJSProps {
     data?: OutputData;
@@ -50,7 +54,11 @@ const EditorJSComponent = forwardRef<EditorJSRef, EditorJSProps>(
                             list: List,
                             paragraph: Paragraph,
                             quote: Quote,
-                            code: Code
+                            code: Code,
+                            embed: Embed,
+                            raw: Raw,
+                            table: Table,
+                            image: SimpleImage
                         },
                         onChange: handleChange
                     });
@@ -95,7 +103,11 @@ const EditorJSComponent = forwardRef<EditorJSRef, EditorJSProps>(
                         list: List,
                         paragraph: Paragraph,
                         quote: Quote,
-                        code: Code
+                        code: Code,
+                        embed: Embed,
+                        raw: Raw,
+                        table: Table,
+                        image: SimpleImage
                     },
                     onChange: handleChangeRef.current
                 });

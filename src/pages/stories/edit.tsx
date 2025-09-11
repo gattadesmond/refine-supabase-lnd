@@ -4,7 +4,9 @@ import { Form, Input, Checkbox } from "antd";
 import EditorJSForm from "../../components/EditorJS/EditorJSForm";
 
 export const StoriesEdit = () => {
-    const { formProps, saveButtonProps } = useForm();
+    const { formProps, saveButtonProps } = useForm({
+        redirect: false, // Không redirect sau khi save
+    });
 
     return (
         <Edit saveButtonProps={saveButtonProps}>

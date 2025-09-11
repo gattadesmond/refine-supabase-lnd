@@ -298,7 +298,7 @@ const EditorJSComponent = forwardRef<EditorJSRef, EditorJSProps>(
         return (
             <div
                 ref={holderRef}
-                className="tw:border tw:border-gray-300 tw:rounded-lg tw:p-4 tw:min-h-[400px] tw:bg-white tw:shadow-sm tw:text-lg"
+                className="tw:border tw:border-gray-300 tw:rounded-lg tw:p-4 tw:min-h-[400px] tw:bg-white tw:prose-sm tw:text-base"
                 style={{
                     backgroundColor: readOnly ? '#f8f9fa' : 'white',
                     cursor: readOnly ? 'default' : 'text'

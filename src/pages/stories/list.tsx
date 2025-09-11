@@ -4,10 +4,8 @@ import {
     useTable,
     List,
     EditButton,
-    ShowButton,
     DateField,
     BooleanField,
-    MarkdownField,
     FilterDropdown,
 } from "@refinedev/antd";
 
@@ -102,11 +100,11 @@ export const StoriesList = () => {
                                 size="small"
                                 recordItemId={record.id}
                             />
-                            <ShowButton
+                            {/* <ShowButton
                                 hideText
                                 size="small"
                                 recordItemId={record.id}
-                            />
+                            /> */}
                         </Space>
                     )}
                 />

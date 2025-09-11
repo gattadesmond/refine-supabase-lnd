@@ -56,7 +56,6 @@ import {
   StoriesList,
   StoriesCreate,
   StoriesEdit,
-  StoriesShow,
 } from "./pages/stories";
 
 import { AppIcon } from "./components/app-icon";
@@ -112,7 +111,6 @@ function App() {
                   list: "/stories",
                   create: "/stories/create",
                   edit: "/stories/edit/:id",
-                  show: "/stories/show/:id"
                 }
                 ]}
                 options={{
@@ -179,7 +177,6 @@ function App() {
                       <Route index element={<StoriesList />} />
                       <Route path="create" element={<StoriesCreate />} />
                       <Route path="edit/:id" element={<StoriesEdit />} />
-                      <Route path="show/:id" element={<StoriesShow />} />
                     </Route>
 
                     <Route path="*" element={<ErrorComponent />} />

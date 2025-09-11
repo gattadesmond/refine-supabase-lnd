@@ -1,12 +1,10 @@
 import React from "react";
 import { Edit, useForm } from "@refinedev/antd";
-import { Form, Input, DatePicker, Checkbox } from "antd";
-import dayjs from "dayjs";
+import { Form, Input, Checkbox } from "antd";
+import EditorJSForm from "../../components/EditorJS/EditorJSForm";
 
 export const StoriesEdit = () => {
-    const { formProps, saveButtonProps, query } = useForm();
-
-    const storiesData = query?.data?.data;
+    const { formProps, saveButtonProps } = useForm();
 
     return (
         <Edit saveButtonProps={saveButtonProps}>
@@ -39,7 +37,7 @@ export const StoriesEdit = () => {
                     name={["description"]}
                     rules={[
                         {
-                            required: true,
+                            required: false,
                         },
                     ]}
                 >
@@ -50,7 +48,7 @@ export const StoriesEdit = () => {
                     name={["status"]}
                     rules={[
                         {
-                            required: true,
+                            required: false,
                         },
                     ]}
                 >
@@ -62,7 +60,7 @@ export const StoriesEdit = () => {
                     name={["featured"]}
                     rules={[
                         {
-                            required: true,
+                            required: false,
                         },
                     ]}
                 >
@@ -74,18 +72,18 @@ export const StoriesEdit = () => {
                     name={["content"]}
                     rules={[
                         {
-                            required: true,
+                            required: false,
                         },
                     ]}
                 >
-                    <Input />
+                    <EditorJSForm placeholder="Nhập nội dung bài viết..." />
                 </Form.Item>
                 <Form.Item
                     label="View Count"
                     name={["view_count"]}
                     rules={[
                         {
-                            required: true,
+                            required: false,
                         },
                     ]}
                 >

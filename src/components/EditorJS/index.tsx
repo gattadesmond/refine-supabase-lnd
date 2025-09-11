@@ -123,9 +123,9 @@ const EditorJSComponent = forwardRef<EditorJSRef, EditorJSProps>(
                                     cols: 3
                                 }
                             },
-                         
+
                             simpleImage: SimpleImage as EditorJSTool,
-                            
+
                             // Inline tools
                             inlineCode: {
                                 class: InlineCode as EditorJSTool,
@@ -175,7 +175,7 @@ const EditorJSComponent = forwardRef<EditorJSRef, EditorJSProps>(
         const placeholderRef = useRef(placeholder);
         const readOnlyRef = useRef(readOnly);
         const handleChangeRef = useRef(handleChange);
-        
+
         dataRef.current = data;
         placeholderRef.current = placeholder;
         readOnlyRef.current = readOnly;
@@ -250,9 +250,9 @@ const EditorJSComponent = forwardRef<EditorJSRef, EditorJSProps>(
                                 cols: 3
                             }
                         },
-                       
+
                         simpleImage: SimpleImage as EditorJSTool,
-                        
+
                         // Inline tools
                         inlineCode: {
                             class: InlineCode as EditorJSTool,
@@ -296,10 +296,10 @@ const EditorJSComponent = forwardRef<EditorJSRef, EditorJSProps>(
         // EditorJS sẽ handle data internally, không cần re-render khi user edit
 
         return (
-            <div 
-                ref={holderRef} 
-                className="tw-border tw-border-gray-300 tw-rounded-lg tw-p-4 tw-min-h-[400px] tw-bg-white tw-shadow-sm"
-                style={{ 
+            <div
+                ref={holderRef}
+                className="tw:border tw:border-gray-300 tw:rounded-lg tw:p-4 tw:min-h-[400px] tw:bg-white tw:shadow-sm tw:text-lg"
+                style={{
                     backgroundColor: readOnly ? '#f8f9fa' : 'white',
                     cursor: readOnly ? 'default' : 'text'
                 }}

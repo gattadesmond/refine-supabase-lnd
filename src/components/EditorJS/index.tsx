@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, forwardRef, useImperativeHandle, useCallback } from 'react';
 import EditorJS, { OutputData } from '@editorjs/editorjs';
 import Header from '@editorjs/header';
-import List from '@editorjs/list';
 import Paragraph from '@editorjs/paragraph';
 import Quote from '@editorjs/quote';
 import Code from '@editorjs/code';
@@ -10,12 +9,28 @@ import Raw from '@editorjs/raw';
 import Table from '@editorjs/table';
 import SimpleImage from '@editorjs/simple-image';
 
+// Inline plugins
+import InlineCode from '@editorjs/inline-code';
+// @ts-expect-error - No type definitions available
+import Marker from '@editorjs/marker';
+import Underline from '@editorjs/underline';
+import Delimiter from '@editorjs/delimiter';
+import Warning from '@editorjs/warning';
+// @ts-expect-error - No type definitions available
+import Checklist from '@editorjs/checklist';
+import NestedList from '@editorjs/nested-list';
+
+
 interface EditorJSProps {
     data?: OutputData;
     onChange?: (data: OutputData) => void;
     placeholder?: string;
     readOnly?: boolean;
 }
+
+// Type for EditorJS tools to avoid using 'any'
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type EditorJSTool = any;
 
 export interface EditorJSRef {
     save: () => Promise<OutputData>;
@@ -50,15 +65,93 @@ const EditorJSComponent = forwardRef<EditorJSRef, EditorJSProps>(
                         readOnly,
                         data: newData,
                         tools: {
-                            header: Header,
-                            list: List,
-                            paragraph: Paragraph,
-                            quote: Quote,
-                            code: Code,
-                            embed: Embed,
-                            raw: Raw,
-                            table: Table,
-                            image: SimpleImage
+                            // Block tools
+                            header: {
+                                class: Header as EditorJSTool,
+                                config: {
+                                    placeholder: 'Nhập tiêu đề...',
+                                    levels: [1, 2, 3, 4, 5, 6],
+                                    defaultLevel: 2
+                                }
+                            },
+                            list: {
+                                class: NestedList as EditorJSTool,
+                                inlineToolbar: true,
+                                config: {
+                                    defaultStyle: 'unordered'
+                                }
+                            },
+                            paragraph: {
+                                class: Paragraph as EditorJSTool,
+                                inlineToolbar: true,
+                                config: {
+                                    placeholder: 'Nhập nội dung...'
+                                }
+                            },
+                            quote: {
+                                class: Quote as EditorJSTool,
+                                inlineToolbar: true,
+                                config: {
+                                    quotePlaceholder: 'Nhập trích dẫn...',
+                                    captionPlaceholder: 'Tác giả...'
+                                }
+                            },
+                            code: {
+                                class: Code as EditorJSTool,
+                                config: {
+                                    placeholder: 'Nhập code...'
+                                }
+                            },
+                            embed: {
+                                class: Embed as EditorJSTool,
+                                config: {
+                                    services: {
+                                        youtube: true,
+                                        codepen: true,
+                                        instagram: true,
+                                        twitter: true,
+                                        vimeo: true
+                                    }
+                                }
+                            },
+                            raw: Raw as EditorJSTool,
+                            table: {
+                                class: Table as EditorJSTool,
+                                inlineToolbar: true,
+                                config: {
+                                    rows: 2,
+                                    cols: 3
+                                }
+                            },
+                         
+                            simpleImage: SimpleImage as EditorJSTool,
+                            
+                            // Inline tools
+                            inlineCode: {
+                                class: InlineCode as EditorJSTool,
+                                shortcut: 'CMD+SHIFT+M'
+                            },
+                            marker: {
+                                class: Marker as EditorJSTool,
+                                shortcut: 'CMD+SHIFT+H'
+                            },
+                            underline: {
+                                class: Underline as EditorJSTool,
+                                shortcut: 'CMD+U'
+                            },
+                            delimiter: Delimiter as EditorJSTool,
+                            warning: {
+                                class: Warning as EditorJSTool,
+                                inlineToolbar: true,
+                                config: {
+                                    titlePlaceholder: 'Tiêu đề cảnh báo',
+                                    messagePlaceholder: 'Nội dung cảnh báo'
+                                }
+                            },
+                            checklist: {
+                                class: Checklist as EditorJSTool,
+                                inlineToolbar: true
+                            },
                         },
                         onChange: handleChange
                     });
@@ -99,15 +192,93 @@ const EditorJSComponent = forwardRef<EditorJSRef, EditorJSProps>(
                     readOnly: readOnlyRef.current,
                     data: dataRef.current || { blocks: [] },
                     tools: {
-                        header: Header,
-                        list: List,
-                        paragraph: Paragraph,
-                        quote: Quote,
-                        code: Code,
-                        embed: Embed,
-                        raw: Raw,
-                        table: Table,
-                        image: SimpleImage
+                        // Block tools
+                        header: {
+                            class: Header as EditorJSTool,
+                            config: {
+                                placeholder: 'Nhập tiêu đề...',
+                                levels: [1, 2, 3, 4, 5, 6],
+                                defaultLevel: 2
+                            }
+                        },
+                        list: {
+                            class: NestedList as EditorJSTool,
+                            inlineToolbar: true,
+                            config: {
+                                defaultStyle: 'unordered'
+                            }
+                        },
+                        paragraph: {
+                            class: Paragraph as EditorJSTool,
+                            inlineToolbar: true,
+                            config: {
+                                placeholder: 'Nhập nội dung...'
+                            }
+                        },
+                        quote: {
+                            class: Quote as EditorJSTool,
+                            inlineToolbar: true,
+                            config: {
+                                quotePlaceholder: 'Nhập trích dẫn...',
+                                captionPlaceholder: 'Tác giả...'
+                            }
+                        },
+                        code: {
+                            class: Code as EditorJSTool,
+                            config: {
+                                placeholder: 'Nhập code...'
+                            }
+                        },
+                        embed: {
+                            class: Embed as EditorJSTool,
+                            config: {
+                                services: {
+                                    youtube: true,
+                                    codepen: true,
+                                    instagram: true,
+                                    twitter: true,
+                                    vimeo: true
+                                }
+                            }
+                        },
+                        raw: Raw as EditorJSTool,
+                        table: {
+                            class: Table as EditorJSTool,
+                            inlineToolbar: true,
+                            config: {
+                                rows: 2,
+                                cols: 3
+                            }
+                        },
+                       
+                        simpleImage: SimpleImage as EditorJSTool,
+                        
+                        // Inline tools
+                        inlineCode: {
+                            class: InlineCode as EditorJSTool,
+                            shortcut: 'CMD+SHIFT+M'
+                        },
+                        marker: {
+                            class: Marker as EditorJSTool,
+                            shortcut: 'CMD+SHIFT+H'
+                        },
+                        underline: {
+                            class: Underline as EditorJSTool,
+                            shortcut: 'CMD+U'
+                        },
+                        delimiter: Delimiter as EditorJSTool,
+                        warning: {
+                            class: Warning as EditorJSTool,
+                            inlineToolbar: true,
+                            config: {
+                                titlePlaceholder: 'Tiêu đề cảnh báo',
+                                messagePlaceholder: 'Nội dung cảnh báo'
+                            }
+                        },
+                        checklist: {
+                            class: Checklist as EditorJSTool,
+                            inlineToolbar: true
+                        },
                     },
                     onChange: handleChangeRef.current
                 });
@@ -127,9 +298,9 @@ const EditorJSComponent = forwardRef<EditorJSRef, EditorJSProps>(
         return (
             <div 
                 ref={holderRef} 
-                className="tw-border tw-border-gray-300 tw-rounded tw-p-4 tw-min-h-[300px]"
+                className="tw-border tw-border-gray-300 tw-rounded-lg tw-p-4 tw-min-h-[400px] tw-bg-white tw-shadow-sm"
                 style={{ 
-                    backgroundColor: readOnly ? '#f5f5f5' : 'white',
+                    backgroundColor: readOnly ? '#f8f9fa' : 'white',
                     cursor: readOnly ? 'default' : 'text'
                 }}
             />

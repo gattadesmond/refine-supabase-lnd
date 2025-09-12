@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { DateField, Edit, useForm, SaveButton, DeleteButton, NumberField } from "@refinedev/antd";
+import { DateField, Edit, useForm, SaveButton, DeleteButton, NumberField, useSelect } from "@refinedev/antd";
 import { Form, Input, Switch } from "antd";
 import EditorJSForm from "../../components/EditorJS/EditorJSForm";
 import { Select } from "antd/lib";
@@ -10,6 +10,14 @@ export const StoriesEdit = () => {
     const { formProps, saveButtonProps, form, query: queryResult } = useForm({
         redirect: false, // Không redirect sau khi save
     });
+
+    // Get categories data using useSelect hook
+    const { selectProps: categorySelectProps } = useSelect({
+        resource: "categories",
+        optionLabel: "title", // Field name to display in options
+        optionValue: "id",   // Field name to use as value
+    });
+
 
     // Watch title changes and auto-generate slug using slugify
     const title = Form.useWatch('title', form);
@@ -86,10 +94,6 @@ export const StoriesEdit = () => {
                         </Form.Item>
 
 
-
-
-
-
                         <Form.Item
                             label="Content"
                             name={["content"]}
@@ -145,10 +149,12 @@ export const StoriesEdit = () => {
                                     },
                                 ]}
                             >
-                                <Select>
-                                    <Select.Option value="1">Chuyên mục 1</Select.Option>
-                                    <Select.Option value="2">Chuyên mục 2</Select.Option>
-                                </Select>
+                                <Select 
+                                    {...categorySelectProps}
+                                    placeholder="Chọn chuyên mục"
+                                    allowClear
+                                    className="tw:w-full"
+                                />
                             </Form.Item>
 
                             <Form.Item

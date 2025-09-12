@@ -32,6 +32,97 @@ interface EditorJSProps {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type EditorJSTool = any;
 
+// EditorJS tools configuration - tách ra để tránh trùng lặp code
+const EDITOR_TOOLS = {
+    // Block tools
+    header: {
+        class: Header as EditorJSTool,
+        inlineToolbar: true,
+        config: {
+            placeholder: 'Nhập tiêu đề...',
+            levels: [1, 2, 3, 4, 5, 6],
+            defaultLevel: 2
+        }
+    },
+    list: {
+        class: NestedList as EditorJSTool,
+        inlineToolbar: true,
+        config: {
+            defaultStyle: 'unordered'
+        }
+    },
+    paragraph: {
+        class: Paragraph as EditorJSTool,
+        inlineToolbar: true,
+        config: {
+            placeholder: 'Nhập nội dung...'
+        }
+    },
+    quote: {
+        class: Quote as EditorJSTool,
+        inlineToolbar: true,
+        config: {
+            quotePlaceholder: 'Nhập trích dẫn...',
+            captionPlaceholder: 'Tác giả...'
+        }
+    },
+    code: {
+        class: Code as EditorJSTool,
+        config: {
+            placeholder: 'Nhập code...'
+        }
+    },
+    embed: {
+        class: Embed as EditorJSTool,
+        config: {
+            services: {
+                youtube: true,
+                codepen: true,
+                instagram: true,
+                twitter: true,
+                vimeo: true
+            }
+        }
+    },
+    raw: Raw as EditorJSTool,
+    table: {
+        class: Table as EditorJSTool,
+        inlineToolbar: true,
+        config: {
+            rows: 2,
+            cols: 3
+        }
+    },
+    simpleImage: SimpleImage as EditorJSTool,
+
+    // Inline tools
+    inlineCode: {
+        class: InlineCode as EditorJSTool,
+        shortcut: 'CMD+SHIFT+M'
+    },
+    marker: {
+        class: Marker as EditorJSTool,
+        shortcut: 'CMD+SHIFT+H'
+    },
+    underline: {
+        class: Underline as EditorJSTool,
+        shortcut: 'CMD+U'
+    },
+    delimiter: Delimiter as EditorJSTool,
+    warning: {
+        class: Warning as EditorJSTool,
+        inlineToolbar: true,
+        config: {
+            titlePlaceholder: 'Tiêu đề cảnh báo',
+            messagePlaceholder: 'Nội dung cảnh báo'
+        }
+    },
+    checklist: {
+        class: Checklist as EditorJSTool,
+        inlineToolbar: true
+    },
+};
+
 export interface EditorJSRef {
     save: () => Promise<OutputData>;
     clear: () => void;
@@ -64,96 +155,7 @@ const EditorJSComponent = forwardRef<EditorJSRef, EditorJSProps>(
                         placeholder,
                         readOnly,
                         data: newData,
-                        tools: {
-                            // Block tools
-                            header: {
-                                class: Header as EditorJSTool,
-                                inlineToolbar: true,
-                                config: {
-                                    placeholder: 'Nhập tiêu đề...',
-                                    levels: [1, 2, 3, 4, 5, 6],
-                                    defaultLevel: 2
-                                }
-                            },
-                            list: {
-                                class: NestedList as EditorJSTool,
-                                inlineToolbar: true,
-                                config: {
-                                    defaultStyle: 'unordered'
-                                }
-                            },
-                            paragraph: {
-                                class: Paragraph as EditorJSTool,
-                                inlineToolbar: true,
-                                config: {
-                                    placeholder: 'Nhập nội dung...'
-                                }
-                            },
-                            quote: {
-                                class: Quote as EditorJSTool,
-                                inlineToolbar: true,
-                                config: {
-                                    quotePlaceholder: 'Nhập trích dẫn...',
-                                    captionPlaceholder: 'Tác giả...'
-                                }
-                            },
-                            code: {
-                                class: Code as EditorJSTool,
-                                config: {
-                                    placeholder: 'Nhập code...'
-                                }
-                            },
-                            embed: {
-                                class: Embed as EditorJSTool,
-                                config: {
-                                    services: {
-                                        youtube: true,
-                                        codepen: true,
-                                        instagram: true,
-                                        twitter: true,
-                                        vimeo: true
-                                    }
-                                }
-                            },
-                            raw: Raw as EditorJSTool,
-                            table: {
-                                class: Table as EditorJSTool,
-                                inlineToolbar: true,
-                                config: {
-                                    rows: 2,
-                                    cols: 3
-                                }
-                            },
-
-                            simpleImage: SimpleImage as EditorJSTool,
-
-                            // Inline tools
-                            inlineCode: {
-                                class: InlineCode as EditorJSTool,
-                                shortcut: 'CMD+SHIFT+M'
-                            },
-                            marker: {
-                                class: Marker as EditorJSTool,
-                                shortcut: 'CMD+SHIFT+H'
-                            },
-                            underline: {
-                                class: Underline as EditorJSTool,
-                                shortcut: 'CMD+U'
-                            },
-                            delimiter: Delimiter as EditorJSTool,
-                            warning: {
-                                class: Warning as EditorJSTool,
-                                inlineToolbar: true,
-                                config: {
-                                    titlePlaceholder: 'Tiêu đề cảnh báo',
-                                    messagePlaceholder: 'Nội dung cảnh báo'
-                                }
-                            },
-                            checklist: {
-                                class: Checklist as EditorJSTool,
-                                inlineToolbar: true
-                            },
-                        },
+                        tools: EDITOR_TOOLS,
                         onChange: handleChange
                     });
                 }
@@ -192,96 +194,7 @@ const EditorJSComponent = forwardRef<EditorJSRef, EditorJSProps>(
                     placeholder: placeholderRef.current,
                     readOnly: readOnlyRef.current,
                     data: dataRef.current || { blocks: [] },
-                    tools: {
-                        // Block tools
-                        header: {
-                            class: Header as EditorJSTool,
-                            inlineToolbar: true,
-                            config: {
-                                placeholder: 'Nhập tiêu đề...',
-                                levels: [1, 2, 3, 4, 5, 6],
-                                defaultLevel: 2
-                            }
-                        },
-                        list: {
-                            class: NestedList as EditorJSTool,
-                            inlineToolbar: true,
-                            config: {
-                                defaultStyle: 'unordered'
-                            }
-                        },
-                        paragraph: {
-                            class: Paragraph as EditorJSTool,
-                            inlineToolbar: true,
-                            config: {
-                                placeholder: 'Nhập nội dung...'
-                            }
-                        },
-                        quote: {
-                            class: Quote as EditorJSTool,
-                            inlineToolbar: true,
-                            config: {
-                                quotePlaceholder: 'Nhập trích dẫn...',
-                                captionPlaceholder: 'Tác giả...'
-                            }
-                        },
-                        code: {
-                            class: Code as EditorJSTool,
-                            config: {
-                                placeholder: 'Nhập code...'
-                            }
-                        },
-                        embed: {
-                            class: Embed as EditorJSTool,
-                            config: {
-                                services: {
-                                    youtube: true,
-                                    codepen: true,
-                                    instagram: true,
-                                    twitter: true,
-                                    vimeo: true
-                                }
-                            }
-                        },
-                        raw: Raw as EditorJSTool,
-                        table: {
-                            class: Table as EditorJSTool,
-                            inlineToolbar: true,
-                            config: {
-                                rows: 2,
-                                cols: 3
-                            }
-                        },
-
-                        simpleImage: SimpleImage as EditorJSTool,
-
-                        // Inline tools
-                        inlineCode: {
-                            class: InlineCode as EditorJSTool,
-                            shortcut: 'CMD+SHIFT+M'
-                        },
-                        marker: {
-                            class: Marker as EditorJSTool,
-                            shortcut: 'CMD+SHIFT+H'
-                        },
-                        underline: {
-                            class: Underline as EditorJSTool,
-                            shortcut: 'CMD+U'
-                        },
-                        delimiter: Delimiter as EditorJSTool,
-                        warning: {
-                            class: Warning as EditorJSTool,
-                            inlineToolbar: true,
-                            config: {
-                                titlePlaceholder: 'Tiêu đề cảnh báo',
-                                messagePlaceholder: 'Nội dung cảnh báo'
-                            }
-                        },
-                        checklist: {
-                            class: Checklist as EditorJSTool,
-                            inlineToolbar: true
-                        },
-                    },
+                    tools: EDITOR_TOOLS,
                     onChange: handleChangeRef.current
                 });
             }

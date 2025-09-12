@@ -1,3 +1,7 @@
 @import "tailwindcss" prefix(tw);
 
 @plugin "@tailwindcss/typography" ;
+
+.codex-editor__redactor{
+    padding-bottom: 0 !important;
+}

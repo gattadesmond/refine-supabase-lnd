@@ -79,7 +79,7 @@ export const MyList = () => {
 #### ❌ Incorrect Usage:
 ```tsx
 // Don't use regular CSS classes
-<div className="p-4 bg-blue-500">
+<div className="p-4 bg-sky-500">
 
 // Don't create custom UI components when Ant Design has them
 <button>Click me</button> // Use <Button> from antd instead

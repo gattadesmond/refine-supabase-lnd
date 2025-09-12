@@ -1,15 +1,16 @@
 import React from "react";
-import { BaseRecord, getDefaultFilter } from "@refinedev/core";
+import { BaseRecord, getDefaultFilter, useNavigation } from "@refinedev/core";
 import {
     useTable,
     List,
     EditButton,
+    ShowButton,
     DateField,
     BooleanField,
     FilterDropdown,
 } from "@refinedev/antd";
 
-import { Table, Space, Input, Typography } from "antd";
+import { Table, Space, Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 
 export const StoriesList = () => {
@@ -27,21 +28,17 @@ export const StoriesList = () => {
         },
     });
 
+    const { edit } = useNavigation();
+
 
     return (
         <List>
             <Table {...tableProps} rowKey="id">
-                <Table.Column dataIndex="id" title="Id" render={(value: string) => <Typography.Text
-                    style={{
-                        whiteSpace: "nowrap",
-                    }}
-                >
-                    #{value}
-                </Typography.Text>} />
+
 
                 <Table.Column
                     dataIndex="title"
-                    title="Title"
+                    title="Tiêu đề"
                     key="title"
                     filterIcon={(filtered) => (
                         <SearchOutlined
@@ -57,29 +54,35 @@ export const StoriesList = () => {
                         </FilterDropdown>
                     )}
 
-                    render={(value: string) => {
+                    render={(value: string, record: BaseRecord) => {
                         return (
-                            <div className="max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap">
+                            <div
+                                className="max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap tw:font-semibold tw:cursor-pointer tw:text-sky-500 tw:hover:text-sky-700 tw:hover:underline"
+                                onClick={() => record.id && edit("stories", record.id)}
+                            >
                                 {value}
                             </div>
                         );
                     }}
                 />
                 <Table.Column
-                    dataIndex={["created_at"]}
-                    title="Created At"
-                    render={(value: string) => <DateField value={value} />}
+                    dataIndex={["member_id"]}
+                    title={<div className="tw:whitespace-nowrap">Tác giả</div>}
+                    render={(value: string) => <div className="tw-nowrap">{value}</div>}
                 />
 
                 <Table.Column
-                    dataIndex={["updated_at"]}
-                    title="Updated At"
-                    render={(value: string) => <DateField value={value} />}
+                    dataIndex={["categories_id"]}
+                    title={<div className="tw:whitespace-nowrap">Chuyên mục</div>}
+                    render={(value: string) => <div className="tw:whitespace-nowrap">{value}</div>}
+                />
+                <Table.Column
+                    dataIndex={["created_at"]}
+                    title={<div className="tw:whitespace-nowrap">Thời gian</div>}
+                     render={(value: string) => <div className="tw:whitespace-nowrap"><DateField value={value} format="DD/MM/YYYY HH:mm"/></div>}
                 />
 
-                <Table.Column dataIndex="description" title="Description" render={(value: string) => <div className="max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap">
-                    {value}
-                </div>} />
+             
                 <Table.Column dataIndex="status" title="Status" />
                 <Table.Column
                     dataIndex={["featured"]}
@@ -89,9 +92,9 @@ export const StoriesList = () => {
 
 
 
-                <Table.Column dataIndex="view_count" title="Lượt xem" />
+                <Table.Column dataIndex="view_count" title="View" />
                 <Table.Column
-                    title="Actions"
+                    title=""
                     dataIndex="actions"
                     render={(_, record: BaseRecord) => (
                         <Space>
@@ -100,11 +103,7 @@ export const StoriesList = () => {
                                 size="small"
                                 recordItemId={record.id}
                             />
-                            {/* <ShowButton
-                                hideText
-                                size="small"
-                                recordItemId={record.id}
-                            /> */}
+                           
                         </Space>
                     )}
                 />

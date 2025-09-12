@@ -12,6 +12,7 @@ import {
 import { Table, Space, Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { PostStatus } from "../../components/PostStatus";
+import { compact } from "lodash";
 
 export const StoriesList = () => {
     const { tableProps, filters } = useTable({
@@ -31,10 +32,8 @@ export const StoriesList = () => {
     const { edit } = useNavigation();
 
     // Get member data for all stories
-    const memberIds = tableProps?.dataSource
-        ?.map((item) => item.member_id)
-        ?.filter((id) => id !== null && id !== undefined) ?? [];
-
+    const memberIds = compact(tableProps?.dataSource?.map((item) => item.member_id)) ?? [];
+ 
     const { result: membersData } = useMany({
         resource: "members",
         ids: memberIds,
@@ -42,12 +41,9 @@ export const StoriesList = () => {
             enabled: memberIds.length > 0,
         },
     });
-    console.log("🚀 ~ StoriesList ~ membersData:", membersData)
     
     // Get category data for all stories
-    const categoryIds = tableProps?.dataSource
-        ?.map((item) => item.categories_id)
-        ?.filter((id) => id !== null && id !== undefined) ?? [];
+    const categoryIds = compact(tableProps?.dataSource?.map((item) => item.categories_id)) ?? [];
     
     const { result: categoriesData } = useMany({
         resource: "categories",
@@ -56,7 +52,6 @@ export const StoriesList = () => {
             enabled: categoryIds.length > 0,
         },
     });
-    console.log("🚀 ~ StoriesList ~ categoriesData:", categoriesData)
 
     return (
         <List>

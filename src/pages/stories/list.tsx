@@ -9,8 +9,8 @@ import {
     FilterDropdown,
 } from "@refinedev/antd";
 
-import { Table, Space, Input } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { Table, Space, Input, Button } from "antd";
+import { SearchOutlined, EditOutlined } from "@ant-design/icons";
 import { PostStatus } from "../../components/PostStatus";
 import { compact } from "lodash";
 
@@ -33,7 +33,7 @@ export const StoriesList = () => {
 
     // Get member data for all stories
     const memberIds = compact(tableProps?.dataSource?.map((item) => item.member_id)) ?? [];
- 
+
     const { result: membersData } = useMany({
         resource: "members",
         ids: memberIds,
@@ -41,10 +41,10 @@ export const StoriesList = () => {
             enabled: memberIds.length > 0,
         },
     });
-    
+
     // Get category data for all stories
     const categoryIds = compact(tableProps?.dataSource?.map((item) => item.categories_id)) ?? [];
-    
+
     const { result: categoriesData } = useMany({
         resource: "categories",
         ids: categoryIds,
@@ -92,7 +92,21 @@ export const StoriesList = () => {
                     title={<div className="tw:whitespace-nowrap">Tác giả</div>}
                     render={(value: string) => {
                         const member = membersData?.data?.find((item) => item.id === value);
-                        return <div className="tw:whitespace-nowrap">{member?.name || "..."}</div>;
+                        if (!member) {
+                            return <div className="tw:whitespace-nowrap tw:text-gray-400">...</div>;
+                        }
+                        return (
+                            <div className="tw:whitespace-nowrap">
+                                <Button
+                                    type="link"
+                                    size="small"
+                                   className="tw:p-0 tw:h-auto tw:font-normal tw:!text-sky-500 tw:hover:text-sky-700 tw:hover:underline"
+                                    onClick={() => edit("members", value)}
+                                >
+                                    {member.name}
+                                </Button>
+                            </div>
+                        );
                     }}
                 />
 
@@ -101,19 +115,34 @@ export const StoriesList = () => {
                     title={<div className="tw:whitespace-nowrap">Chuyên mục</div>}
                     render={(value: string) => {
                         const category = categoriesData?.data?.find((item) => item.id === value);
-                        return <div className="tw:whitespace-nowrap">{category?.title || "..."}</div>;
+                        if (!category) {
+                            return <div className="tw:whitespace-nowrap tw:text-gray-400">...</div>;
+                        }
+                        return (
+                            <div className="tw:whitespace-nowrap">
+                                <Button
+                                    type="link"
+                                    color="default"
+                                    size="small"
+                                    className="tw:p-0 tw:h-auto tw:font-normal tw:!text-sky-500 tw:hover:text-sky-700 tw:hover:underline"
+                                    onClick={() => edit("categories", value)}
+                                >
+                                    {category.title}
+                                </Button>
+                            </div>
+                        );
                     }}
                 />
                 <Table.Column
                     dataIndex={["created_at"]}
                     title={<div className="tw:whitespace-nowrap">Thời gian</div>}
-                     render={(value: string) => <div className="tw:whitespace-nowrap"><DateField value={value} format="DD/MM/YYYY HH:mm"/></div>}
+                    render={(value: string) => <div className="tw:whitespace-nowrap"><DateField value={value} format="DD/MM/YYYY HH:mm" /></div>}
                 />
 
-             
-                <Table.Column 
-                    dataIndex="status" 
-                    title="Trạng thái" 
+
+                <Table.Column
+                    dataIndex="status"
+                    title="Trạng thái"
                     render={(value: string) => <PostStatus status={value} />}
                 />
                 <Table.Column
@@ -135,7 +164,7 @@ export const StoriesList = () => {
                                 size="small"
                                 recordItemId={record.id}
                             />
-                           
+
                         </Space>
                     )}
                 />

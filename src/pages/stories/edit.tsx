@@ -205,6 +205,7 @@ export const StoriesEdit = () => {
                             >
                                 <div className="tw:space-y-3">
                                     <Input
+                                        value={coverImage}
                                         placeholder="Nhập URL hình ảnh..."
                                         className="tw:font-mono tw:text-sm"
                                     />

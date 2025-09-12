@@ -18,6 +18,13 @@ export const StoriesEdit = () => {
         optionValue: "id",   // Field name to use as value
     });
 
+    // Get members data using useSelect hook
+    const { selectProps: memberSelectProps } = useSelect({
+        resource: "members",
+        optionLabel: "name", // Field name to display in options
+        optionValue: "id",   // Field name to use as value
+    });
+
 
     // Watch title changes and auto-generate slug using slugify
     const title = Form.useWatch('title', form);
@@ -152,6 +159,23 @@ export const StoriesEdit = () => {
                                 <Select 
                                     {...categorySelectProps}
                                     placeholder="Chọn chuyên mục"
+                                    allowClear
+                                    className="tw:w-full"
+                                />
+                            </Form.Item>
+
+                            <Form.Item
+                                label="Tác giả"
+                                name={["member_id"]}
+                                rules={[
+                                    {
+                                        required: false,
+                                    },
+                                ]}
+                            >
+                                <Select 
+                                    {...memberSelectProps}
+                                    placeholder="Chọn tác giả"
                                     allowClear
                                     className="tw:w-full"
                                 />

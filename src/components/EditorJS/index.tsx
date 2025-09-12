@@ -68,6 +68,7 @@ const EditorJSComponent = forwardRef<EditorJSRef, EditorJSProps>(
                             // Block tools
                             header: {
                                 class: Header as EditorJSTool,
+                                inlineToolbar: true,
                                 config: {
                                     placeholder: 'Nhập tiêu đề...',
                                     levels: [1, 2, 3, 4, 5, 6],
@@ -195,6 +196,7 @@ const EditorJSComponent = forwardRef<EditorJSRef, EditorJSProps>(
                         // Block tools
                         header: {
                             class: Header as EditorJSTool,
+                            inlineToolbar: true,
                             config: {
                                 placeholder: 'Nhập tiêu đề...',
                                 levels: [1, 2, 3, 4, 5, 6],

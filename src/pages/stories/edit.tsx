@@ -29,7 +29,7 @@ export const StoriesEdit = () => {
     // Watch title changes and auto-generate slug using slugify
     const title = Form.useWatch('title', form);
     const slug = Form.useWatch('slug', form);
-    const status = Form.useWatch('status', form);
+    const status = queryResult?.data?.data?.status;
     const coverImage = Form.useWatch('cover_image', form);
     const createDate = queryResult?.data?.data?.created_at;
     const updateDate = queryResult?.data?.data?.updated_at;
@@ -52,9 +52,18 @@ export const StoriesEdit = () => {
             <Form {...formProps} layout="vertical" >
 
                 <div className="tw:grid  tw:grid-cols-[1fr_260px] tw:gap-10  ">
-                    <div className=" ">
+
+                    <div className="relative z-10 ">
+                        {/* <div className="tw:mb-4 tw:absolute tw:top-4 tw:left-36">
+                            <PostStatus status={status || 'draft'} />
+                        </div> */}
                         <Form.Item
-                            label="Tiêu đề bài viết"
+                            label={
+                                <div className="tw:flex tw:items-center tw:gap-3">
+                                    <span>Tiêu đề bài viết</span>
+                                    <PostStatus status={status || 'draft'} />
+                                </div>
+                            }
                             name={["title"]}
                             rules={[
                                 {
@@ -137,14 +146,12 @@ export const StoriesEdit = () => {
                                 >
                                     <Select>
                                         <Select.Option value="draft">Bản nháp</Select.Option>
+                                        {/* <Select.Option value="preview">Xem trước</Select.Option> */}
                                         <Select.Option value="published">Xuất bản</Select.Option>
-                                        <Select.Option value="preview">Xem trước</Select.Option>
                                     </Select>
                                 </Form.Item>
 
-                                <div>
-                                    <PostStatus status={status || 'draft'} />
-                                </div>
+
                             </div>
 
                             <Form.Item
@@ -156,7 +163,7 @@ export const StoriesEdit = () => {
                                     },
                                 ]}
                             >
-                                <Select 
+                                <Select
                                     {...categorySelectProps}
                                     placeholder="Chọn chuyên mục"
                                     allowClear
@@ -173,7 +180,7 @@ export const StoriesEdit = () => {
                                     },
                                 ]}
                             >
-                                <Select 
+                                <Select
                                     {...memberSelectProps}
                                     placeholder="Chọn tác giả"
                                     allowClear

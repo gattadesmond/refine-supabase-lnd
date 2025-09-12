@@ -11,20 +11,9 @@ export const StoriesEdit = () => {
     return (
         <Edit saveButtonProps={saveButtonProps}>
             <Form {...formProps} layout="vertical">
+
                 <Form.Item
-                    label="Id"
-                    name={["id"]}
-                    rules={[
-                        {
-                            required: true,
-                        },
-                    ]}
-                >
-                    <Input readOnly disabled />
-                </Form.Item>
-             
-                <Form.Item
-                    label="Title"
+                    label="Tiêu đề bài viết"
                     name={["title"]}
                     rules={[
                         {
@@ -32,10 +21,10 @@ export const StoriesEdit = () => {
                         },
                     ]}
                 >
-                    <Input />
+                    <Input size="large" className="tw:font-semibold"/>
                 </Form.Item>
                 <Form.Item
-                    label="Description"
+                    label="Mô tả ngắn bài viết"
                     name={["description"]}
                     rules={[
                         {
@@ -43,7 +32,7 @@ export const StoriesEdit = () => {
                         },
                     ]}
                 >
-                    <Input />
+                    <Input.TextArea rows={4} />
                 </Form.Item>
                 <Form.Item
                     label="Status"
@@ -68,7 +57,7 @@ export const StoriesEdit = () => {
                 >
                     <Checkbox>Featured</Checkbox>
                 </Form.Item>
-               
+
                 <Form.Item
                     label="Content"
                     name={["content"]}

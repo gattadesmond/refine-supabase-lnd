@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
 import { DateField, Edit, useForm, SaveButton, DeleteButton } from "@refinedev/antd";
-import { Form, Input, Switch, Space } from "antd";
+import { Form, Input, Switch } from "antd";
 import EditorJSForm from "../../components/EditorJS/EditorJSForm";
 import { Select } from "antd/lib";
 import slugify from "slugify";
+import PostStatus from "../../components/PostStatus";
 
 export const StoriesEdit = () => {
     const { formProps, saveButtonProps, form, query: queryResult } = useForm({
@@ -13,6 +14,8 @@ export const StoriesEdit = () => {
     // Watch title changes and auto-generate slug using slugify
     const title = Form.useWatch('title', form);
     const slug = Form.useWatch('slug', form);
+    const status = Form.useWatch('status', form);
+    const coverImage = Form.useWatch('cover_image', form);
     const createDate = queryResult?.data?.data?.created_at;
     const updateDate = queryResult?.data?.data?.updated_at;
 
@@ -85,6 +88,7 @@ export const StoriesEdit = () => {
 
 
 
+
                         <Form.Item
                             label="Content"
                             name={["content"]}
@@ -120,36 +124,27 @@ export const StoriesEdit = () => {
                                 <SaveButton  {...saveButtonProps} className="tw:w-full" >Lưu</SaveButton>
 
                             </div>
-                            <Form.Item
-                                label="Trạng thái"
-                                name={["status"]}
-                                rules={[
-                                    {
-                                        required: false,
-                                    },
-                                ]}
-                            >
-                                <Select>
-                                    <Select.Option value="draft">Bản nháp</Select.Option>
-                                    <Select.Option value="published">Xuất bản</Select.Option>
-                                    <Select.Option value="preview">Xem trước</Select.Option>
-                                </Select>
-                            </Form.Item>
-                            <Form.Item
-                                label="Bài nổi bật"
-                                valuePropName="checked"
-                                name={["featured"]}
-                                rules={[
-                                    {
-                                        required: false,
-                                    },
-                                ]}
-                            >
-                                <Switch />
-                            </Form.Item>
+                            <div className="tw:mb-6  tw:flex tw:flex-nowrap tw:gap-4">
+                                <Form.Item
+                                    label="Trạng thái"
+                                    name={["status"]}
+                                    rules={[
+                                        {
+                                            required: false,
+                                        },
+                                    ]}
+                                >
+                                    <Select>
+                                        <Select.Option value="draft">Bản nháp</Select.Option>
+                                        <Select.Option value="published">Xuất bản</Select.Option>
+                                        <Select.Option value="preview">Xem trước</Select.Option>
+                                    </Select>
+                                </Form.Item>
 
-                            Ngày tạo : <DateField value={createDate} format="DD/MM/YYYY HH:mm" />
-                            Ngày chỉnh sửa : <DateField value={updateDate} format="DD/MM/YYYY HH:mm" />
+                                <div>
+                                    <PostStatus status={status || 'draft'} />
+                                </div>
+                            </div>
 
                             <Form.Item
                                 label="Chuyên mục"
@@ -165,6 +160,84 @@ export const StoriesEdit = () => {
                                     <Select.Option value="2">Chuyên mục 2</Select.Option>
                                 </Select>
                             </Form.Item>
+
+                            <Form.Item
+                                label="Bài nổi bật"
+                                valuePropName="checked"
+                                name={["featured"]}
+                                rules={[
+                                    {
+                                        required: false,
+                                    },
+                                ]}
+                            >
+                                <Switch />
+                            </Form.Item>
+
+                            <Form.Item
+                                label="Hình ảnh bìa"
+                                name={["cover_image"]}
+                                rules={[
+                                    {
+                                        required: false,
+                                    },
+                                ]}
+                            >
+                                <div className="tw:space-y-3">
+                                    <Input
+                                        placeholder="Nhập URL hình ảnh..."
+                                        className="tw:font-mono tw:text-sm"
+                                    />
+                                    {coverImage && (
+                                        <div className="tw:border tw:border-gray-200 tw:rounded-lg tw:p-3 tw:bg-gray-50">
+                                            <div className="tw:text-xs tw:text-gray-600 tw:mb-2">Preview:</div>
+                                            <img
+                                                src={coverImage}
+                                                alt="Cover preview"
+                                                className="tw:max-w-full tw:h-auto tw:max-h-48 tw:rounded-md tw:shadow-sm"
+                                                onError={(e) => {
+                                                    const target = e.currentTarget;
+                                                    const errorDiv = target.nextElementSibling as HTMLElement;
+                                                    if (errorDiv) {
+                                                        target.style.display = 'none';
+                                                        errorDiv.style.display = 'flex';
+                                                    }
+                                                }}
+                                            />
+                                            <div
+                                                className="tw:hidden tw:items-center tw:justify-center tw:h-24 tw:bg-gray-100 tw:rounded-md tw:text-xs tw:text-gray-500"
+                                                style={{ display: 'none' }}
+                                            >
+                                                Không thể tải hình ảnh
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </Form.Item>
+
+
+                            <div className="tw:space-y-2 tw:mt-4">
+                                <div className="tw:flex tw:justify-between tw:items-center tw:py-2 3">
+                                    <span className="tw:text-xs tw:text-gray-600 tw:font-medium">Ngày tạo:</span>
+                                    <DateField
+                                        value={createDate}
+                                        format="DD/MM/YYYY HH:mm"
+                                        className="tw:text-xs tw:font-mono tw:text-gray-800"
+                                    />
+                                </div>
+                                <div className="tw:flex tw:justify-between tw:items-center ">
+                                    <span className="tw:text-xs tw:text-gray-600 tw:font-medium">Cập nhật:</span>
+                                    <DateField
+                                        value={updateDate}
+                                        format="DD/MM/YYYY HH:mm"
+                                        className="tw:text-xs tw:font-mono tw:text-gray-800"
+                                    />
+                                </div>
+                            </div>
+
+
+
+
                         </div>
 
                     </div>

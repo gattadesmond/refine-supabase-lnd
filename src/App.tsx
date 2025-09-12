@@ -134,7 +134,7 @@ function App() {
                   syncWithLocation: true,
                   warnWhenUnsavedChanges: true,
                   projectId: "tXU1Am-9UF01z-5NT45A",
-                  title: { text: "Refine Project", icon: <AppIcon /> },
+                  title: { text: "LnD Project", icon: <AppIcon /> },
                 }}
               >
                 <Routes>

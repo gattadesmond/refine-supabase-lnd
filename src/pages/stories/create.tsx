@@ -8,7 +8,7 @@ import PostStatus from "../../components/PostStatus";
 
 export const StoriesCreate = () => {
     const { formProps, saveButtonProps, form } = useForm({
-        redirect: false, // Không redirect sau khi save
+        redirect: "edit", // Redirect sang trang edit sau khi tạo thành công
     });
 
     // Get categories data using useSelect hook

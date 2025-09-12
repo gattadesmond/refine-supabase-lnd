@@ -1,7 +1,5 @@
 import {
   Refine,
-  GitHubBanner,
-  WelcomePage,
   Authenticated,
 } from "@refinedev/core";
 import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
@@ -63,6 +61,7 @@ import { supabaseClient } from "./utility";
 import { ColorModeContextProvider } from "./contexts/color-mode";
 import { Header } from "./components/header";
 import authProvider from "./authProvider";
+import { BookOpen, Users, FolderOpen, Calendar, GraduationCap } from "lucide-react";
 
 function App() {
   return (
@@ -78,40 +77,58 @@ function App() {
                 authProvider={authProvider}
                 routerProvider={routerProvider}
                 notificationProvider={useNotificationProvider}
-                resources={[{
-                  name: "categories",
-                  list: "/categories",
-                  create: "/categories/create",
-                  edit: "/categories/edit/:id",
-                  show: "/categories/show/:id",
-                  meta: {
-                    canDelete: true,
-                  },
-                }, {
-                  name: "members",
-                  list: "/members",
-                  create: "/members/create",
-                  edit: "/members/edit/:id",
-                  show: "/members/show/:id"
-                }, {
-                  name: "events",
-                  list: "/events",
-                  create: "/events/create",
-                  edit: "/events/edit/:id",
-                  show: "/events/show/:id"
-                }, {
-                  name: "learning_materials",
-                  list: "/learning_materials",
-                  create: "/learning_materials/create",
-                  edit: "/learning_materials/edit/:id",
-                  show: "/learning_materials/show/:id"
-                },
-                {
-                  name: "stories",
-                  list: "/stories",
-                  create: "/stories/create",
-                  edit: "/stories/edit/:id",
-                }
+                resources={[
+                  {
+                    name: "stories",
+                    list: "/stories",
+                    create: "/stories/create",
+                    edit: "/stories/edit/:id",
+                    meta: {
+                      label: "Stories",
+                      icon: <BookOpen size={16} />,
+                    },
+                  }, {
+                    name: "categories",
+                    list: "/categories",
+                    create: "/categories/create",
+                    edit: "/categories/edit/:id",
+                    show: "/categories/show/:id",
+                    meta: {
+                      label: "Categories",
+                      icon: <FolderOpen size={16} />,
+                      canDelete: true,
+                    },
+                  }, {
+                    name: "members",
+                    list: "/members",
+                    create: "/members/create",
+                    edit: "/members/edit/:id",
+                    show: "/members/show/:id",
+                    meta: {
+                      label: "Members",
+                      icon: <Users size={16} />,
+                    }
+                  }, {
+                    name: "events",
+                    list: "/events",
+                    create: "/events/create",
+                    edit: "/events/edit/:id",
+                    show: "/events/show/:id",
+                    meta: {
+                      label: "Events",
+                      icon: <Calendar size={16} />,
+                    }
+                  }, {
+                    name: "learning_materials",
+                    list: "/learning_materials",
+                    create: "/learning_materials/create",
+                    edit: "/learning_materials/edit/:id",
+                    show: "/learning_materials/show/:id",
+                    meta: {
+                      label: "Learning Materials",
+                      icon: <GraduationCap size={16} />,
+                    }
+                  }
                 ]}
                 options={{
                   syncWithLocation: true,

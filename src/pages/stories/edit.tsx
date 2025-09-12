@@ -220,7 +220,7 @@ export const StoriesEdit = () => {
                                         className="tw:font-mono tw:text-sm"
                                     />
                                     {coverImage && (
-                                        <div className="tw:border tw:border-gray-200 tw:rounded-lg tw:p-3 tw:bg-gray-50">
+                                        <div className="tw:border tw:border-gray-200 tw:rounded-lg tw:p-3 ">
                                             <div className="tw:text-xs tw:text-gray-600 tw:mb-2">Preview:</div>
                                             <img
                                                 src={coverImage}

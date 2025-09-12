@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { DateField, Edit, useForm, SaveButton, DeleteButton } from "@refinedev/antd";
+import { DateField, Edit, useForm, SaveButton, DeleteButton, NumberField } from "@refinedev/antd";
 import { Form, Input, Switch } from "antd";
 import EditorJSForm from "../../components/EditorJS/EditorJSForm";
 import { Select } from "antd/lib";
@@ -18,6 +18,7 @@ export const StoriesEdit = () => {
     const coverImage = Form.useWatch('cover_image', form);
     const createDate = queryResult?.data?.data?.created_at;
     const updateDate = queryResult?.data?.data?.updated_at;
+    const viewCount = queryResult?.data?.data?.view_count;
 
     useEffect(() => {
         if (title && form) {
@@ -99,17 +100,6 @@ export const StoriesEdit = () => {
                             ]}
                         >
                             <EditorJSForm placeholder="Nhập nội dung bài viết..." />
-                        </Form.Item>
-                        <Form.Item
-                            label="View Count"
-                            name={["view_count"]}
-                            rules={[
-                                {
-                                    required: false,
-                                },
-                            ]}
-                        >
-                            <Input />
                         </Form.Item>
 
                     </div>
@@ -232,6 +222,11 @@ export const StoriesEdit = () => {
                                         format="DD/MM/YYYY HH:mm"
                                         className="tw:text-xs tw:font-mono tw:text-gray-800"
                                     />
+                                </div>
+
+                                <div className="tw:flex tw:justify-between tw:items-center ">
+                                    <span className="tw:text-xs tw:text-gray-600 tw:font-medium">Lượt xem:</span>
+                                    <NumberField value={viewCount} />
                                 </div>
                             </div>
 

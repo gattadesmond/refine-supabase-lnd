@@ -1,5 +1,5 @@
 import React from "react";
-import { BaseRecord, getDefaultFilter, useNavigation } from "@refinedev/core";
+import { BaseRecord, getDefaultFilter, useNavigation, useMany } from "@refinedev/core";
 import {
     useTable,
     List,
@@ -30,6 +30,33 @@ export const StoriesList = () => {
 
     const { edit } = useNavigation();
 
+    // Get member data for all stories
+    const memberIds = tableProps?.dataSource
+        ?.map((item) => item.member_id)
+        ?.filter((id) => id !== null && id !== undefined) ?? [];
+
+    const { result: membersData } = useMany({
+        resource: "members",
+        ids: memberIds,
+        queryOptions: {
+            enabled: memberIds.length > 0,
+        },
+    });
+    console.log("🚀 ~ StoriesList ~ membersData:", membersData)
+    
+    // Get category data for all stories
+    const categoryIds = tableProps?.dataSource
+        ?.map((item) => item.categories_id)
+        ?.filter((id) => id !== null && id !== undefined) ?? [];
+    
+    const { result: categoriesData } = useMany({
+        resource: "categories",
+        ids: categoryIds,
+        queryOptions: {
+            enabled: categoryIds.length > 0,
+        },
+    });
+    console.log("🚀 ~ StoriesList ~ categoriesData:", categoriesData)
 
     return (
         <List>
@@ -68,13 +95,19 @@ export const StoriesList = () => {
                 <Table.Column
                     dataIndex={["member_id"]}
                     title={<div className="tw:whitespace-nowrap">Tác giả</div>}
-                    render={(value: string) => <div className="tw-nowrap">{value}</div>}
+                    render={(value: string) => {
+                        const member = membersData?.data?.find((item) => item.id === value);
+                        return <div className="tw:whitespace-nowrap">{member?.name || "..."}</div>;
+                    }}
                 />
 
                 <Table.Column
                     dataIndex={["categories_id"]}
                     title={<div className="tw:whitespace-nowrap">Chuyên mục</div>}
-                    render={(value: string) => <div className="tw:whitespace-nowrap">{value}</div>}
+                    render={(value: string) => {
+                        const category = categoriesData?.data?.find((item) => item.id === value);
+                        return <div className="tw:whitespace-nowrap">{category?.title || "..."}</div>;
+                    }}
                 />
                 <Table.Column
                     dataIndex={["created_at"]}

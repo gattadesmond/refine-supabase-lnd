@@ -43,8 +43,8 @@ export const StoriesCreate = () => {
     }, [title, form]);
 
     return (
-        <Create saveButtonProps={saveButtonProps}>
-            <Form {...formProps} layout="vertical">
+        <Create saveButtonProps={saveButtonProps} footerButtons={<></>}>
+            <Form {...formProps} layout="vertical" >
 
                 <div className="tw:grid  tw:grid-cols-[1fr_260px] tw:gap-10  ">
 

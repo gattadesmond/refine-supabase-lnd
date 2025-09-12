@@ -48,7 +48,7 @@ export const StoriesEdit = () => {
     }, [title, form]);
 
     return (
-        <Edit saveButtonProps={saveButtonProps} >
+        <Edit saveButtonProps={saveButtonProps} footerButtons={<></>}>
             <Form {...formProps} layout="vertical" >
 
                 <div className="tw:grid  tw:grid-cols-[1fr_260px] tw:gap-10  ">

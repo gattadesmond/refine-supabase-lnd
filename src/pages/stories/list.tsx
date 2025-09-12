@@ -17,6 +17,14 @@ import { compact } from "lodash";
 export const StoriesList = () => {
     const { tableProps, filters } = useTable({
         syncWithLocation: false,
+        sorters: {
+            initial: [
+                {
+                    field: "created_at",
+                    order: "desc",
+                },
+            ],
+        },
         filters: {
             initial: [
                 {

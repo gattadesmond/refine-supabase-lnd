@@ -11,6 +11,18 @@ export const StoriesEdit = () => {
         redirect: false, // Không redirect sau khi save
     });
 
+    // Override formProps để thêm updated_at trước khi submit
+    const enhancedFormProps = {
+        ...formProps,
+        onFinish: (values: any) => {
+            const dataWithUpdatedAt = {
+                ...values,
+                updated_at: new Date().toISOString(),
+            };
+            return formProps.onFinish?.(dataWithUpdatedAt);
+        },
+    };
+
     // Get categories data using useSelect hook
     const { selectProps: categorySelectProps } = useSelect({
         resource: "categories",
@@ -49,7 +61,7 @@ export const StoriesEdit = () => {
 
     return (
         <Edit saveButtonProps={saveButtonProps} footerButtons={<></>}>
-            <Form {...formProps} layout="vertical" >
+            <Form {...enhancedFormProps} layout="vertical" >
 
                 <div className="tw:grid  tw:grid-cols-[1fr_260px] tw:gap-10  ">
 

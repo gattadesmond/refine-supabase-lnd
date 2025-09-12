@@ -1,12 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Edit, useForm } from "@refinedev/antd";
 import { Form, Input, Checkbox } from "antd";
 import EditorJSForm from "../../components/EditorJS/EditorJSForm";
+import { Select } from "antd/lib";
+import slugify from "slugify";
 
 export const StoriesEdit = () => {
-    const { formProps, saveButtonProps } = useForm({
+    const { formProps, saveButtonProps, form } = useForm({
         redirect: false, // Không redirect sau khi save
     });
+
+    // Watch title changes and auto-generate slug using slugify
+    const title = Form.useWatch('title', form);
+    
+    useEffect(() => {
+        if (title && form) {
+            const slug = slugify(title, {
+                lower: true,      // Convert to lowercase
+                strict: true,     // Remove special characters
+                locale: 'vi',     // Support Vietnamese characters
+                trim: true        // Trim leading/trailing spaces
+            });
+            form.setFieldValue('slug', slug);
+        }
+    }, [title, form]);
 
     return (
         <Edit saveButtonProps={saveButtonProps}>
@@ -21,8 +38,25 @@ export const StoriesEdit = () => {
                         },
                     ]}
                 >
-                    <Input size="large" className="tw:font-semibold"/>
+                    <Input size="large" className="tw:font-semibold" />
                 </Form.Item>
+                
+                <Form.Item
+                    label="URL Slug"
+                    name={["slug"]}
+                    rules={[
+                        {
+                            required: true,
+                        },
+                    ]}
+                    extra="URL slug được tự động tạo từ tiêu đề"
+                >
+                    <Input 
+                        className="tw:font-mono tw:text-sm"
+                        disabled
+                    />
+                </Form.Item>
+
                 <Form.Item
                     label="Mô tả ngắn bài viết"
                     name={["description"]}
@@ -34,6 +68,22 @@ export const StoriesEdit = () => {
                 >
                     <Input.TextArea rows={4} />
                 </Form.Item>
+                
+
+                {/* <Form.Item
+                    label="Chuyên mục"
+                    name={["categories_id"]}
+                    rules={[
+                        {
+                            required: false,
+                        },
+                    ]}
+                >
+                    <Select>
+                        <Select.Option value="1">Chuyên mục 1</Select.Option>
+                        <Select.Option value="2">Chuyên mục 2</Select.Option>
+                    </Select>
+                </Form.Item> */}
                 <Form.Item
                     label="Status"
                     name={["status"]}
@@ -43,7 +93,11 @@ export const StoriesEdit = () => {
                         },
                     ]}
                 >
-                    <Input />
+                    <Select>
+                        <Select.Option value="draft">Bản nháp</Select.Option>
+                        <Select.Option value="published">Xuất bản</Select.Option>
+                        <Select.Option value="preview">Xem trước</Select.Option>
+                    </Select>
                 </Form.Item>
                 <Form.Item
                     label="Featured"

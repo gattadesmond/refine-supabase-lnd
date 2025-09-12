@@ -109,51 +109,7 @@ export const StoriesEdit = () => {
                             <Input.TextArea rows={3} />
                         </Form.Item>
 
-
-                        <Form.Item
-                            label="Content"
-                            name={["content"]}
-                            rules={[
-                                {
-                                    required: false,
-                                },
-                            ]}
-                        >
-                            <EditorJSForm placeholder="Nhập nội dung bài viết..." />
-                        </Form.Item>
-
-                    </div>
-
-                    <div className="tw:relative  tw:bg-gray-50 tw:-m-5 tw:p-5">
-                        <div className="tw:sticky tw:top-20">
-                            <div className="tw:mb-6  tw:flex tw:flex-nowrap tw:gap-4">
-                                <DeleteButton
-                                    recordItemId={queryResult?.data?.data?.id}
-                                />
-
-                                <SaveButton  {...saveButtonProps} className="tw:w-full" >Lưu</SaveButton>
-
-                            </div>
-                            <div className="tw:mb-6  tw:flex tw:flex-nowrap tw:gap-4">
-                                <Form.Item
-                                    label="Trạng thái"
-                                    name={["status"]}
-                                    rules={[
-                                        {
-                                            required: false,
-                                        },
-                                    ]}
-                                >
-                                    <Select>
-                                        <Select.Option value="draft">Bản nháp</Select.Option>
-                                        {/* <Select.Option value="preview">Xem trước</Select.Option> */}
-                                        <Select.Option value="published">Xuất bản</Select.Option>
-                                    </Select>
-                                </Form.Item>
-
-
-                            </div>
-
+                        <div className="tw:grid tw:grid-cols-2 tw:gap-4">
                             <Form.Item
                                 label="Chuyên mục"
                                 name={["categories_id"]}
@@ -184,22 +140,69 @@ export const StoriesEdit = () => {
                                     {...memberSelectProps}
                                     placeholder="Chọn tác giả"
                                     allowClear
-                                    className="tw:w-full"
+                                    className="tw:w-[200px]"
                                 />
                             </Form.Item>
+                        </div>
 
-                            <Form.Item
-                                label="Bài nổi bật"
-                                valuePropName="checked"
-                                name={["featured"]}
-                                rules={[
-                                    {
-                                        required: false,
-                                    },
-                                ]}
-                            >
-                                <Switch />
-                            </Form.Item>
+
+                        <Form.Item
+                            label="Content"
+                            name={["content"]}
+                            rules={[
+                                {
+                                    required: false,
+                                },
+                            ]}
+                        >
+                            <EditorJSForm placeholder="Nhập nội dung bài viết..." />
+                        </Form.Item>
+
+                    </div>
+
+                    <div className="tw:relative  tw:bg-gray-50 tw:-m-5 tw:p-5">
+                        <div className="tw:sticky tw:top-20">
+                            <div className="tw:mb-6  tw:flex tw:flex-nowrap tw:gap-4">
+                                <DeleteButton
+                                    recordItemId={queryResult?.data?.data?.id}
+                                />
+
+                                <SaveButton  {...saveButtonProps} className="tw:w-full" >Lưu</SaveButton>
+
+                            </div>
+
+
+
+                            <div className="tw:grid tw:grid-cols-2 tw:gap-4">
+                                <Form.Item
+                                    label="Trạng thái"
+                                    name={["status"]}
+                                    rules={[
+                                        {
+                                            required: false,
+                                        },
+                                    ]}
+                                >
+                                    <Select>
+                                        <Select.Option value="draft">Bản nháp</Select.Option>
+                                        {/* <Select.Option value="preview">Xem trước</Select.Option> */}
+                                        <Select.Option value="published">Xuất bản</Select.Option>
+                                    </Select>
+                                </Form.Item>
+
+                                <Form.Item
+                                    label="Bài nổi bật"
+                                    valuePropName="checked"
+                                    name={["featured"]}
+                                    rules={[
+                                        {
+                                            required: false,
+                                        },
+                                    ]}
+                                >
+                                    <Switch />
+                                </Form.Item>
+                            </div>
 
                             <Form.Item
                                 label="Hình ảnh bìa"
@@ -244,7 +247,7 @@ export const StoriesEdit = () => {
                             </Form.Item>
 
 
-                            <div className="tw:space-y-2 tw:mt-4">
+                            <div className="tw:space-y-2">
                                 <div className="tw:flex tw:justify-between tw:items-center tw:py-2 3">
                                     <span className="tw:text-xs tw:text-gray-600 tw:font-medium">Ngày tạo:</span>
                                     <DateField

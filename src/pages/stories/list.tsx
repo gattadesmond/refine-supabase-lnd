@@ -4,7 +4,6 @@ import {
     useTable,
     List,
     EditButton,
-    ShowButton,
     DateField,
     BooleanField,
     FilterDropdown,
@@ -12,6 +11,7 @@ import {
 
 import { Table, Space, Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
+import { PostStatus } from "../../components/PostStatus";
 
 export const StoriesList = () => {
     const { tableProps, filters } = useTable({
@@ -83,7 +83,11 @@ export const StoriesList = () => {
                 />
 
              
-                <Table.Column dataIndex="status" title="Status" />
+                <Table.Column 
+                    dataIndex="status" 
+                    title="Trạng thái" 
+                    render={(value: string) => <PostStatus status={value} />}
+                />
                 <Table.Column
                     dataIndex={["featured"]}
                     title="Featured"

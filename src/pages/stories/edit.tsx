@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Edit, useForm } from "@refinedev/antd";
-import { Form, Input, Checkbox } from "antd";
+import { Form, Input, Switch } from "antd";
 import EditorJSForm from "../../components/EditorJS/EditorJSForm";
 import { Select } from "antd/lib";
 import slugify from "slugify";
@@ -74,7 +74,7 @@ export const StoriesEdit = () => {
                         },
                     ]}
                 >
-                    <Input.TextArea rows={4} />
+                    <Input.TextArea rows={3} />
                 </Form.Item>
 
 
@@ -93,7 +93,7 @@ export const StoriesEdit = () => {
                     </Select>
                 </Form.Item> */}
                 <Form.Item
-                    label="Status"
+                    label="Trạng thái"
                     name={["status"]}
                     rules={[
                         {
@@ -108,7 +108,7 @@ export const StoriesEdit = () => {
                     </Select>
                 </Form.Item>
                 <Form.Item
-                    label="Featured"
+                    label="Bài nổi bật"
                     valuePropName="checked"
                     name={["featured"]}
                     rules={[
@@ -117,7 +117,7 @@ export const StoriesEdit = () => {
                         },
                     ]}
                 >
-                    <Checkbox>Featured</Checkbox>
+                    <Switch />
                 </Form.Item>
 
                 <Form.Item

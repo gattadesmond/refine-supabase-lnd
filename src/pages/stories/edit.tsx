@@ -12,7 +12,8 @@ export const StoriesEdit = () => {
 
     // Watch title changes and auto-generate slug using slugify
     const title = Form.useWatch('title', form);
-    
+    const slug = Form.useWatch('slug', form);
+
     useEffect(() => {
         if (title && form) {
             const slug = slugify(title, {
@@ -41,8 +42,13 @@ export const StoriesEdit = () => {
                     <Input size="large" className="tw:font-semibold" />
                 </Form.Item>
                 
+                <div className=" tw:text-gray-600 tw:-mt-4 tw:mb-4  tw:text-xs">
+                   Url bài viết : <span className="tw:font-mono">{slug || ''}</span>
+                </div>
+
                 <Form.Item
-                    label="URL Slug"
+                    className="tw:hidden"
+                    label="Đường dẫn bài viết"
                     name={["slug"]}
                     rules={[
                         {
@@ -51,11 +57,13 @@ export const StoriesEdit = () => {
                     ]}
                     extra="URL slug được tự động tạo từ tiêu đề"
                 >
-                    <Input 
+                    <Input
                         className="tw:font-mono tw:text-sm"
                         disabled
                     />
                 </Form.Item>
+
+
 
                 <Form.Item
                     label="Mô tả ngắn bài viết"
@@ -68,7 +76,7 @@ export const StoriesEdit = () => {
                 >
                     <Input.TextArea rows={4} />
                 </Form.Item>
-                
+
 
                 {/* <Form.Item
                     label="Chuyên mục"

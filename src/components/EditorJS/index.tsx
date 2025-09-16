@@ -133,6 +133,7 @@ const EditorJSComponent = forwardRef<EditorJSRef, EditorJSProps>(
     ({ data, onChange, placeholder = "Nhập nội dung...", readOnly = false }, ref) => {
         const editorRef = useRef<EditorJS | null>(null);
         const holderRef = useRef<HTMLDivElement>(null);
+        const isInitializingRef = useRef(true);
 
         useImperativeHandle(ref, () => ({
             save: async () => {
@@ -167,6 +168,11 @@ const EditorJSComponent = forwardRef<EditorJSRef, EditorJSProps>(
         onChangeRef.current = onChange;
 
         const handleChange = useCallback(async () => {
+            // Skip onChange during initialization to prevent Raw plugin from triggering unwanted changes
+            if (isInitializingRef.current) {
+                return;
+            }
+            
             if (onChangeRef.current && editorRef.current) {
                 const outputData = await editorRef.current.save();
                 onChangeRef.current(outputData);
@@ -197,6 +203,12 @@ const EditorJSComponent = forwardRef<EditorJSRef, EditorJSProps>(
                     tools: EDITOR_TOOLS,
                     onChange: handleChangeRef.current
                 });
+
+                // Set initialization flag to false after EditorJS is ready
+                // This prevents Raw plugin from triggering onChange during initial load
+                setTimeout(() => {
+                    isInitializingRef.current = false;
+                }, 1000);
             }
 
             return () => {

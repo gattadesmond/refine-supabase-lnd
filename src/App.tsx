@@ -108,27 +108,28 @@ function App() {
                       label: "Members",
                       icon: <Users size={16} />,
                     }
-                  }, {
-                    name: "events",
-                    list: "/events",
-                    create: "/events/create",
-                    edit: "/events/edit/:id",
-                    show: "/events/show/:id",
-                    meta: {
-                      label: "Events",
-                      icon: <Calendar size={16} />,
-                    }
-                  }, {
-                    name: "learning_materials",
-                    list: "/learning_materials",
-                    create: "/learning_materials/create",
-                    edit: "/learning_materials/edit/:id",
-                    show: "/learning_materials/show/:id",
-                    meta: {
-                      label: "Learning Materials",
-                      icon: <GraduationCap size={16} />,
-                    }
                   }
+                  // , {
+                  //   name: "events",
+                  //   list: "/events",
+                  //   create: "/events/create",
+                  //   edit: "/events/edit/:id",
+                  //   show: "/events/show/:id",
+                  //   meta: {
+                  //     label: "Events",
+                  //     icon: <Calendar size={16} />,
+                  //   }
+                  // }, {
+                  //   name: "learning_materials",
+                  //   list: "/learning_materials",
+                  //   create: "/learning_materials/create",
+                  //   edit: "/learning_materials/edit/:id",
+                  //   show: "/learning_materials/show/:id",
+                  //   meta: {
+                  //     label: "Learning Materials",
+                  //     icon: <GraduationCap size={16} />,
+                  //   }
+                  // }
                 ]}
                 options={{
                   syncWithLocation: true,

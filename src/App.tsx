@@ -1,7 +1,4 @@
-import {
-  Refine,
-  Authenticated,
-} from "@refinedev/core";
+import { Refine, Authenticated } from "@refinedev/core";
 import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 
@@ -34,8 +31,8 @@ import {
 import {
   CategoriesList,
   CategoriesCreate,
-  CategoriesEdit,
   CategoriesShow,
+  CategoryEdit,
 } from "./pages/categories";
 
 import {
@@ -50,18 +47,14 @@ import {
   LearningMaterialsEdit,
   LearningMaterialsShow,
 } from "./pages/learning_materials";
-import {
-  StoriesList,
-  StoriesCreate,
-  StoriesEdit,
-} from "./pages/stories";
+import { StoriesList, StoriesCreate, StoriesEdit } from "./pages/stories";
 
 import { AppIcon } from "./components/app-icon";
 import { supabaseClient } from "./utility";
 import { ColorModeContextProvider } from "./contexts/color-mode";
 import { Header } from "./components/header";
 import authProvider from "./authProvider";
-import { BookOpen, Users, FolderOpen, Calendar, GraduationCap } from "lucide-react";
+import { BookOpen, Users, FolderOpen, Calendar } from "lucide-react";
 
 function App() {
   return (
@@ -87,7 +80,8 @@ function App() {
                       label: "Stories",
                       icon: <BookOpen size={16} />,
                     },
-                  }, {
+                  },
+                  {
                     name: "categories",
                     list: "/categories",
                     create: "/categories/create",
@@ -98,7 +92,14 @@ function App() {
                       icon: <FolderOpen size={16} />,
                       canDelete: true,
                     },
-                  }, {
+                  },
+                  {
+                    name: "post_types",
+                  },
+                  {
+                    name: "categories_post_types",
+                  },
+                  {
                     name: "members",
                     list: "/members",
                     create: "/members/create",
@@ -107,19 +108,20 @@ function App() {
                     meta: {
                       label: "Members",
                       icon: <Users size={16} />,
-                    }
-                  }
-                  // , {
-                  //   name: "events",
-                  //   list: "/events",
-                  //   create: "/events/create",
-                  //   edit: "/events/edit/:id",
-                  //   show: "/events/show/:id",
-                  //   meta: {
-                  //     label: "Events",
-                  //     icon: <Calendar size={16} />,
-                  //   }
-                  // }, {
+                    },
+                  },
+                  {
+                    name: "events",
+                    list: "/events",
+                    create: "/events/create",
+                    edit: "/events/edit/:id",
+                    show: "/events/show/:id",
+                    meta: {
+                      label: "Events",
+                      icon: <Calendar size={16} />,
+                    },
+                  },
+                  //{
                   //   name: "learning_materials",
                   //   list: "/learning_materials",
                   //   create: "/learning_materials/create",
@@ -176,7 +178,7 @@ function App() {
                     <Route path="/categories">
                       <Route index element={<CategoriesList />} />
                       <Route path="create" element={<CategoriesCreate />} />
-                      <Route path="edit/:id" element={<CategoriesEdit />} />
+                      <Route path="edit/:id" element={<CategoryEdit />} />
                       <Route path="show/:id" element={<CategoriesShow />} />
                     </Route>
                     <Route path="/events">
@@ -187,9 +189,18 @@ function App() {
                     </Route>
                     <Route path="/learning_materials">
                       <Route index element={<LearningMaterialsList />} />
-                      <Route path="create" element={<LearningMaterialsCreate />} />
-                      <Route path="edit/:id" element={<LearningMaterialsEdit />} />
-                      <Route path="show/:id" element={<LearningMaterialsShow />} />
+                      <Route
+                        path="create"
+                        element={<LearningMaterialsCreate />}
+                      />
+                      <Route
+                        path="edit/:id"
+                        element={<LearningMaterialsEdit />}
+                      />
+                      <Route
+                        path="show/:id"
+                        element={<LearningMaterialsShow />}
+                      />
                     </Route>
                     <Route path="/stories">
                       <Route index element={<StoriesList />} />

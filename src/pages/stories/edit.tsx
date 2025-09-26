@@ -63,7 +63,7 @@ export const StoriesEdit = () => {
   const title = Form.useWatch("title", form);
   const slug = Form.useWatch("slug", form);
   const status = queryResult?.data?.data?.status;
-  const coverImage = Form.useWatch("cover_image", form);
+  const coverImage = Form.useWatch("cover_image_url", form);
   const createDate = queryResult?.data?.data?.created_at;
   const updateDate = queryResult?.data?.data?.updated_at;
 
@@ -225,7 +225,7 @@ export const StoriesEdit = () => {
 
               <Form.Item
                 label="Hình ảnh bìa"
-                name={["cover_image"]}
+                name={["cover_image_url"]}
                 rules={[
                   {
                     required: false,

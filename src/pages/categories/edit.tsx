@@ -85,17 +85,6 @@ export const CategoryEdit = () => {
     <Edit saveButtonProps={saveButtonProps}>
       <Form {...formProps} layout="vertical" onFinish={handleOnFinish}>
         <Form.Item
-          label="Id"
-          name={["id"]}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Input readOnly disabled />
-        </Form.Item>
-        <Form.Item
           label="Title"
           name={["title"]}
           rules={[
@@ -115,7 +104,7 @@ export const CategoryEdit = () => {
             },
           ]}
         >
-          <Input />
+          <Input.TextArea rows={4} />
         </Form.Item>
         <Form.Item label="Types" name={["types"]}>
           <Select mode="multiple" {...selectProps} />

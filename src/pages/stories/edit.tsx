@@ -26,12 +26,22 @@ export const StoriesEdit = () => {
   // Override formProps để thêm updated_at trước khi submit
   const enhancedFormProps = {
     ...formProps,
-    onFinish: (values: any) => {
+    onFinish: (values: Record<string, unknown>) => {
       const dataWithUpdatedAt = {
         ...values,
         updated_at: new Date().toISOString(),
       };
       return formProps.onFinish?.(dataWithUpdatedAt);
+    },
+    initialValues: {
+      ...formProps.initialValues,
+      authors:
+        formProps.initialValues?.authors?.map(
+          (author: { id: string; full_name: string }) => ({
+            value: author.id,
+            label: author.full_name,
+          })
+        ) || [],
     },
   };
 
@@ -45,7 +55,7 @@ export const StoriesEdit = () => {
   // Get members data using useSelect hook
   const { selectProps: memberSelectProps } = useSelect({
     resource: "members",
-    optionLabel: "name", // Field name to display in options
+    optionLabel: "full_name", // Field name to display in options
     optionValue: "id", // Field name to use as value
   });
 
@@ -74,9 +84,6 @@ export const StoriesEdit = () => {
       <Form {...enhancedFormProps} layout="vertical">
         <div className="tw:grid  tw:grid-cols-[1fr_260px] tw:gap-10  ">
           <div className="relative z-10 ">
-            {/* <div className="tw:mb-4 tw:absolute tw:top-4 tw:left-36">
-                            <PostStatus status={status || 'draft'} />
-                        </div> */}
             <Form.Item
               label={
                 <div className="tw:flex tw:items-center tw:gap-3">
@@ -127,7 +134,7 @@ export const StoriesEdit = () => {
             <div className="tw:grid tw:grid-cols-2 tw:gap-4">
               <Form.Item
                 label="Chuyên mục"
-                name={["categories_id"]}
+                name={["category", "title"]}
                 rules={[
                   {
                     required: false,
@@ -144,10 +151,11 @@ export const StoriesEdit = () => {
 
               <Form.Item
                 label="Tác giả"
-                name={["member_id"]}
+                name={["authors"]}
                 rules={[
                   {
                     required: false,
+                    type: "array",
                   },
                 ]}
               >
@@ -156,6 +164,7 @@ export const StoriesEdit = () => {
                   placeholder="Chọn tác giả"
                   allowClear
                   className="tw:w-[200px]"
+                  mode="multiple"
                 />
               </Form.Item>
             </div>

@@ -72,9 +72,16 @@ function App() {
                 notificationProvider={useNotificationProvider}
                 resources={[
                   {
+                    name: "stories_with_full_details",
+                    edit: "/stories/edit/:id",
+                    meta: {
+                      label: "Stories",
+                      icon: <BookOpen size={16} />,
+                    },
+                  },
+                  {
                     name: "stories",
                     create: "/stories/create",
-                    edit: "/stories/edit/:id",
                     meta: {
                       label: "Stories",
                       icon: <BookOpen size={16} />,

@@ -12,7 +12,30 @@ import EditorJSForm from "../../components/EditorJS/EditorJSForm";
 import { Select } from "antd/lib";
 import slugify from "slugify";
 import PostStatus from "../../components/PostStatus";
-import { useCreateMany, useDeleteMany, useGetIdentity } from "@refinedev/core";
+import {
+  HttpError,
+  useCreateMany,
+  useDeleteMany,
+  useGetIdentity,
+} from "@refinedev/core";
+
+type Story = {
+  id: number;
+  title: string;
+  slug: string;
+  category_id: number;
+  description: string;
+  content: string;
+  cover_image_url: string;
+  status: "draft" | "published" | "preview";
+  featured: boolean;
+  created_at: string;
+  updated_at: string;
+  created_by: string;
+  updated_by: string;
+  // Quan hệ nhiều-nhiều với members thông qua stories_authors
+  authors: { id: number; value: string; label: string }[] | undefined;
+};
 
 export const StoriesEdit = () => {
   const {
@@ -20,7 +43,7 @@ export const StoriesEdit = () => {
     saveButtonProps,
     form,
     query: queryResult,
-  } = useForm({
+  } = useForm<Story, HttpError, Story>({
     redirect: false, // Không redirect sau khi save
     queryMeta: {
       select:
@@ -34,41 +57,41 @@ export const StoriesEdit = () => {
 
   const { data: user } = useGetIdentity();
 
+  const fetchedAuthors = queryResult?.data?.data?.authors ?? [];
+
   // Override formProps để thêm updated_at trước khi submit
   const enhancedFormProps = {
     ...formProps,
-    onFinish: (values: Record<string, unknown>) => {
+    onFinish: (values: Story) => {
       const dataWithUpdatedAt = {
         ...values,
         updated_at: new Date().toISOString(),
         updated_by: user?.id || null,
         authors: undefined, // Loại bỏ authors để tránh lỗi không mong muốn
       };
-      const updatedAuthors = values.authors?.map((author: any) =>
-        typeof author === "object" ? author.value : author
-      );
-      const addedAuthors = (updatedAuthors || []).filter(
-        (value: string) =>
-          !(queryResult?.data?.data?.authors || []).some(
-            (author: any) => author.value === value
-          )
+      const updatedAuthors =
+        values.authors?.map((author) =>
+          typeof author === "object" ? author.value : author
+        ) ?? [];
+      const addedAuthors = updatedAuthors.filter(
+        (value) => !fetchedAuthors.some((author) => author.value === value)
       );
       if (addedAuthors.length > 0) {
         addAuthors({
           resource: "stories_authors",
-          values: addedAuthors.map((author: any) => ({
+          values: addedAuthors.map((author) => ({
             story_id: queryResult?.data?.data?.id,
             author_id: author,
           })),
         });
       }
-      const removedAuthors = (queryResult?.data?.data?.authors || []).filter(
-        (author: any) => !updatedAuthors?.includes(author.value)
+      const removedAuthors = fetchedAuthors.filter(
+        (author) => !updatedAuthors?.includes(author.value)
       );
       if (removedAuthors.length > 0) {
         removeAuthors({
           resource: "stories_authors",
-          ids: removedAuthors.map((author: any) => author.id),
+          ids: removedAuthors.map((author) => author.id),
         });
       }
       return formProps.onFinish?.(dataWithUpdatedAt);
@@ -88,9 +111,7 @@ export const StoriesEdit = () => {
     resource: "members",
     optionLabel: "full_name", // Field name to display in options
     optionValue: "id", // Field name to use as value
-    defaultValue: queryResult?.data?.data?.authors.map(
-      ({ value }: { value: string }) => value
-    ),
+    defaultValue: fetchedAuthors.map(({ value }: { value: string }) => value),
   });
 
   // Watch title changes and auto-generate slug using slugify
@@ -115,7 +136,7 @@ export const StoriesEdit = () => {
 
   return (
     <Edit saveButtonProps={saveButtonProps} footerButtons={<></>}>
-      <Form {...enhancedFormProps} layout="vertical">
+      <Form<Story> {...enhancedFormProps} layout="vertical">
         <div className="tw:grid  tw:grid-cols-[1fr_260px] tw:gap-10  ">
           <div className="relative z-10 ">
             <Form.Item

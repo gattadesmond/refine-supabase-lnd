@@ -12,7 +12,7 @@ import EditorJSForm from "../../components/EditorJS/EditorJSForm";
 import { Select } from "antd/lib";
 import slugify from "slugify";
 import PostStatus from "../../components/PostStatus";
-import { useCreateMany, useDeleteMany } from "@refinedev/core";
+import { useCreateMany, useDeleteMany, useGetIdentity } from "@refinedev/core";
 
 export const StoriesEdit = () => {
   const {
@@ -28,11 +28,11 @@ export const StoriesEdit = () => {
     },
   });
 
-  const { mutate: addAuthors } = useCreateMany({
-    resource: "stories_authors",
-  });
+  const { mutate: addAuthors } = useCreateMany();
 
   const { mutate: removeAuthors } = useDeleteMany();
+
+  const { data: user } = useGetIdentity();
 
   // Override formProps để thêm updated_at trước khi submit
   const enhancedFormProps = {
@@ -41,6 +41,7 @@ export const StoriesEdit = () => {
       const dataWithUpdatedAt = {
         ...values,
         updated_at: new Date().toISOString(),
+        updated_by: user?.id || null,
         authors: undefined, // Loại bỏ authors để tránh lỗi không mong muốn
       };
       const updatedAuthors = values.authors?.map((author: any) =>

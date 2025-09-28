@@ -12,6 +12,7 @@ import EditorJSForm from "../../components/EditorJS/EditorJSForm";
 import { Select } from "antd/lib";
 import slugify from "slugify";
 import PostStatus from "../../components/PostStatus";
+import { useCreateMany, useDeleteMany } from "@refinedev/core";
 
 export const StoriesEdit = () => {
   const {
@@ -21,7 +22,17 @@ export const StoriesEdit = () => {
     query: queryResult,
   } = useForm({
     redirect: false, // Không redirect sau khi save
+    queryMeta: {
+      select:
+        "*, authors:stories_authors(id,...members(value:id,label:full_name))", // Lấy thêm dữ liệu quan hệ authors và category
+    },
   });
+
+  const { mutate: addAuthors } = useCreateMany({
+    resource: "stories_authors",
+  });
+
+  const { mutate: removeAuthors } = useDeleteMany();
 
   // Override formProps để thêm updated_at trước khi submit
   const enhancedFormProps = {
@@ -30,18 +41,36 @@ export const StoriesEdit = () => {
       const dataWithUpdatedAt = {
         ...values,
         updated_at: new Date().toISOString(),
+        authors: undefined, // Loại bỏ authors để tránh lỗi không mong muốn
       };
+      const updatedAuthors = values.authors?.map((author: any) =>
+        typeof author === "object" ? author.value : author
+      );
+      const addedAuthors = (updatedAuthors || []).filter(
+        (value: string) =>
+          !(queryResult?.data?.data?.authors || []).some(
+            (author: any) => author.value === value
+          )
+      );
+      if (addedAuthors.length > 0) {
+        addAuthors({
+          resource: "stories_authors",
+          values: addedAuthors.map((author: any) => ({
+            story_id: queryResult?.data?.data?.id,
+            author_id: author,
+          })),
+        });
+      }
+      const removedAuthors = (queryResult?.data?.data?.authors || []).filter(
+        (author: any) => !updatedAuthors?.includes(author.value)
+      );
+      if (removedAuthors.length > 0) {
+        removeAuthors({
+          resource: "stories_authors",
+          ids: removedAuthors.map((author: any) => author.id),
+        });
+      }
       return formProps.onFinish?.(dataWithUpdatedAt);
-    },
-    initialValues: {
-      ...formProps.initialValues,
-      authors:
-        formProps.initialValues?.authors?.map(
-          (author: { id: string; full_name: string }) => ({
-            value: author.id,
-            label: author.full_name,
-          })
-        ) || [],
     },
   };
 
@@ -50,6 +79,7 @@ export const StoriesEdit = () => {
     resource: "categories",
     optionLabel: "title", // Field name to display in options
     optionValue: "id", // Field name to use as value
+    defaultValue: queryResult?.data?.data?.category_id, // Set default value to current category
   });
 
   // Get members data using useSelect hook
@@ -57,6 +87,9 @@ export const StoriesEdit = () => {
     resource: "members",
     optionLabel: "full_name", // Field name to display in options
     optionValue: "id", // Field name to use as value
+    defaultValue: queryResult?.data?.data?.authors.map(
+      ({ value }: { value: string }) => value
+    ),
   });
 
   // Watch title changes and auto-generate slug using slugify
@@ -134,7 +167,7 @@ export const StoriesEdit = () => {
             <div className="tw:grid tw:grid-cols-2 tw:gap-4">
               <Form.Item
                 label="Chuyên mục"
-                name={["category", "title"]}
+                name={["category_id"]}
                 rules={[
                   {
                     required: false,

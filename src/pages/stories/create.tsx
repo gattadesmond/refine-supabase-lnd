@@ -35,18 +35,19 @@ export const StoriesCreate = () => {
           },
         ],
       });
+    console.log("🚀 ~ StoriesCreate ~ categorySelectProps:", categorySelectProps)
 
     // Get members data using useSelect hook
     const { selectProps: memberSelectProps } = useSelect({
         resource: "members",
-        optionLabel: "name", // Field name to display in options
+        optionLabel: "full_name", // Field name to display in options
         optionValue: "id",   // Field name to use as value
     });
 
     // Watch title changes and auto-generate slug using slugify
     const title = Form.useWatch('title', form);
     const slug = Form.useWatch('slug', form);
-    const coverImage = Form.useWatch('cover_image', form);
+    const coverImage = Form.useWatch('cover_image_url', form);
 
     useEffect(() => {
         if (title && form) {
@@ -137,10 +138,11 @@ export const StoriesCreate = () => {
 
                             <Form.Item
                                 label="Tác giả"
-                                name={["member_id"]}
+                                name={["authors"]}
                                 rules={[
                                     {
                                         required: false,
+                                        type: "array",
                                     },
                                 ]}
                             >
@@ -149,6 +151,7 @@ export const StoriesCreate = () => {
                                     placeholder="Chọn tác giả"
                                     allowClear
                                     className="tw:w-[200px]"
+                                    mode="multiple"
                                 />
                             </Form.Item>
                         </div>
@@ -207,7 +210,7 @@ export const StoriesCreate = () => {
 
                             <Form.Item
                                 label="Hình ảnh bìa"
-                                name={["cover_image"]}
+                                name={["cover_image_url"]}
                                 rules={[
                                     {
                                         required: false,

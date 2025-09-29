@@ -16,7 +16,6 @@ import {
   HttpError,
   useCreateMany,
   useDeleteMany,
-  useGetIdentity,
 } from "@refinedev/core";
 
 type Story = {
@@ -55,7 +54,6 @@ export const StoriesEdit = () => {
 
   const { mutate: removeAuthors } = useDeleteMany();
 
-  const { data: user } = useGetIdentity();
 
   const fetchedAuthors = queryResult?.data?.data?.authors ?? [];
 
@@ -65,8 +63,7 @@ export const StoriesEdit = () => {
     onFinish: (values: Story) => {
       const dataWithUpdatedAt = {
         ...values,
-        updated_at: new Date().toISOString(),
-        updated_by: user?.id || null,
+
         authors: undefined, // Loại bỏ authors để tránh lỗi không mong muốn
       };
       const updatedAuthors =
@@ -104,7 +101,18 @@ export const StoriesEdit = () => {
     optionLabel: "title", // Field name to display in options
     optionValue: "id", // Field name to use as value
     defaultValue: queryResult?.data?.data?.category_id, // Set default value to current category
+    meta: {
+      select: "id, title, description, slug, categories_post_types!inner(post_type_id)",
+    },
+    filters: [
+      {
+        field: "categories_post_types.post_type_id",
+        operator: "eq",
+        value: 1,
+      },
+    ],
   });
+
 
   // Get members data using useSelect hook
   const { selectProps: memberSelectProps } = useSelect({

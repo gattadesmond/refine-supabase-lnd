@@ -40,7 +40,7 @@ export const StoriesList = () => {
     },
   });
 
-  const { editUrl, edit } = useNavigation();
+  const { editUrl } = useNavigation();
 
   const {
     result: { data: categoriesData },
@@ -73,12 +73,12 @@ export const StoriesList = () => {
           )}
           render={(value: string, record: BaseRecord) => {
             return (
-              <div
-                className="max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap tw:font-semibold tw:cursor-pointer tw:text-sky-500 tw:hover:text-sky-700 tw:hover:underline"
-                onClick={() => record.id && edit("stories", record.id)}
+              <a
+                href={record.id ? editUrl("stories", record.id) : "#"}
+                className="max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap tw:font-semibold tw:text-sky-500 tw:hover:text-sky-700 tw:hover:underline"
               >
                 {value}
-              </div>
+              </a>
             );
           }}
         />
@@ -145,7 +145,6 @@ export const StoriesList = () => {
           title=""
           dataIndex="actions"
           render={(_, record: BaseRecord) => {
-            console.log("🚀 ~ record:", record);
             return (
               <Space>
                 <EditButton hideText size="small" recordItemId={record.id} />

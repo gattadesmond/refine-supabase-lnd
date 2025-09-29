@@ -35,7 +35,6 @@ export const StoriesCreate = () => {
           },
         ],
       });
-    console.log("🚀 ~ StoriesCreate ~ categorySelectProps:", categorySelectProps)
 
     // Get members data using useSelect hook
     const { selectProps: memberSelectProps } = useSelect({

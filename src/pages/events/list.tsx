@@ -2,7 +2,6 @@ import {
   BaseRecord,
   getDefaultFilter,
   useNavigation,
-  useList,
 } from "@refinedev/core";
 import {
   useTable,
@@ -80,7 +79,7 @@ export const EventsList = () => {
         <Table.Column
           dataIndex={["category"]}
           title={<div className="tw:whitespace-nowrap">Chuyên mục</div>}
-          render={(category: string) => {
+          render={(category: { title: string }) => {
             console.log("🚀 ~ category:", category)
             return (
               <div className="tw:whitespace-nowrap">

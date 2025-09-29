@@ -73,16 +73,8 @@ function App() {
                 resources={[
                   {
                     name: "stories",
-                    create: "/stories/create",
-                    edit: "/stories/edit/:id",
-                    meta: {
-                      label: "Stories",
-                      icon: <BookOpen size={16} />,
-                    },
-                  },
-                  {
-                    name: "stories_overview",
                     list: "/stories",
+                    create: "/stories/create",
                     edit: "/stories/edit/:id",
                     meta: {
                       label: "Stories",

@@ -19,6 +19,7 @@ import { PostStatus } from "../../components/PostStatus";
 
 export const StoriesList = () => {
   const { tableProps, filters } = useTable({
+    resource: "stories_overview",
     syncWithLocation: false,
     sorters: {
       initial: [

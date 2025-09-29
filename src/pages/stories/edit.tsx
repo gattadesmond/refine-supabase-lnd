@@ -43,6 +43,7 @@ export const StoriesEdit = () => {
     form,
     query: queryResult,
   } = useForm<Story, HttpError, Story>({
+    resource: "stories",
     redirect: false, // Không redirect sau khi save
     queryMeta: {
       select:

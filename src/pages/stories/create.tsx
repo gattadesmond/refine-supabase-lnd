@@ -8,15 +8,33 @@ import PostStatus from "../../components/PostStatus";
 
 export const StoriesCreate = () => {
     const { formProps, saveButtonProps, form } = useForm({
+        resource: "stories",
         redirect: "edit", // Redirect sang trang edit sau khi tạo thành công
     });
 
-    // Get categories data using useSelect hook
+    // // Get categories data using useSelect hook
+    // const { selectProps: categorySelectProps } = useSelect({
+    //     resource: "categories",
+    //     optionLabel: "title", // Field name to display in options
+    //     optionValue: "id",   // Field name to use as value
+    // });
+
+
     const { selectProps: categorySelectProps } = useSelect({
         resource: "categories",
         optionLabel: "title", // Field name to display in options
-        optionValue: "id",   // Field name to use as value
-    });
+        optionValue: "id", // Field name to use as value
+        meta: {
+          select: "id, title, description, slug, categories_post_types!inner(post_type_id)",
+        },
+        filters: [
+          {
+            field: "categories_post_types.post_type_id",
+            operator: "eq",
+            value: 1,
+          },
+        ],
+      });
 
     // Get members data using useSelect hook
     const { selectProps: memberSelectProps } = useSelect({

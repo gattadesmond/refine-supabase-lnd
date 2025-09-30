@@ -87,17 +87,16 @@ const EDITOR_TOOLS = {
         twitter: true,
         vimeo: true,
         googledrive: {
-          regex: /https?:\/\/drive.google.com\/file\/d\/([^/?&]*)/,
+          regex: /https?:\/\/drive\.google\.com\/file\/d\/([^/?&]*).*/,
           embedUrl: "https://drive.google.com/file/d/<%= remote_id %>/preview",
-          html: "<iframe allow='autoplay; fullscreen' allowtransparency='true' allowfullscreen='true'></iframe>",
+          html: "<iframe allow='autoplay' width='640' height='360'></iframe>",
           id: (groups: string[]) => groups[0],
         },
         googleform: {
-          regex: /https?:\/\/docs.google.com\/forms\/d\/e\/([^/?&]*)/,
+          regex: /https?:\/\/docs.google.com\/forms\/d\/e\/([^/?&]*).*/,
           embedUrl:
             "https://docs.google.com/forms/d/e/<%= remote_id %>/viewform?embedded=true",
-          html: "<iframe width='640' height='440'></iframe>",
-          id: (groups: string[]) => groups[0],
+          html: "<iframe width='640' height='640'></iframe>",
         },
       },
     },

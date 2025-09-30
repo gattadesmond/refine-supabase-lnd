@@ -1,11 +1,26 @@
 @import "tailwindcss" prefix(tw);
 
-@plugin "@tailwindcss/typography" ;
+@plugin "@tailwindcss/typography";
 
-.codex-editor__redactor{
-    padding-bottom: 0 !important;
+.codex-editor__redactor {
+  padding-bottom: 0 !important;
 }
 
-.ant-layout-header{
-    z-index: 50 !important;
+.ant-layout-header {
+  z-index: 50 !important;
+}
+
+.editorjs-container code {
+  display: block;
+  padding: 10px 15px;
+  letter-spacing: -1px;
+  background-color: #fef3c7;
+  box-shadow: -4px 4px 0px -2px #fef3c7;
+  border: 2px solid #fff;
+  font-family: "JetBrains Mono", monospace;
+}
+.editorjs-container code:before,
+.editorjs-container code:after {
+  content: "";
+  display: none;
 }

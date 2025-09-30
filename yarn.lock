@@ -453,6 +453,11 @@
     "@babel/helper-string-parser" "^7.27.1"
     "@babel/helper-validator-identifier" "^7.27.1"
 
+"@codexteam/icons@0.3.2":
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/@codexteam/icons/-/icons-0.3.2.tgz#b7aed0ba7b344e07953101f5476cded570d4f150"
+  integrity sha512-P1ep2fHoy0tv4wx85eic+uee5plDnZQ1Qa6gDfv7eHPkCXorMtVqJhzMb75o1izogh6G7380PqmFDXV3bW3Pig==
+
 "@codexteam/icons@^0.0.2":
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/@codexteam/icons/-/icons-0.0.2.tgz#9183996a38b75a93506890373a015e3a2a369264"
@@ -536,6 +541,11 @@
   integrity sha512-yLO+86MYOIUr1Jl7SQw23SYT84ggv6aJW0EIRsI3NTHYgnQzmK7Bt2n5ZFupQlB0GJqmKqA5tCue3NKQb+o7Pw==
   dependencies:
     "@editorjs/helpers" "^1.0.1"
+
+"@editorjs/editorjs@2.30.6":
+  version "2.30.6"
+  resolved "https://registry.yarnpkg.com/@editorjs/editorjs/-/editorjs-2.30.6.tgz#a77292da7433bc912e4beaf359b13812cab89c4d"
+  integrity sha512-6eQMc4Di3Hz9p4o+NGRgKaCeAF7eAk106m+bsDLc4eo94VGYO1M163OiGFdmanE+w503qTmXOzycWff5blEOAQ==
 
 "@editorjs/editorjs@^2.29.1", "@editorjs/editorjs@^2.30.7", "@editorjs/editorjs@^2.31.0":
   version "2.31.0"
@@ -2909,6 +2919,14 @@ eastasianwidth@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/eastasianwidth/-/eastasianwidth-0.2.0.tgz#696ce2ec0aa0e6ea93a397ffcf24aa7840c827cb"
   integrity sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==
+
+editorjs-color-picker@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/editorjs-color-picker/-/editorjs-color-picker-1.0.8.tgz#27a9e44ca38910b8831880f38417bee96c126fc7"
+  integrity sha512-7i2frBJI2laleaWGWS1kkyqnhzDFN1T7sh/PF0LlvBQ7zkgQRiElJBz179nGtRSyQVbX+phwgEH7PjgbtW6UTw==
+  dependencies:
+    "@codexteam/icons" "0.3.2"
+    "@editorjs/editorjs" "2.30.6"
 
 ee-first@1.1.1:
   version "1.1.1"

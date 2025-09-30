@@ -1,28 +1,99 @@
-import React, { useEffect } from "react";
-import { Create, useForm, SaveButton, useSelect } from "@refinedev/antd";
-import { Form, Input, Switch } from "antd";
-import EditorJSForm from "../../components/EditorJS/EditorJSForm";
-import { Select } from "antd/lib";
+import {
+  DateField,
+  DeleteButton,
+  Edit,
+  SaveButton,
+  useForm,
+  useSelect,
+} from "@refinedev/antd";
+import { HttpError, useCreateMany, useDeleteMany } from "@refinedev/core";
+import { Form, Input, Select, Switch } from "antd";
+import { useEffect } from "react";
 import slugify from "slugify";
 import PostStatus from "../../components/PostStatus";
+import { EditorJSForm } from "../../components";
 
-export const StoriesCreate = () => {
-  const { formProps, saveButtonProps, form } = useForm({
-    resource: "stories",
-    redirect: "edit", // Redirect sang trang edit sau khi tạo thành công
+type Learning = {
+  id: number;
+  title: string;
+  slug: string;
+  category_id: number;
+  description: string;
+  content: string;
+  cover_image_url: string;
+  status: "draft" | "published" | "preview";
+  featured: boolean;
+  created_at: string;
+  updated_at: string;
+  created_by: string;
+  updated_by: string;
+  // Quan hệ nhiều-nhiều với members thông qua learnings_authors
+  authors: { id: number; value: string; label: string }[] | undefined;
+};
+
+export const LearningMaterialsEdit = () => {
+  const {
+    formProps,
+    saveButtonProps,
+    form,
+    query: queryResult,
+  } = useForm<Learning, HttpError, Learning>({
+    redirect: false, // Không redirect sau khi save
+    queryMeta: {
+      select:
+        "*, authors:learnings_authors(id,...members(value:id,label:full_name))", // Lấy thêm dữ liệu quan hệ authors và category
+    },
   });
 
-  // // Get categories data using useSelect hook
-  // const { selectProps: categorySelectProps } = useSelect({
-  //     resource: "categories",
-  //     optionLabel: "title", // Field name to display in options
-  //     optionValue: "id",   // Field name to use as value
-  // });
+  const { mutate: addAuthors } = useCreateMany();
 
+  const { mutate: removeAuthors } = useDeleteMany();
+
+  const fetchedAuthors = queryResult?.data?.data?.authors ?? [];
+
+  // Override formProps để thêm updated_at trước khi submit
+  const enhancedFormProps = {
+    ...formProps,
+    onFinish: (values: Learning) => {
+      const dataWithUpdatedAt = {
+        ...values,
+        authors: undefined, // Loại bỏ authors để tránh lỗi không mong muốn
+      };
+      const updatedAuthors =
+        values.authors?.map((author) =>
+          typeof author === "object" ? author.value : author
+        ) ?? [];
+      const addedAuthors = updatedAuthors.filter(
+        (value) => !fetchedAuthors.some((author) => author.value === value)
+      );
+      if (addedAuthors.length > 0) {
+        addAuthors({
+          resource: "learnings_authors",
+          values: addedAuthors.map((author) => ({
+            story_id: queryResult?.data?.data?.id,
+            author_id: author,
+          })),
+        });
+      }
+      const removedAuthors = fetchedAuthors.filter(
+        (author) => !updatedAuthors?.includes(author.value)
+      );
+      if (removedAuthors.length > 0) {
+        removeAuthors({
+          resource: "learnings_authors",
+          ids: removedAuthors.map((author) => author.id),
+        });
+      }
+      return formProps.onFinish?.(dataWithUpdatedAt);
+    },
+  };
+
+  // Get categories data using useSelect hook
   const { selectProps: categorySelectProps } = useSelect({
     resource: "categories",
     optionLabel: "title", // Field name to display in options
     optionValue: "id", // Field name to use as value
+    defaultValue: queryResult?.data?.data?.category_id ?? undefined, // Set default value to current category
     meta: {
       select:
         "id, title, description, slug, categories_post_types!inner(post_type_id)",
@@ -41,12 +112,16 @@ export const StoriesCreate = () => {
     resource: "members",
     optionLabel: "full_name", // Field name to display in options
     optionValue: "id", // Field name to use as value
+    defaultValue: fetchedAuthors.map(({ value }: { value: string }) => value),
   });
 
   // Watch title changes and auto-generate slug using slugify
   const title = Form.useWatch("title", form);
   const slug = Form.useWatch("slug", form);
+  const status = queryResult?.data?.data?.status;
   const coverImage = Form.useWatch("cover_image_url", form);
+  const createDate = queryResult?.data?.data?.created_at;
+  const updateDate = queryResult?.data?.data?.updated_at;
 
   useEffect(() => {
     if (title && form) {
@@ -61,15 +136,15 @@ export const StoriesCreate = () => {
   }, [title, form]);
 
   return (
-    <Create saveButtonProps={saveButtonProps} footerButtons={<></>}>
-      <Form {...formProps} layout="vertical">
+    <Edit saveButtonProps={saveButtonProps} footerButtons={<></>}>
+      <Form {...enhancedFormProps} layout="vertical">
         <div className="tw:grid  tw:grid-cols-[1fr_260px] tw:gap-10  ">
           <div className="relative z-10 ">
             <Form.Item
               label={
                 <div className="tw:flex tw:items-center tw:gap-3">
                   <span>Tiêu đề bài viết</span>
-                  <PostStatus status="draft" />
+                  <PostStatus status={status || "draft"} />
                 </div>
               }
               name={["title"]}
@@ -115,7 +190,7 @@ export const StoriesCreate = () => {
             <div className="tw:grid tw:grid-cols-2 tw:gap-4">
               <Form.Item
                 label="Chuyên mục"
-                name={["categories_id"]}
+                name={["category_id"]}
                 rules={[
                   {
                     required: false,
@@ -166,6 +241,8 @@ export const StoriesCreate = () => {
           <div className="tw:relative  tw:bg-gray-50 tw:-m-5 tw:p-5">
             <div className="tw:sticky tw:top-20">
               <div className="tw:mb-6  tw:flex tw:flex-nowrap tw:gap-4">
+                <DeleteButton recordItemId={queryResult?.data?.data?.id} />
+
                 <SaveButton {...saveButtonProps} className="tw:w-full">
                   Lưu
                 </SaveButton>
@@ -180,10 +257,10 @@ export const StoriesCreate = () => {
                       required: false,
                     },
                   ]}
-                  initialValue="draft"
                 >
                   <Select>
                     <Select.Option value="draft">Bản nháp</Select.Option>
+                    {/* <Select.Option value="preview">Xem trước</Select.Option> */}
                     <Select.Option value="published">Xuất bản</Select.Option>
                   </Select>
                 </Form.Item>
@@ -197,7 +274,6 @@ export const StoriesCreate = () => {
                       required: false,
                     },
                   ]}
-                  initialValue={false}
                 >
                   <Switch />
                 </Form.Item>
@@ -219,7 +295,7 @@ export const StoriesCreate = () => {
                     className="tw:font-mono tw:text-sm"
                   />
                   {coverImage && (
-                    <div className="tw:border tw:border-gray-200 tw:rounded-lg tw:p-3 tw:bg-gray-50">
+                    <div className="tw:border tw:border-gray-200 tw:rounded-lg tw:p-3 ">
                       <div className="tw:text-xs tw:text-gray-600 tw:mb-2">
                         Preview:
                       </div>
@@ -248,18 +324,32 @@ export const StoriesCreate = () => {
                 </div>
               </Form.Item>
 
-              <Form.Item
-                label="View Count"
-                name={["view_count"]}
-                initialValue={0}
-                className="tw:hidden"
-              >
-                <Input type="number" />
-              </Form.Item>
+              <div className="tw:space-y-2">
+                <div className="tw:flex tw:justify-between tw:items-center tw:py-2 3">
+                  <span className="tw:text-xs tw:text-gray-600 tw:font-medium">
+                    Ngày tạo:
+                  </span>
+                  <DateField
+                    value={createDate}
+                    format="DD/MM/YYYY HH:mm"
+                    className="tw:text-xs tw:font-mono tw:text-gray-800"
+                  />
+                </div>
+                <div className="tw:flex tw:justify-between tw:items-center ">
+                  <span className="tw:text-xs tw:text-gray-600 tw:font-medium">
+                    Cập nhật:
+                  </span>
+                  <DateField
+                    value={updateDate}
+                    format="DD/MM/YYYY HH:mm"
+                    className="tw:text-xs tw:font-mono tw:text-gray-800"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </Form>
-    </Create>
+    </Edit>
   );
 };

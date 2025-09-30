@@ -37,6 +37,7 @@
     "@tailwindcss/typography": "^0.5.16",
     "@uiw/react-md-editor": "^4.0.8",
     "antd": "^5.23.0",
+    "editorjs-color-picker": "^1.0.8",
     "lodash": "^4.17.21",
     "lucide-react": "^0.544.0",
     "react": "^19.1.0",

@@ -42,11 +42,11 @@ import {
   EventsShow,
 } from "./pages/events";
 import {
-  LearningMaterialsList,
   LearningMaterialsCreate,
   LearningMaterialsEdit,
   LearningMaterialsShow,
-} from "./pages/learning_materials";
+  LearningMaterialList,
+} from "./pages/learnings";
 import { StoriesList, StoriesCreate, StoriesEdit } from "./pages/stories";
 
 import { AppIcon } from "./components/app-icon";
@@ -54,7 +54,13 @@ import { supabaseClient } from "./utility";
 import { ColorModeContextProvider } from "./contexts/color-mode";
 import { Header } from "./components/header";
 import authProvider from "./authProvider";
-import { BookOpen, Users, FolderOpen, Calendar } from "lucide-react";
+import {
+  BookOpen,
+  Users,
+  FolderOpen,
+  Calendar,
+  GraduationCap,
+} from "lucide-react";
 
 function App() {
   return (
@@ -121,17 +127,17 @@ function App() {
                       icon: <Calendar size={16} />,
                     },
                   },
-                  //{
-                  //   name: "learning_materials",
-                  //   list: "/learning_materials",
-                  //   create: "/learning_materials/create",
-                  //   edit: "/learning_materials/edit/:id",
-                  //   show: "/learning_materials/show/:id",
-                  //   meta: {
-                  //     label: "Learning Materials",
-                  //     icon: <GraduationCap size={16} />,
-                  //   }
-                  // }
+                  {
+                    name: "learnings",
+                    list: "/learnings",
+                    create: "/learnings/create",
+                    edit: "/learnings/edit/:id",
+                    show: "/learnings/show/:id",
+                    meta: {
+                      label: "Learning Materials",
+                      icon: <GraduationCap size={16} />,
+                    },
+                  },
                 ]}
                 options={{
                   syncWithLocation: true,
@@ -187,8 +193,8 @@ function App() {
                       <Route path="edit/:id" element={<EventsEdit />} />
                       <Route path="show/:id" element={<EventsShow />} />
                     </Route>
-                    <Route path="/learning_materials">
-                      <Route index element={<LearningMaterialsList />} />
+                    <Route path="/learnings">
+                      <Route index element={<LearningMaterialList />} />
                       <Route
                         path="create"
                         element={<LearningMaterialsCreate />}

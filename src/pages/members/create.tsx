@@ -13,30 +13,14 @@ export const MembersCreate = () => {
     return (
         <Create
             title="Thêm thành viên mới"
-            headerButtons={[
-                <Button key="cancel" size="large">
-                    Hủy
-                </Button>
-            ]}
+            saveButtonProps={saveButtonProps}
         >
-            <div className="tw:p-6">
-                <div className="tw:mb-6">
-                    <Title level={2} className="tw:mb-2">
-                        <TeamOutlined className="tw:mr-2" />
-                        Thêm thành viên mới
-                    </Title>
-                    <Text type="secondary">
-                        Nhập thông tin chi tiết của thành viên mới
-                    </Text>
-                </div>
-
-                <Card className="tw:shadow-lg">
-                <Form
-                    {...formProps}
-                    layout="vertical"
-                    size="large"
-                    className="tw:max-w-4xl"
-                >
+            <Form
+                {...formProps}
+                layout="vertical"
+                size="large"
+                className="tw:max-w-4xl"
+            >
                     <Row gutter={24}>
                         <Col span={24}>
                             <div className="tw:text-center tw:mb-6">
@@ -56,129 +40,113 @@ export const MembersCreate = () => {
                         </Col>
                     </Row>
 
-                    <Row gutter={24}>
-                        <Col span={12}>
-                            <Form.Item
-                                label="Họ và tên"
-                                name="name"
-                                rules={[
-                                    { required: true, message: "Vui lòng nhập họ và tên" },
-                                    { min: 2, message: "Tên phải có ít nhất 2 ký tự" }
-                                ]}
-                            >
-                                <Input 
-                                    placeholder="Nhập họ và tên đầy đủ"
-                                    prefix={<UserOutlined className="tw:text-gray-400" />}
-                                />
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item
-                                label="Email"
-                                name="email"
-                                rules={[
-                                    { required: true, message: "Vui lòng nhập email" },
-                                    { type: "email", message: "Email không hợp lệ" }
-                                ]}
-                            >
-                                <Input 
-                                    placeholder="example@company.com"
-                                    prefix={<MailOutlined className="tw:text-gray-400" />}
-                                />
-                            </Form.Item>
-                        </Col>
-                    </Row>
+                <Row gutter={24}>
+                    <Col span={12}>
+                        <Form.Item
+                            label="Họ và tên"
+                            name="full_name"
+                            rules={[
+                                { required: true, message: "Vui lòng nhập họ và tên" },
+                                { min: 2, message: "Tên phải có ít nhất 2 ký tự" }
+                            ]}
+                        >
+                            <Input 
+                                placeholder="Nhập họ và tên đầy đủ"
+                                prefix={<UserOutlined className="tw:text-gray-400" />}
+                            />
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item
+                            label="Email"
+                            name="email"
+                            rules={[
+                                { required: true, message: "Vui lòng nhập email" },
+                                { type: "email", message: "Email không hợp lệ" }
+                            ]}
+                        >
+                            <Input 
+                                placeholder="example@company.com"
+                                prefix={<MailOutlined className="tw:text-gray-400" />}
+                            />
+                        </Form.Item>
+                    </Col>
+                </Row>
 
-                    <Row gutter={24}>
-                        <Col span={12}>
-                            <Form.Item
-                                label="Số điện thoại"
-                                name="phone"
-                                rules={[
-                                    { required: true, message: "Vui lòng nhập số điện thoại" },
-                                    { pattern: /^[0-9+\-\s()]+$/, message: "Số điện thoại không hợp lệ" }
-                                ]}
-                            >
-                                <Input 
-                                    placeholder="+84 123 456 789"
-                                    prefix={<PhoneOutlined className="tw:text-gray-400" />}
-                                />
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item
-                                label="Vai trò"
-                                name="role"
-                                rules={[{ required: true, message: "Vui lòng chọn vai trò" }]}
-                            >
-                                <Select placeholder="Chọn vai trò">
-                                    <Option value="admin">Quản trị viên</Option>
-                                    <Option value="manager">Quản lý</Option>
-                                    <Option value="member">Thành viên</Option>
-                                    <Option value="guest">Khách</Option>
-                                </Select>
-                            </Form.Item>
-                        </Col>
-                    </Row>
+                <Row gutter={24}>
+                    <Col span={12}>
+                        <Form.Item
+                            label="Username"
+                            name="user_name"
+                            rules={[
+                                { required: true, message: "Vui lòng nhập username" },
+                                { min: 2, message: "Username phải có ít nhất 2 ký tự" }
+                            ]}
+                        >
+                            <Input 
+                                placeholder="Nhập username"
+                                prefix={<UserOutlined className="tw:text-gray-400" />}
+                            />
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item
+                            label="Avatar URL"
+                            name="avatar_url"
+                        >
+                            <Input 
+                                placeholder="https://example.com/avatar.jpg"
+                                prefix={<UserOutlined className="tw:text-gray-400" />}
+                            />
+                        </Form.Item>
+                    </Col>
+                </Row>
 
-                    <Row gutter={24}>
-                        <Col span={12}>
-                            <Form.Item
-                                label="Trạng thái"
-                                name="status"
-                                rules={[{ required: true, message: "Vui lòng chọn trạng thái" }]}
-                                initialValue="active"
-                            >
-                                <Select placeholder="Chọn trạng thái">
-                                    <Option value="active">Hoạt động</Option>
-                                    <Option value="inactive">Không hoạt động</Option>
-                                    <Option value="pending">Chờ duyệt</Option>
-                                </Select>
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item
-                                label="Phòng ban"
-                                name="department"
-                            >
-                                <Input placeholder="Phòng ban làm việc" />
-                            </Form.Item>
-                        </Col>
-                    </Row>
+                <Row gutter={24}>
+                    <Col span={12}>
+                        <Form.Item
+                            label="Phòng ban"
+                            name="department"
+                        >
+                            <Input placeholder="Phòng ban làm việc" />
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item
+                            label="Chức vụ"
+                            name="title"
+                        >
+                            <Input placeholder="Chức vụ công việc" />
+                        </Form.Item>
+                    </Col>
+                </Row>
 
-                    <Row gutter={24}>
-                        <Col span={24}>
-                            <Form.Item
-                                label="Ghi chú"
-                                name="notes"
-                            >
-                                <Input.TextArea 
-                                    rows={4}
-                                    placeholder="Ghi chú về thành viên..."
-                                />
-                            </Form.Item>
-                        </Col>
-                    </Row>
+                <Row gutter={24}>
+                    <Col span={12}>
+                        <Form.Item
+                            label="Trạng thái"
+                            name="status"
+                            rules={[{ required: true, message: "Vui lòng chọn trạng thái" }]}
+                            initialValue="active"
+                        >
+                            <Select placeholder="Chọn trạng thái">
+                                <Option value="active">Hoạt động</Option>
+                                <Option value="disabled">Không hoạt động</Option>
+                                <Option value="pending">Chờ duyệt</Option>
+                            </Select>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item
+                            label="Slogan"
+                            name="slogan"
+                        >
+                            <Input placeholder="Slogan cá nhân" />
+                        </Form.Item>
+                    </Col>
+                </Row>
 
-                    <Row>
-                        <Col span={24}>
-                            <div className="tw:flex tw:justify-end tw:gap-4">
-                                <Button size="large">
-                                    Hủy
-                                </Button>
-                                <Button 
-                                    type="primary" 
-                                    size="large"
-                                    {...saveButtonProps}
-                                >
-                                    Tạo thành viên
-                                </Button>
-                            </div>
-                        </Col>
-                    </Row>
-                </Form>
-            </Card>
-            </div>
+            </Form>
         </Create>
     );
 };

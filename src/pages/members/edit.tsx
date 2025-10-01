@@ -20,13 +20,14 @@ export const MembersEdit = () => {
                 size="large"
                 className="tw:max-w-4xl"
                 initialValues={{
-                    name: memberData?.name,
+                    full_name: memberData?.full_name,
                     email: memberData?.email,
-                    phone: memberData?.phone,
-                    role: memberData?.role,
-                    status: memberData?.status,
+                    user_name: memberData?.user_name,
+                    avatar_url: memberData?.avatar_url,
                     department: memberData?.department,
-                    notes: memberData?.notes,
+                    title: memberData?.title,
+                    slogan: memberData?.slogan,
+                    status: memberData?.status,
                 }}
             >
                 <Row gutter={24}>
@@ -34,17 +35,17 @@ export const MembersEdit = () => {
                         <div className="tw:text-center tw:mb-6">
                             <Avatar
                                 size={120}
-                                src={memberData?.avatar}
+                                src={memberData?.avatar_url}
                                 icon={<UserOutlined />}
                                 className="tw:mb-4"
                             />
-                            <div>
+                            {/* <div>
                                 <Upload>
                                     <Button icon={<UploadOutlined />} type="dashed">
                                         Thay đổi ảnh đại diện
                                     </Button>
                                 </Upload>
-                            </div>
+                            </div> */}
                         </div>
                     </Col>
                 </Row>
@@ -55,7 +56,7 @@ export const MembersEdit = () => {
                     <Col span={12}>
                         <Form.Item
                             label="Họ và tên"
-                            name="name"
+                            name="full_name"
                             rules={[
                                 { required: true, message: "Vui lòng nhập họ và tên" },
                                 { min: 2, message: "Tên phải có ít nhất 2 ký tự" }
@@ -87,25 +88,47 @@ export const MembersEdit = () => {
                 <Row gutter={24}>
                     <Col span={12}>
                         <Form.Item
-                            label="Số điện thoại"
-                            name="phone"
+                            label="Username"
+                            name="user_name"
                             rules={[
-                                { required: true, message: "Vui lòng nhập số điện thoại" },
-                                { pattern: /^[0-9+\-\s()]+$/, message: "Số điện thoại không hợp lệ" }
+                                { required: true, message: "Vui lòng nhập username" },
+                                { min: 2, message: "Username phải có ít nhất 2 ký tự" }
                             ]}
                         >
                             <Input
-                                placeholder="+84 123 456 789"
-                                prefix={<PhoneOutlined className="tw:text-gray-400" />}
+                                placeholder="Nhập username"
+                                prefix={<UserOutlined className="tw:text-gray-400" />}
                             />
                         </Form.Item>
                     </Col>
+                    <Col span={12}>
+                        <Form.Item
+                            label="Avatar URL"
+                            name="avatar_url"
+                        >
+                            <Input
+                                placeholder="https://example.com/avatar.jpg"
+                                prefix={<UserOutlined className="tw:text-gray-400" />}
+                            />
+                        </Form.Item>
+                    </Col>
+                </Row>
+
+                <Row gutter={24}>
                     <Col span={12}>
                         <Form.Item
                             label="Phòng ban"
                             name="department"
                         >
                             <Input placeholder="Phòng ban làm việc" />
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item
+                            label="Chức vụ"
+                            name="title"
+                        >
+                            <Input placeholder="Chức vụ công việc" />
                         </Form.Item>
                     </Col>
                 </Row>
@@ -115,48 +138,27 @@ export const MembersEdit = () => {
                 <Row gutter={24}>
                     <Col span={12}>
                         <Form.Item
-                            label="Vai trò"
-                            name="role"
-                            rules={[{ required: true, message: "Vui lòng chọn vai trò" }]}
-                        >
-                            <Select placeholder="Chọn vai trò">
-                                <Option value="admin">Quản trị viên</Option>
-                                <Option value="manager">Quản lý</Option>
-                                <Option value="member">Thành viên</Option>
-                                <Option value="guest">Khách</Option>
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                        <Form.Item
                             label="Trạng thái"
                             name="status"
                             rules={[{ required: true, message: "Vui lòng chọn trạng thái" }]}
                         >
                             <Select placeholder="Chọn trạng thái">
                                 <Option value="active">Hoạt động</Option>
-                                <Option value="inactive">Không hoạt động</Option>
+                                <Option value="disabled">Không hoạt động</Option>
                                 <Option value="pending">Chờ duyệt</Option>
                             </Select>
                         </Form.Item>
                     </Col>
-                </Row>
-
-                <Divider orientation="left">Thông tin bổ sung</Divider>
-
-                <Row gutter={24}>
-                    <Col span={24}>
+                    <Col span={12}>
                         <Form.Item
-                            label="Ghi chú"
-                            name="notes"
+                            label="Slogan"
+                            name="slogan"
                         >
-                            <Input.TextArea
-                                rows={4}
-                                placeholder="Ghi chú về thành viên..."
-                            />
+                            <Input placeholder="Slogan cá nhân" />
                         </Form.Item>
                     </Col>
                 </Row>
+
 
            
             </Form>

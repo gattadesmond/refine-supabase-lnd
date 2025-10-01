@@ -1,6 +1,6 @@
-import { List, useTable, CreateButton, EditButton, DeleteButton, ShowButton } from "@refinedev/antd";
-import { Table, Card, Avatar, Tag, Space, Typography, Row, Col, Statistic } from "antd";
-import { UserOutlined, MailOutlined, PhoneOutlined, TeamOutlined } from "@ant-design/icons";
+import { List, useTable, CreateButton, EditButton, DeleteButton, ShowButton, FilterDropdown, getDefaultFilter } from "@refinedev/antd";
+import { Table, Card, Avatar, Tag, Space, Typography, Row, Col, Statistic, Input } from "antd";
+import { UserOutlined, MailOutlined, PhoneOutlined, TeamOutlined, SearchOutlined } from "@ant-design/icons";
 
 import {
     useList,
@@ -9,7 +9,8 @@ import {
 const { Text } = Typography;
 
 export const MembersList = () => {
-    const { tableProps } = useTable({
+    const { tableProps, filters } = useTable({
+        syncWithLocation: false,
         sorters: {
             initial: [
                 {
@@ -18,8 +19,16 @@ export const MembersList = () => {
                 },
             ],
         },
+        filters: {
+            initial: [
+              {
+                field: "email",
+                operator: "contains",
+                value: "",
+              },
+            ],
+          },
     });
-    console.log("🚀 ~ MembersList ~ tableProps:", tableProps?.dataSource)
 
     const {
         result: { data: membersData },
@@ -43,25 +52,39 @@ export const MembersList = () => {
             title: "Thành viên",
             dataIndex: "name",
             key: "name",
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             render: (text: string, record: any) => {
                 return (<Space>
                     <Avatar src={record.avatar_url} icon={<UserOutlined />} size="large" />
                     <div>
                         <div className="tw:font-medium tw:text-gray-900">{text}</div>
-                        <div className="tw:text-sm tw:text-gray-500">{record.email}</div>
+                        <div className="tw:text-sm tw:text-gray-500">{record.full_name}</div>
                     </div>
                 </Space>);
             },
         },
-
         {
-            title: "Tên",
-            dataIndex: "full_name",
-            key: "full_name",
-            render: (fullName: string) => (
+            title: "Email",
+            dataIndex: "email",
+            key: "email",
+            filterIcon: (filtered) => (
+                <SearchOutlined
+                    style={{
+                        color: filtered ? "#1890ff" : undefined,
+                    }}
+                />
+            ),
+            defaultFilteredValue: getDefaultFilter("email", filters, "contains"),
+            filterDropdown: (props) => (
+                <FilterDropdown {...props}>
+                    <Input placeholder="Search by email" />
+                </FilterDropdown>
+            ),
+            render: (email: string) => (
                 <Space direction="vertical" size={0}>
                     <Space size={4}>
-                        <Text className="tw:text-sm">{fullName || "Chưa cập nhật"}</Text>
+                        <MailOutlined className="tw:text-gray-400" />
+                        <Text className="tw:text-sm">{email || "Chưa cập nhật"}</Text>
                     </Space>
                 </Space>
             ),
@@ -72,8 +95,8 @@ export const MembersList = () => {
             key: "status",
             render: (status: string) => {
                 const statusConfig = {
-                    active: { color: "green", text: "Hoạt động" },
-                    inactive: { color: "red", text: "Không hoạt động" },
+                    active: { color: "green", text: "Active" },
+                    inactive: { color: "red", text: "Inactive" },
                     pending: { color: "orange", text: "Chờ duyệt" }
                 };
                 const config = statusConfig[status as keyof typeof statusConfig] || { color: "default", text: status };
@@ -89,6 +112,7 @@ export const MembersList = () => {
         {
             title: "Thao tác",
             key: "actions",
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             render: (_, record: any) => (
                 <Space>
                     <EditButton hideText size="small" recordItemId={record.id} />

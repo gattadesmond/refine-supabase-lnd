@@ -13,9 +13,6 @@ import Code from "@editorjs/code";
 import Embed from "@editorjs/embed";
 import Raw from "@editorjs/raw";
 import Table from "@editorjs/table";
-import SimpleImage from "@editorjs/simple-image";
-
-// Inline plugins
 import InlineCode from "@editorjs/inline-code";
 // @ts-expect-error - No type definitions available
 import Marker from "@editorjs/marker";
@@ -25,7 +22,10 @@ import Warning from "@editorjs/warning";
 // @ts-expect-error - No type definitions available
 import Checklist from "@editorjs/checklist";
 import NestedList from "@editorjs/nested-list";
-import ColorPicker from "editorjs-color-picker";
+
+// @ts-expect-error - No type definitions available
+import SimpleImage from "./plugins/simple-image/index.js";
+
 interface EditorJSProps {
   data?: OutputData;
   onChange?: (data: OutputData) => void;
@@ -111,9 +111,6 @@ const EDITOR_TOOLS = {
     },
   },
   simpleImage: SimpleImage as EditorJSTool,
-  ColorPicker: {
-    class: ColorPicker,
-  },
 
   // Inline tools
   inlineCode: {

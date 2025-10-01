@@ -109,7 +109,6 @@ function App() {
                     list: "/members",
                     create: "/members/create",
                     edit: "/members/edit/:id",
-                    show: "/members/show/:id",
                     meta: {
                       label: "Members",
                       icon: <Users size={16} />,

@@ -7,20 +7,30 @@ const { Option } = Select;
 
 export const MembersCreate = () => {
     const { formProps, saveButtonProps } = useForm();
+    
+    console.log("🚀 ~ MembersCreate ~ formProps:", formProps);
 
     return (
-        <div className="tw:p-6">
-            <div className="tw:mb-6">
-                <Title level={2} className="tw:mb-2">
-                    <TeamOutlined className="tw:mr-2" />
-                    Thêm thành viên mới
-                </Title>
-                <Text type="secondary">
-                    Nhập thông tin chi tiết của thành viên mới
-                </Text>
-            </div>
+        <Create
+            title="Thêm thành viên mới"
+            headerButtons={[
+                <Button key="cancel" size="large">
+                    Hủy
+                </Button>
+            ]}
+        >
+            <div className="tw:p-6">
+                <div className="tw:mb-6">
+                    <Title level={2} className="tw:mb-2">
+                        <TeamOutlined className="tw:mr-2" />
+                        Thêm thành viên mới
+                    </Title>
+                    <Text type="secondary">
+                        Nhập thông tin chi tiết của thành viên mới
+                    </Text>
+                </div>
 
-            <Card className="tw:shadow-lg">
+                <Card className="tw:shadow-lg">
                 <Form
                     {...formProps}
                     layout="vertical"
@@ -168,6 +178,7 @@ export const MembersCreate = () => {
                     </Row>
                 </Form>
             </Card>
-        </div>
+            </div>
+        </Create>
     );
 };

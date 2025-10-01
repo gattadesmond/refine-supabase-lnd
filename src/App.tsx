@@ -24,7 +24,7 @@ import routerProvider, {
 
 import {
   MembersList,
-  MembersCreate,
+  // MembersCreate,
   MembersEdit,
 } from "./pages/members";
 import {
@@ -107,7 +107,7 @@ function App() {
                   {
                     name: "members",
                     list: "/members",
-                    create: "/members/create",
+                    // create: "/members/create",
                     edit: "/members/edit/:id",
                     meta: {
                       label: "Members",
@@ -175,7 +175,7 @@ function App() {
 
                     <Route path="/members">
                       <Route index element={<MembersList />} />
-                      <Route path="create" element={<MembersCreate />} />
+                      {/* <Route path="create" element={<MembersCreate />} /> */}
                       <Route path="edit/:id" element={<MembersEdit />} />
                     </Route>
                     <Route path="/categories">

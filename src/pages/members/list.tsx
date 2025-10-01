@@ -67,7 +67,7 @@ export const MembersList = () => {
             title: "Email",
             dataIndex: "email",
             key: "email",
-            filterIcon: (filtered) => (
+            filterIcon: (filtered: any) => (
                 <SearchOutlined
                     style={{
                         color: filtered ? "#1890ff" : undefined,
@@ -75,7 +75,7 @@ export const MembersList = () => {
                 />
             ),
             defaultFilteredValue: getDefaultFilter("email", filters, "contains"),
-            filterDropdown: (props) => (
+            filterDropdown: (props: any) => (
                 <FilterDropdown {...props}>
                     <Input placeholder="Search by email" />
                 </FilterDropdown>
@@ -113,17 +113,20 @@ export const MembersList = () => {
             title: "Thao tác",
             key: "actions",
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            render: (_, record: any) => (
+            render: ( record: any) => (
                 <Space>
                     <EditButton hideText size="small" recordItemId={record.id} />
-                    <DeleteButton hideText size="small" recordItemId={record.id} />
                 </Space>
             ),
         },
     ];
 
     return (
-        <List>
+        <List
+            headerButtons={[
+                
+            ]}
+        >
             <div className="">
                 {/* Statistics Cards */}
                 <Row gutter={16} className="tw:mb-6">

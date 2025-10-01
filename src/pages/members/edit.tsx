@@ -1,8 +1,9 @@
 import { Edit, useForm } from "@refinedev/antd";
 import { Form, Input, Select, Upload, Button, Card, Typography, Row, Col, Avatar, Space, Divider } from "antd";
 import { UserOutlined, UploadOutlined, MailOutlined, PhoneOutlined, TeamOutlined, EditOutlined } from "@ant-design/icons";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 
-const { Title, Text } = Typography;
 const { Option } = Select;
 
 export const MembersEdit = () => {
@@ -149,12 +150,28 @@ export const MembersEdit = () => {
                             </Select>
                         </Form.Item>
                     </Col>
-                    <Col span={12}>
+                    <Col span={24}>
                         <Form.Item
                             label="Slogan"
                             name="slogan"
                         >
-                            <Input placeholder="Slogan cá nhân" />
+                            <ReactQuill 
+                                theme="snow"
+                                placeholder="Nhập slogan cá nhân..."
+                                style={{ 
+                                    height: "120px",
+                                    marginBottom: "42px"
+                                }}
+                                modules={{
+                                    toolbar: [
+                                        [{ 'header': [1, 2, 3, false] }],
+                                        ['bold', 'italic', 'underline'],
+                                        [{ 'color': [] }, { 'background': [] }],
+                                        [{ 'align': [] }],
+                                        ['clean']
+                                    ]
+                                }}
+                            />
                         </Form.Item>
                     </Col>
                 </Row>

@@ -9,10 +9,10 @@ export const MembersCreate = () => {
     const { formProps, saveButtonProps } = useForm();
 
     return (
-        <div className="tw-p-6">
-            <div className="tw-mb-6">
-                <Title level={2} className="tw-mb-2">
-                    <TeamOutlined className="tw-mr-2" />
+        <div className="tw:p-6">
+            <div className="tw:mb-6">
+                <Title level={2} className="tw:mb-2">
+                    <TeamOutlined className="tw:mr-2" />
                     Thêm thành viên mới
                 </Title>
                 <Text type="secondary">
@@ -20,20 +20,20 @@ export const MembersCreate = () => {
                 </Text>
             </div>
 
-            <Card className="tw-shadow-lg">
+            <Card className="tw:shadow-lg">
                 <Form
                     {...formProps}
                     layout="vertical"
                     size="large"
-                    className="tw-max-w-4xl"
+                    className="tw:max-w-4xl"
                 >
                     <Row gutter={24}>
                         <Col span={24}>
-                            <div className="tw-text-center tw-mb-6">
+                            <div className="tw:text-center tw:mb-6">
                                 <Avatar 
                                     size={120} 
                                     icon={<UserOutlined />}
-                                    className="tw-mb-4"
+                                    className="tw:mb-4"
                                 />
                                 <div>
                                     <Upload>
@@ -58,7 +58,7 @@ export const MembersCreate = () => {
                             >
                                 <Input 
                                     placeholder="Nhập họ và tên đầy đủ"
-                                    prefix={<UserOutlined className="tw-text-gray-400" />}
+                                    prefix={<UserOutlined className="tw:text-gray-400" />}
                                 />
                             </Form.Item>
                         </Col>
@@ -73,7 +73,7 @@ export const MembersCreate = () => {
                             >
                                 <Input 
                                     placeholder="example@company.com"
-                                    prefix={<MailOutlined className="tw-text-gray-400" />}
+                                    prefix={<MailOutlined className="tw:text-gray-400" />}
                                 />
                             </Form.Item>
                         </Col>
@@ -91,7 +91,7 @@ export const MembersCreate = () => {
                             >
                                 <Input 
                                     placeholder="+84 123 456 789"
-                                    prefix={<PhoneOutlined className="tw-text-gray-400" />}
+                                    prefix={<PhoneOutlined className="tw:text-gray-400" />}
                                 />
                             </Form.Item>
                         </Col>
@@ -152,7 +152,7 @@ export const MembersCreate = () => {
 
                     <Row>
                         <Col span={24}>
-                            <div className="tw-flex tw-justify-end tw-gap-4">
+                            <div className="tw:flex tw:justify-end tw:gap-4">
                                 <Button size="large">
                                     Hủy
                                 </Button>

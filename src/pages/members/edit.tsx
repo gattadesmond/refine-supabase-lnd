@@ -10,10 +10,10 @@ export const MembersEdit = () => {
     const memberData = queryResult?.data?.data;
 
     return (
-        <div className="tw-p-6">
-            <div className="tw-mb-6">
-                <Title level={2} className="tw-mb-2">
-                    <EditOutlined className="tw-mr-2" />
+        <div className="tw:p-6">
+            <div className="tw:mb-6">
+                <Title level={2} className="tw:mb-2">
+                    <EditOutlined className="tw:mr-2" />
                     Chỉnh sửa thông tin thành viên
                 </Title>
                 <Text type="secondary">
@@ -21,12 +21,12 @@ export const MembersEdit = () => {
                 </Text>
             </div>
 
-            <Card className="tw-shadow-lg">
+            <Card className="tw:shadow-lg">
                 <Form
                     {...formProps}
                     layout="vertical"
                     size="large"
-                    className="tw-max-w-4xl"
+                    className="tw:max-w-4xl"
                     initialValues={{
                         name: memberData?.name,
                         email: memberData?.email,
@@ -39,12 +39,12 @@ export const MembersEdit = () => {
                 >
                     <Row gutter={24}>
                         <Col span={24}>
-                            <div className="tw-text-center tw-mb-6">
+                            <div className="tw:text-center tw:mb-6">
                                 <Avatar 
                                     size={120} 
                                     src={memberData?.avatar}
                                     icon={<UserOutlined />}
-                                    className="tw-mb-4"
+                                    className="tw:mb-4"
                                 />
                                 <div>
                                     <Upload>
@@ -71,7 +71,7 @@ export const MembersEdit = () => {
                             >
                                 <Input 
                                     placeholder="Nhập họ và tên đầy đủ"
-                                    prefix={<UserOutlined className="tw-text-gray-400" />}
+                                    prefix={<UserOutlined className="tw:text-gray-400" />}
                                 />
                             </Form.Item>
                         </Col>
@@ -86,7 +86,7 @@ export const MembersEdit = () => {
                             >
                                 <Input 
                                     placeholder="example@company.com"
-                                    prefix={<MailOutlined className="tw-text-gray-400" />}
+                                    prefix={<MailOutlined className="tw:text-gray-400" />}
                                 />
                             </Form.Item>
                         </Col>
@@ -104,7 +104,7 @@ export const MembersEdit = () => {
                             >
                                 <Input 
                                     placeholder="+84 123 456 789"
-                                    prefix={<PhoneOutlined className="tw-text-gray-400" />}
+                                    prefix={<PhoneOutlined className="tw:text-gray-400" />}
                                 />
                             </Form.Item>
                         </Col>
@@ -168,7 +168,7 @@ export const MembersEdit = () => {
 
                     <Row>
                         <Col span={24}>
-                            <div className="tw-flex tw-justify-end tw-gap-4">
+                            <div className="tw:flex tw:justify-end tw:gap-4">
                                 <Button size="large">
                                     Hủy
                                 </Button>

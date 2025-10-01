@@ -10,7 +10,7 @@
 This [Refine](https://github.com/refinedev/refine) project uses:
 - **Refine** - React framework for building admin panels
 - **Ant Design** - UI component library
-- **Tailwind CSS** - Utility-first CSS framework (with `tw-` prefix)
+- **Tailwind CSS** - Utility-first CSS framework (with `tw:` prefix)
 - **Supabase** - Backend as a Service
 - **TypeScript** - Type safety
 
@@ -18,7 +18,7 @@ This [Refine](https://github.com/refinedev/refine) project uses:
 
 - **Framework**: Refine v5
 - **UI Library**: Ant Design v5
-- **Styling**: Tailwind CSS v4 (with `tw-` prefix)
+- **Styling**: Tailwind CSS v4 (with `tw:` prefix)
 - **Backend**: Supabase
 - **Language**: TypeScript
 - **Build Tool**: Vite
@@ -33,7 +33,7 @@ Refine's hooks and components simplifies the development process and eliminates 
 
 ### UI Components
 - **Use Ant Design components** for all UI elements (forms, tables, buttons, etc.)
-- **Use Tailwind CSS with `tw-` prefix** for layout, spacing, and styling
+- **Use Tailwind CSS with `tw:` prefix** for layout, spacing, and styling
 - **Follow Refine patterns** for data fetching and state management
 
 ### Example Usage
@@ -45,10 +45,10 @@ export const MyList = () => {
   const { tableProps } = useTable();
   
   return (
-    <div className="tw-p-4">
-      <Card className="tw-shadow-lg">
-        <div className="tw-flex tw-justify-between tw-items-center tw-mb-4">
-          <h2 className="tw-text-2xl tw-font-bold">My Resources</h2>
+    <div className="tw:p-4">
+      <Card className="tw:shadow-lg">
+        <div className="tw:flex tw:justify-between tw:items-center tw:mb-4">
+          <h2 className="tw:text-2xl tw:font-bold">My Resources</h2>
           <CreateButton />
         </div>
         <Table {...tableProps} />

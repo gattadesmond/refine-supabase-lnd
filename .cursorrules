@@ -4,7 +4,7 @@
 This is a Refine-based project using:
 - **Refine** as the main framework
 - **Ant Design** for UI components
-- **Tailwind CSS** with `tw-` prefix for layout and styling
+- **Tailwind CSS** with `tw:` prefix for layout and styling
 - **Supabase** as backend
 - **TypeScript** for type safety
 
@@ -31,7 +31,7 @@ This is a Refine-based project using:
   - Other (Button, Icon, Avatar, Badge, etc.)
 
 ### 3. Styling and Layout
-- **USE Tailwind CSS with `tw-` prefix** for:
+- **USE Tailwind CSS with `tw:` prefix** for:
   - Layout and spacing (padding, margin, width, height)
   - Grid and flexbox layouts
   - Colors and backgrounds
@@ -39,7 +39,7 @@ This is a Refine-based project using:
   - Borders and shadows
   - Responsive design
 - **DO NOT** use Tailwind for component styling - use Ant Design components instead
-- **DO NOT** use regular CSS classes without `tw-` prefix
+- **DO NOT** use regular CSS classes without `tw:` prefix
 
 ### 4. Code Structure
 - Follow Refine's page structure:
@@ -61,10 +61,10 @@ export const MyList = () => {
   const { tableProps } = useTable();
   
   return (
-    <div className="tw-p-4">
-      <Card className="tw-shadow-lg">
-        <div className="tw-flex tw-justify-between tw-items-center tw-mb-4">
-          <h2 className="tw-text-2xl tw-font-bold tw-text-gray-800">
+    <div className="tw:p-4">
+      <Card className="tw:shadow-lg">
+        <div className="tw:flex tw:justify-between tw:items-center tw:mb-4">
+          <h2 className="tw:text-2xl tw:font-bold tw:text-gray-800">
             My Resources
           </h2>
           <CreateButton />
@@ -85,14 +85,14 @@ export const MyList = () => {
 <button>Click me</button> // Use <Button> from antd instead
 
 // Don't use Tailwind for component styling
-<Table className="tw-bg-white tw-border" /> // Use Ant Design's Table props
+<Table className="tw:bg-white tw:border" /> // Use Ant Design's Table props
 ```
 
 ### 6. File Organization
 - Keep Refine pages in their respective folders
 - Use Ant Design's theme customization if needed
 - Import Tailwind classes only for layout and spacing
-- Always use `tw-` prefix for Tailwind classes
+- Always use `tw:` prefix for Tailwind classes
 
 ### 7. Documentation References
 - Refine: https://refine.dev/docs/

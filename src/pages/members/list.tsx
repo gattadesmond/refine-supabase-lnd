@@ -6,7 +6,7 @@ import {
     useList,
 } from "@refinedev/core";
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 export const MembersList = () => {
     const { tableProps } = useTable({
@@ -19,6 +19,7 @@ export const MembersList = () => {
             ],
         },
     });
+    console.log("🚀 ~ MembersList ~ tableProps:", tableProps?.dataSource)
 
     const {
         result: { data: membersData },
@@ -42,30 +43,25 @@ export const MembersList = () => {
             title: "Thành viên",
             dataIndex: "name",
             key: "name",
-            render: (text: string, record: any) => (
-                <Space>
-                    <Avatar
-                        src={record.avatar}
-                        icon={<UserOutlined />}
-                        size="large"
-                    />
+            render: (text: string, record: any) => {
+                return (<Space>
+                    <Avatar src={record.avatar_url} icon={<UserOutlined />} size="large" />
                     <div>
-                        <div className="tw-font-medium tw-text-gray-900">{text}</div>
-                        <div className="tw-text-sm tw-text-gray-500">{record.email}</div>
+                        <div className="tw:font-medium tw:text-gray-900">{text}</div>
+                        <div className="tw:text-sm tw:text-gray-500">{record.email}</div>
                     </div>
-                </Space>
-            ),
+                </Space>);
+            },
         },
 
         {
-            title: "Liên hệ",
-            dataIndex: "phone",
-            key: "phone",
-            render: (phone: string) => (
+            title: "Tên",
+            dataIndex: "full_name",
+            key: "full_name",
+            render: (fullName: string) => (
                 <Space direction="vertical" size={0}>
                     <Space size={4}>
-                        <PhoneOutlined className="tw-text-gray-400" />
-                        <Text className="tw-text-sm">{phone || "Chưa cập nhật"}</Text>
+                        <Text className="tw:text-sm">{fullName || "Chưa cập nhật"}</Text>
                     </Space>
                 </Space>
             ),
@@ -103,37 +99,22 @@ export const MembersList = () => {
     ];
 
     return (
-        <div className="tw-p-6">
-            <div className="tw-mb-6">
-                <div className="tw-flex tw-justify-between tw-items-center tw-mb-4">
-                    <div>
-                        <Title level={2} className="tw-mb-2">
-                            <TeamOutlined className="tw-mr-2" />
-                            Quản lý thành viên
-                        </Title>
-                        <Text type="secondary">
-                            Quản lý thông tin và quyền hạn của các thành viên trong tổ chức
-                        </Text>
-                    </div>
-                    <CreateButton type="primary" size="large">
-                        Thêm thành viên
-                    </CreateButton>
-                </div>
-
+        <List>
+            <div className="">
                 {/* Statistics Cards */}
-                <Row gutter={16} className="tw-mb-6">
+                <Row gutter={16} className="tw:mb-6">
                     <Col span={6}>
-                        <Card className="tw-text-center">
+                        <Card className="tw:text-center">
                             <Statistic
                                 title="Tổng thành viên"
-                                value={totalCount|| 0}
+                                value={totalCount || 0}
                                 prefix={<UserOutlined />}
                                 valueStyle={{ color: "#1890ff" }}
                             />
                         </Card>
                     </Col>
                     <Col span={6}>
-                        <Card className="tw-text-center">
+                        <Card className="tw:text-center">
                             <Statistic
                                 title="Đang hoạt động"
                                 value={activeCount || 0}
@@ -144,7 +125,7 @@ export const MembersList = () => {
                     </Col>
 
                     <Col span={6}>
-                        <Card className="tw-text-center">
+                        <Card className="tw:text-center">
                             <Statistic
                                 title="Dừng hoạt động"
                                 value={disabledCount || 0}
@@ -154,23 +135,13 @@ export const MembersList = () => {
                         </Card>
                     </Col>
                 </Row>
-            </div>
 
-            <Card className="tw-shadow-lg tw-mt-10">
                 <Table
                     {...tableProps}
                     columns={columns}
                     rowKey="id"
-                    pagination={{
-                        ...tableProps.pagination,
-                        showSizeChanger: true,
-                        showQuickJumper: true,
-                        showTotal: (total, range) =>
-                            `${range[0]}-${range[1]} của ${total} thành viên`,
-                    }}
-                    className="tw-rounded-lg"
                 />
-            </Card>
-        </div>
+            </div>
+        </List>
     );
 };

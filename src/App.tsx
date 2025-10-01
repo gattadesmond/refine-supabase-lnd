@@ -26,7 +26,6 @@ import {
   MembersList,
   MembersCreate,
   MembersEdit,
-  MembersShow,
 } from "./pages/members";
 import {
   CategoriesList,
@@ -179,7 +178,6 @@ function App() {
                       <Route index element={<MembersList />} />
                       <Route path="create" element={<MembersCreate />} />
                       <Route path="edit/:id" element={<MembersEdit />} />
-                      <Route path="show/:id" element={<MembersShow />} />
                     </Route>
                     <Route path="/categories">
                       <Route index element={<CategoriesList />} />

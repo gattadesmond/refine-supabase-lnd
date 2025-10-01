@@ -99,6 +99,24 @@ export const MyList = () => {
 - Ant Design: https://ant.design/components/overview
 - Tailwind CSS: https://tailwindcss.com/docs
 
+## Status Values for Resources
+
+### Posts (stories, learnings, events):
+- "draft" - Bài viết đang soạn thảo
+- "preview" - Bài viết đang xem trước  
+- "published" - Bài viết đã xuất bản
+
+### Members:
+- "active" - Thành viên đang hoạt động
+- "disabled" - Thành viên bị vô hiệu hóa
+- "pending" - Thành viên chờ duyệt
+
+### Status Usage Rules:
+- Always use these exact status values in forms, filters, and status displays
+- Do not use "inactive" for members - use "disabled" instead
+- Ensure consistency across all components
+- Use proper status colors: active=green, disabled=red, pending=orange, draft=gray, preview=blue, published=green
+
 ## Quick Reference Commands
 - `yarn dev` - Start development server
 - `yarn build` - Build for production

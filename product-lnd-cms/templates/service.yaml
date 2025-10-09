@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.service }}-service
+  namespace: {{ .Values.namespace }}
+spec:
+  type: NodePort
+  ports:
+    - port: {{ .Values.servicePort }}
+      targetPort: {{ .Values.servicePort }}
+  selector:
+    app: {{ .Values.service }}
+
+---
+apiVersion: apisix.apache.org/v2
+kind: ApisixRoute
+metadata:
+  name: {{ .Values.service }}-route
+  namespace: {{ .Values.namespace }}
+spec:
+  http:
+    - backends:
+        - serviceName: {{ .Values.service }}-service
+          servicePort: {{ .Values.servicePort }}
+      match:
+        hosts:
+          - {{ .Values.host }}
+        paths:
+          - {{ .Values.basePath }}*
+      name: public-mapping
+      plugins:
+        - config:
+            whitelist:
+              - 'preset:default-access-eks-dev'
+              - 'preset:cloudflare'
+              {{- if ne .Values.envType "uat" }}
+              - 0.0.0.0/0
+              {{- end }}
+          enable: true
+          name: momo-ip-restriction

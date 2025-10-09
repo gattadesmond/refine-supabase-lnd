@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.service }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.replica }}
+  selector:
+    matchLabels:
+      app: {{ .Values.service }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.service }}
+    spec:
+      containers:
+        - name: {{ .Values.service }}
+          image: {{ .Values.image }}
+          command:
+            - sh
+            - '-c'
+          args:
+            - {{ .Values.startCommand }}
+          ports:
+            - containerPort: {{ .Values.servicePort }}
+              protocol: TCP
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              cpu: 200m
+              memory: 200Mi
+          livenessProbe:
+            httpGet:
+              path: {{ if eq .Values.basePath "/" }}/healthz{{ else }}{{ .Values.basePath }}/healthz{{ end }}
+              port: {{ .Values.servicePort }}
+              scheme: HTTP
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+
+{{ if .Values.autoscaling }}
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ .Values.service }}-scaling
+  namespace: {{ .Values.namespace }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ .Values.service }}
+  minReplicas: {{ .Values.minReplicas}}
+  maxReplicas: {{ .Values.maxReplicas}}
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+{{ end }}

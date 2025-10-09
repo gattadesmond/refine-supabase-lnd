@@ -38,6 +38,7 @@
     "@uiw/react-md-editor": "^4.0.8",
     "antd": "^5.23.0",
     "editorjs-color-picker": "^1.0.8",
+    "env-cmd": "10.1.0",
     "lodash": "^4.17.21",
     "lucide-react": "^0.544.0",
     "react": "^19.1.0",
@@ -69,9 +70,13 @@
     "vite": "^6.3.5"
   },
   "scripts": {
-    "dev": "refine dev",
-    "build": "tsc && refine build",
-    "start": "refine start",
+    "dev": "env-cmd -e local refine dev",
+    "build-local": "env-cmd -e local tsc && refine build",
+    "start-local": "env-cmd -e local refine start",
+    "build-uat": "env-cmd -e uat tsc && refine build",
+    "start-uat": "env-cmd -e uat refine start",
+    "build-production": "env-cmd -e production tsc && refine build",
+    "start-production": "env-cmd -e production refine start",
     "refine": "refine"
   },
   "browserslist": {

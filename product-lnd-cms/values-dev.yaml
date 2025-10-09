@@ -1,0 +1,16 @@
+# Default values for product-lnd-cms.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replica: 2
+service: product-lnd-cms
+namespace: momovn
+image: docker.mservice.io/momovn-dev/eks/product-lnd-cms
+host: momovn-dev.mservice.io
+autoscaling: false
+minReplicas: 2
+maxReplicas: 2
+servicePort: 8080
+basePath: /lnd/admin
+startCommand: nginx -g 'daemon off;'
+envType: uat

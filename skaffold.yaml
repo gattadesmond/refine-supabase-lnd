@@ -1,0 +1,70 @@
+---
+apiVersion: skaffold/v4beta2
+kind: Config
+profiles:
+  - name: dev
+    build:
+      artifacts:
+        - image: product-lnd-cms
+          context: .
+          docker:
+            dockerfile: src/config/docker/development/Dockerfile
+        - image: docker.mservice.io/momovn-dev/eks/product-lnd-cms
+          custom:
+            buildCommand: "
+            docker tag product-lnd-cms:${IMAGE_TAG} ${IMAGE}
+            && docker push ${IMAGE}"
+          requires:
+            - image: product-lnd-cms
+              alias: BASE
+      local:
+        push: false
+
+    manifests:
+      helm:
+        releases:
+          - name: product-lnd-cms
+            setValueTemplates:
+              image: "docker.mservice.io/momovn-dev/eks/product-lnd-cms:{{.IMAGE_TAG}}"
+            chartPath: product-lnd-cms
+            namespace: momovn
+            valuesFiles:
+              - product-lnd-cms/values-dev.yaml
+    deploy:
+      kubectl: {}
+      kubeContext: arn:aws:eks:ap-southeast-1:286382079878:cluster/momovn-dev
+
+
+  - name: prod
+    build:
+      artifacts:
+        - image: product-lnd-cms
+          context: .
+          docker:
+            dockerfile: src/config/docker/production/Dockerfile
+            buildArgs:
+              BUILD_ENV: Production
+        - image: docker.mservice.io/momovn-prod/eks/product-lnd-cms
+          custom:
+            buildCommand: "
+            docker tag product-lnd-cms:${IMAGE_TAG} ${IMAGE}
+            && docker push ${IMAGE}"
+          requires:
+            - image: product-lnd-cms
+              alias: BASE
+      local:
+        push: false
+
+    manifests:
+      helm:
+        releases:
+          - name: product-lnd-cms
+            setValueTemplates:
+              image: "docker.mservice.io/momovn-prod/eks/product-lnd-cms:{{.IMAGE_TAG}}"
+            chartPath: product-lnd-cms
+            namespace: momovn
+            valuesFiles:
+              - product-lnd-cms/values-prod.yaml
+    deploy:
+      kubectl: {}
+      kubeContext: arn:aws:eks:ap-southeast-1:286382079878:cluster/momovn-prod

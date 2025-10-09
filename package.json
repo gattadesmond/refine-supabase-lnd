@@ -71,11 +71,11 @@
   },
   "scripts": {
     "dev": "env-cmd -e local refine dev",
-    "build-local": "env-cmd -e local tsc && refine build",
+    "build-local": "env-cmd -e local tsc && env-cmd -e local refine build",
     "start-local": "env-cmd -e local refine start",
-    "build-uat": "env-cmd -e uat tsc && refine build",
+    "build-uat": "env-cmd -e uat tsc && env-cmd -e uat refine build",
     "start-uat": "env-cmd -e uat refine start",
-    "build-production": "env-cmd -e production tsc && refine build",
+    "build-production": "env-cmd -e production tsc && env-cmd -e production refine build",
     "start-production": "env-cmd -e production refine start",
     "refine": "refine"
   },

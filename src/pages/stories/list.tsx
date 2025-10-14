@@ -1,8 +1,7 @@
 import {
   BaseRecord,
   getDefaultFilter,
-  useNavigation,
-  useList,
+  useGo,
 } from "@refinedev/core";
 import {
   useTable,
@@ -13,7 +12,7 @@ import {
   FilterDropdown,
 } from "@refinedev/antd";
 
-import { Table, Space, Input, Button, Avatar } from "antd";
+import { Table, Space, Input, Avatar, Typography } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { PostStatus } from "../../components/PostStatus";
 
@@ -40,7 +39,7 @@ export const StoriesList = () => {
     },
   });
 
-  const { editUrl } = useNavigation();
+  const go = useGo();
 
 
 
@@ -66,12 +65,23 @@ export const StoriesList = () => {
           )}
           render={(value: string, record: BaseRecord) => {
             return (
-              <a
-                href={record.id ? editUrl("stories", record.id) : "#"}
-                className="max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap tw:font-semibold tw:text-sky-500 tw:hover:text-sky-700 tw:hover:underline"
+              <Typography.Link
+                onClick={() => {
+                  if (record.id) {
+                    go({
+                      to: {
+                        resource: "stories",
+                        action: "edit",
+                        id: record.id,
+                      },
+                      type: "push",
+                    });
+                  }
+                }}
+                className="tw:max-w-[200px] tw:overflow-hidden tw:text-ellipsis tw:whitespace-nowrap tw:font-semibold tw:text-sky-500 tw:hover:text-sky-700 tw:hover:underline"
               >
                 {value}
-              </a>
+              </Typography.Link>
             );
           }}
         />
@@ -94,19 +104,27 @@ export const StoriesList = () => {
           dataIndex={["category"]}
           title={<div className="tw:whitespace-nowrap">Chuyên mục</div>}
           render={(value) => {
-            console.log("🚀 ~ value:", value)
             return (
               <div className="tw:whitespace-nowrap">
-                <Button
-                  type="link"
-                  color="default"
-                  size="small"
-                  className="tw:p-0 tw:h-auto tw:font-normal tw:!text-sky-500 tw:hover:text-sky-700 tw:hover:underline"
-                  href={value?.slug ? editUrl("categories", value.slug) : "#"}
-                  disabled={!value?.slug}
-                >
-                  {value?.title || "Chưa phân loại"}
-                </Button>
+                {value?.slug ? (
+                  <Typography.Link
+                    onClick={() => {
+                      go({
+                        to: {
+                          resource: "categories",
+                          action: "edit",
+                          id: value.id,
+                        },
+                        type: "push",
+                      });
+                    }}
+                    className="tw:p-0 tw:h-auto tw:font-normal tw:!text-sky-500 tw:hover:text-sky-700 tw:hover:underline"
+                  >
+                    {value?.title || "Chưa phân loại"}
+                  </Typography.Link>
+                ) : (
+                  <span className="tw:text-gray-500">Chưa phân loại</span>
+                )}
               </div>
             );
           }}
@@ -134,7 +152,7 @@ export const StoriesList = () => {
 
         <Table.Column dataIndex="view_count" title="View" />
         <Table.Column
-          title=""
+          title="Actions"
           dataIndex="actions"
           render={(_, record: BaseRecord) => {
             return (

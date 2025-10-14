@@ -42,14 +42,7 @@ export const StoriesList = () => {
 
   const { editUrl } = useNavigation();
 
-  const {
-    result: { data: categoriesData },
-  } = useList({
-    resource: "categories",
-    meta: {
-      select: "id, title",
-    },
-  });
+
 
   return (
     <List>
@@ -98,11 +91,10 @@ export const StoriesList = () => {
           }}
         />
         <Table.Column
-          dataIndex={["category_title"]}
+          dataIndex={["category"]}
           title={<div className="tw:whitespace-nowrap">Chuyên mục</div>}
-          render={(category: string) => {
-            const { id: categoryId } =
-              categoriesData.find((cat) => cat.title === category) ?? {};
+          render={(value) => {
+            console.log("🚀 ~ value:", value)
             return (
               <div className="tw:whitespace-nowrap">
                 <Button
@@ -110,10 +102,10 @@ export const StoriesList = () => {
                   color="default"
                   size="small"
                   className="tw:p-0 tw:h-auto tw:font-normal tw:!text-sky-500 tw:hover:text-sky-700 tw:hover:underline"
-                  href={categoryId ? editUrl("categories", categoryId) : "#"}
-                  disabled={!categoryId}
+                  href={value?.slug ? editUrl("categories", value.slug) : "#"}
+                  disabled={!value?.slug}
                 >
-                  {category}
+                  {value?.title || "Chưa phân loại"}
                 </Button>
               </div>
             );

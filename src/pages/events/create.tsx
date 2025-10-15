@@ -270,7 +270,7 @@ export const EventsCreate = () => {
                                     )}
                                 </div>
                             </Form.Item>
-
+{/* 
                             <Form.Item
                                 label="View Count"
                                 name={["view_count"]}
@@ -278,7 +278,7 @@ export const EventsCreate = () => {
                                 className="tw:hidden"
                             >
                                 <Input type="number" />
-                            </Form.Item>
+                            </Form.Item> */}
 
                         </div>
 

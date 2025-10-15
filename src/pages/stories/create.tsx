@@ -248,14 +248,14 @@ export const StoriesCreate = () => {
                 </div>
               </Form.Item>
 
-              <Form.Item
+              {/* <Form.Item
                 label="View Count"
                 name={["view_count"]}
                 initialValue={0}
                 className="tw:hidden"
               >
                 <Input type="number" />
-              </Form.Item>
+              </Form.Item> */}
             </div>
           </div>
         </div>

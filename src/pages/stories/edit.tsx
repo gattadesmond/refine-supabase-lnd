@@ -101,7 +101,7 @@ export const StoriesEdit = () => {
     resource: "categories",
     optionLabel: "title", // Field name to display in options
     optionValue: "id", // Field name to use as value
-    defaultValue: queryResult?.data?.data?.category_id, // Set default value to current category
+    defaultValue: queryResult?.data?.data?.category_id || undefined, // Set default value to current category
     meta: {
       select: "id, title, description, slug, categories_post_types!inner(post_type_id)",
     },

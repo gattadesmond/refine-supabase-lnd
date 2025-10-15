@@ -14,6 +14,7 @@ import Embed from "@editorjs/embed";
 import Raw from "@editorjs/raw";
 import Table from "@editorjs/table";
 import InlineCode from "@editorjs/inline-code";
+
 // @ts-expect-error - No type definitions available
 import Marker from "@editorjs/marker";
 import Underline from "@editorjs/underline";
@@ -22,9 +23,11 @@ import Warning from "@editorjs/warning";
 // @ts-expect-error - No type definitions available
 import Checklist from "@editorjs/checklist";
 import NestedList from "@editorjs/nested-list";
+import ImageTool from "@editorjs/image";
 
 // @ts-expect-error - No type definitions available
 import SimpleImage from "./plugins/simple-image/index.js";
+
 
 interface EditorJSProps {
   data?: OutputData;
@@ -111,6 +114,142 @@ const EDITOR_TOOLS = {
     },
   },
   simpleImage: SimpleImage as EditorJSTool,
+  image: {
+    class: ImageTool as EditorJSTool,
+    config: {
+      endpoints: {
+        byFile: 'https://sa.mservice.io/momovn-cms/api/v2/upload/base64_v2',
+        byUrl: 'https://sa.mservice.io/momovn-cms/api/v2/upload/base64_v2',
+      },
+      field: 'File',
+      types: 'image/*',
+      additionalRequestData: {
+        Folder: 'Img',
+      },
+      captionPlaceholder: 'Nhập chú thích cho hình ảnh...',
+      buttonContent: 'Chọn hình ảnh',
+      uploader: {
+        uploadByFile(file: File) {
+          return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = async () => {
+              try {
+                const base64 = reader.result as string;
+                const response = await fetch('https://sa.mservice.io/momovn-cms/api/v2/upload/base64_v2', {
+                  method: 'POST',
+                  headers: {
+                    'accept': 'application/json',
+                    'accept-language': 'en-US,en;q=0.9,vi;q=0.8',
+                    'content-type': 'application/json',
+                    'origin': 'https://adminweb.momocdn.net',
+                    'priority': 'u=1, i',
+                    'referer': 'https://adminweb.momocdn.net/',
+                    'sec-ch-ua': '"Google Chrome";v="141", "Not?A_Brand";v="8", "Chromium";v="141"',
+                    'sec-ch-ua-mobile': '?0',
+                    'sec-ch-ua-platform': '"macOS"',
+                    'sec-fetch-dest': 'empty',
+                    'sec-fetch-mode': 'cors',
+                    'sec-fetch-site': 'cross-site',
+                    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36',
+                    'x-user-token': 'AEJAMWEIQMUAN@991HSOAHQYFJAHQKAGQEO-32WKAKAUIWUCNAPKQK'
+                  },
+                  body: JSON.stringify({
+                    File: base64,
+                    Folder: 'Img',
+                    Size: file.size,
+                    Type: file.type
+                  })
+                });
+
+                const result = await response.json();
+
+                if (result && result.Url) {
+                  resolve({
+                    success: 1,
+                    file: {
+                      url: result.Url,
+                    },
+                  });
+                } else {
+                  reject(new Error('Upload failed'));
+                }
+              } catch (error) {
+                reject(error);
+              }
+            };
+            reader.onerror = () => reject(new Error('File reading failed'));
+            reader.readAsDataURL(file);
+          });
+        },
+        uploadByUrl(url: string) {
+          return new Promise((resolve, reject) => {
+            const handleUpload = async () => {
+              try {
+                // Fetch the image from URL and convert to base64
+                const response = await fetch(url);
+                const blob = await response.blob();
+                const reader = new FileReader();
+
+                reader.onload = async () => {
+                  try {
+                    const base64 = reader.result as string;
+                    const uploadResponse = await fetch('https://sa.mservice.io/momovn-cms/api/v2/upload/base64_v2', {
+                      method: 'POST',
+                      headers: {
+                        'accept': 'application/json',
+                        'accept-language': 'en-US,en;q=0.9,vi;q=0.8',
+                        'content-type': 'application/json',
+                        'origin': 'https://adminweb.momocdn.net',
+                        'priority': 'u=1, i',
+                        'referer': 'https://adminweb.momocdn.net/',
+                        'sec-ch-ua': '"Google Chrome";v="141", "Not?A_Brand";v="8", "Chromium";v="141"',
+                        'sec-ch-ua-mobile': '?0',
+                        'sec-ch-ua-platform': '"macOS"',
+                        'sec-fetch-dest': 'empty',
+                        'sec-fetch-mode': 'cors',
+                        'sec-fetch-site': 'cross-site',
+                        'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36',
+                        'x-user-token': 'AEJAMWEIQMUAN@991HSOAHQYFJAHQKAGQEO-32WKAKAUIWUCNAPKQK'
+                      },
+                      body: JSON.stringify({
+                        File: base64,
+                        Folder: 'Img',
+                        Size: blob.size,
+                        Type: blob.type
+                      })
+                    });
+
+                    const result = await uploadResponse.json();
+
+                    if (result && result.Url) {
+                      resolve({
+                        success: 1,
+                        file: {
+                          url: result.Url,
+                        },
+                      });
+                    } else {
+                      reject(new Error('Upload failed'));
+                    }
+                  } catch (error) {
+                    reject(error);
+                  }
+                };
+
+                reader.onerror = () => reject(new Error('File reading failed'));
+                reader.readAsDataURL(blob);
+              } catch (error) {
+                reject(error);
+              }
+            };
+
+            handleUpload();
+          });
+        },
+      },
+    },
+  },
+  // simpleImage: SimpleImage as EditorJSTool,
 
   // Inline tools
   inlineCode: {

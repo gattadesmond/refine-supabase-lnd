@@ -150,7 +150,7 @@ export const StoriesList = () => {
           render={(value: boolean) => <BooleanField value={value} />}
         />
 
-        <Table.Column dataIndex="view_count" title="View" />
+        {/* <Table.Column dataIndex="view_count" title="View" /> */}
         <Table.Column
           title="Actions"
           dataIndex="actions"

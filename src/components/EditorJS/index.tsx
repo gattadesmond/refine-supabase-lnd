@@ -163,11 +163,11 @@ const EDITOR_TOOLS = {
 
                 const result = await response.json();
 
-                if (result && result.Url) {
+                if (result && result.Result) {
                   resolve({
                     success: 1,
                     file: {
-                      url: result.Url,
+                      url: result?.Data?.Full,
                     },
                   });
                 } else {
@@ -221,11 +221,11 @@ const EDITOR_TOOLS = {
 
                     const result = await uploadResponse.json();
 
-                    if (result && result.Url) {
+                    if (result && result.Result) {
                       resolve({
                         success: 1,
                         file: {
-                          url: result.Url,
+                          url: result?.Data?.Full,
                         },
                       });
                     } else {

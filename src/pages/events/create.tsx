@@ -5,7 +5,7 @@ import EditorJSForm from "../../components/EditorJS/EditorJSForm";
 import { Select } from "antd/lib";
 import slugify from "slugify";
 import PostStatus from "../../components/PostStatus";
-import dayjs from "dayjs";
+import UploadImage from "../../components/UploadImage";
 
 export const EventsCreate = () => {
     const { formProps, saveButtonProps, form } = useForm({
@@ -29,7 +29,6 @@ export const EventsCreate = () => {
           },
         ],
       });
-    console.log("🚀 ~ EventsCreate ~ categorySelectProps:", categorySelectProps)
 
     // Get members data using useSelect hook
     const { selectProps: memberSelectProps } = useSelect({
@@ -41,7 +40,6 @@ export const EventsCreate = () => {
     // Watch title changes and auto-generate slug using slugify
     const title = Form.useWatch('title', form);
     const slug = Form.useWatch('slug', form);
-    const coverImage = Form.useWatch('cover_image_url', form);
 
     useEffect(() => {
         if (title && form) {
@@ -149,19 +147,44 @@ export const EventsCreate = () => {
                         </div>
 
                         <Form.Item
-                            label="Ngày sự kiện"
-                            name={["event_date"]}
+                            label="Thời gian bắt đầu"
+                            name={["start_at"]}
+                          
+                        >
+                            <DatePicker
+                                showTime
+                                format="YYYY-MM-DD HH:mm"
+                                className="tw:w-full"
+                                placeholder="Chọn ngày và giờ bắt đầu"
+                            />
+                        </Form.Item>
+
+                        <Form.Item
+                            label="Thời gian kết thúc"
+                            name={["end_at"]}
                             rules={[
                                 {
-                                    required: true,
+                                    required: false,
                                 },
+                                ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                        const startAt = getFieldValue('start_at');
+                                        if (!value || !startAt) {
+                                            return Promise.resolve();
+                                        }
+                                        if (value && startAt && value.isBefore(startAt)) {
+                                            return Promise.reject(new Error('Thời gian kết thúc phải sau thời gian bắt đầu'));
+                                        }
+                                        return Promise.resolve();
+                                    },
+                                }),
                             ]}
                         >
                             <DatePicker
                                 showTime
                                 format="YYYY-MM-DD HH:mm"
                                 className="tw:w-full"
-                                placeholder="Chọn ngày và giờ sự kiện"
+                                placeholder="Chọn ngày và giờ kết thúc (tùy chọn)"
                             />
                         </Form.Item>
 
@@ -238,37 +261,7 @@ export const EventsCreate = () => {
                                     },
                                 ]}
                             >
-                                <div className="tw:space-y-3">
-                                    <Input
-                                        value={coverImage}
-                                        placeholder="Nhập URL hình ảnh..."
-                                        className="tw:font-mono tw:text-sm"
-                                    />
-                                    {coverImage && (
-                                        <div className="tw:border tw:border-gray-200 tw:rounded-lg tw:p-3 tw:bg-gray-50">
-                                            <div className="tw:text-xs tw:text-gray-600 tw:mb-2">Preview:</div>
-                                            <img
-                                                src={coverImage}
-                                                alt="Cover preview"
-                                                className="tw:max-w-full tw:h-auto tw:max-h-48 tw:rounded-md tw:shadow-sm"
-                                                onError={(e) => {
-                                                    const target = e.currentTarget;
-                                                    const errorDiv = target.nextElementSibling as HTMLElement;
-                                                    if (errorDiv) {
-                                                        target.style.display = 'none';
-                                                        errorDiv.style.display = 'flex';
-                                                    }
-                                                }}
-                                            />
-                                            <div
-                                                className="tw:hidden tw:items-center tw:justify-center tw:h-24 tw:bg-gray-100 tw:rounded-md tw:text-xs tw:text-gray-500"
-                                                style={{ display: 'none' }}
-                                            >
-                                                Không thể tải hình ảnh
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
+                                <UploadImage />
                             </Form.Item>
 {/* 
                             <Form.Item

@@ -213,7 +213,6 @@ export default class SimpleImage {
 
     return new Promise((resolve) => {
       reader.onload = (event) => {
-        console.log("xxx", event);
         resolve({
           url: event.target.result,
           caption: file.name,
@@ -228,7 +227,6 @@ export default class SimpleImage {
    * @param {PasteEvent} event - event with pasted config
    */
   onPaste(event) {
-    console.log("xxx", event);
 
     switch (event.type) {
       case "tag": {

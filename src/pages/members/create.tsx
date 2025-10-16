@@ -9,7 +9,6 @@ const { Option } = Select;
 export const MembersCreate = () => {
     const { formProps, saveButtonProps } = useForm();
     
-    console.log("🚀 ~ MembersCreate ~ formProps:", formProps);
 
     return (
         <Create

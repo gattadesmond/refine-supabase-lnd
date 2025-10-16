@@ -11,6 +11,7 @@ import { Form, Input, Select, Switch } from "antd";
 import { useEffect } from "react";
 import slugify from "slugify";
 import PostStatus from "../../components/PostStatus";
+import UploadImage from "../../components/UploadImage";
 import { EditorJSForm } from "../../components";
 
 type Learning = {
@@ -119,7 +120,6 @@ export const LearningMaterialsEdit = () => {
   const title = Form.useWatch("title", form);
   const slug = Form.useWatch("slug", form);
   const status = queryResult?.data?.data?.status;
-  const coverImage = Form.useWatch("cover_image_url", form);
   const createDate = queryResult?.data?.data?.created_at;
   const updateDate = queryResult?.data?.data?.updated_at;
 
@@ -288,40 +288,7 @@ export const LearningMaterialsEdit = () => {
                   },
                 ]}
               >
-                <div className="tw:space-y-3">
-                  <Input
-                    value={coverImage}
-                    placeholder="Nhập URL hình ảnh..."
-                    className="tw:font-mono tw:text-sm"
-                  />
-                  {coverImage && (
-                    <div className="tw:border tw:border-gray-200 tw:rounded-lg tw:p-3 ">
-                      <div className="tw:text-xs tw:text-gray-600 tw:mb-2">
-                        Preview:
-                      </div>
-                      <img
-                        src={coverImage}
-                        alt="Cover preview"
-                        className="tw:max-w-full tw:h-auto tw:max-h-48 tw:rounded-md tw:shadow-sm"
-                        onError={(e) => {
-                          const target = e.currentTarget;
-                          const errorDiv =
-                            target.nextElementSibling as HTMLElement;
-                          if (errorDiv) {
-                            target.style.display = "none";
-                            errorDiv.style.display = "flex";
-                          }
-                        }}
-                      />
-                      <div
-                        className="tw:hidden tw:items-center tw:justify-center tw:h-24 tw:bg-gray-100 tw:rounded-md tw:text-xs tw:text-gray-500"
-                        style={{ display: "none" }}
-                      >
-                        Không thể tải hình ảnh
-                      </div>
-                    </div>
-                  )}
-                </div>
+                <UploadImage />
               </Form.Item>
 
               <div className="tw:space-y-2">

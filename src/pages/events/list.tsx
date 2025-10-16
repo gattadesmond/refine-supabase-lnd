@@ -126,7 +126,7 @@ export const EventsList = () => {
         />
        */}
         <Table.Column
-          dataIndex={["event_date"]}
+          dataIndex={["start_at"]}
           title={<div className="tw:whitespace-nowrap">Ngày sự kiện</div>}
           render={(value: string) => (
             <div className="tw:whitespace-nowrap">

@@ -291,15 +291,32 @@ export const CoursesEdit = () => {
                   URL khóa học: <span className="tw:font-mono">{slug || ""}</span>
                 </div>
 
-                <Form.Item
+                {/* <Form.Item
                   label="Trạng thái"
                   name={["published"]}
                   valuePropName="checked"
                   rules={[{ required: false }]}
                 >
                   <Switch checkedChildren="Xuất bản" unCheckedChildren="Bản nháp" />
-                </Form.Item>
+                </Form.Item> */}
 
+
+                <Form.Item
+                  label="Trạng thái"
+                  name={["published"]}
+                  rules={[
+                    {
+                      required: false,
+                    },
+                  ]}
+                  className="tw:max-w-[200px]"
+                  initialValue="draft"
+                >
+                  <Select>
+                    <Select.Option value="draft">Bản nháp</Select.Option>
+                    <Select.Option value="published">Xuất bản</Select.Option>
+                  </Select>
+                </Form.Item>
 
                 <Form.Item
                   className="tw:hidden"
@@ -340,66 +357,66 @@ export const CoursesEdit = () => {
               </Form.Item>
             </div>
           </div>
-
-          {/* Course Lessons Management */}
-          <div className="tw:grid tw:grid-cols-[1fr_340px] tw:gap-8">
-            {/* Course Lessons List */}
-            <div>
-              <Card
-                title={
-                  <div className="tw:flex tw:justify-between tw:items-center">
-                    <span className="tw:font-semibold">Danh sách bài học trong khóa</span>
-                    {ordered.length > 0 && (
-                      <Button type="primary" onClick={handleSaveOrder}>
-                        Lưu thay đổi
-                      </Button>
-                    )}
-                  </div>
-                }
-              >
-                <div className="tw:gap-3 tw:grid tw:grid-cols-1">
-                  {ordered.map((row, index) => (
-                    <SortableItem
-                      key={row.id}
-                      row={row}
-                      index={index}
-                      onRemove={handleRemove}
-                      moveItem={moveItem}
-                    />
-                  ))}
-                  {ordered.length === 0 && (
-                    <Typography.Text type="secondary">Chưa có học liệu nào trong khóa.</Typography.Text>
+        </Form>
+        {/* Course Lessons Management */}
+        <div className="tw:grid tw:grid-cols-[1fr_340px] tw:gap-8">
+          {/* Course Lessons List */}
+          <div>
+            <Card
+              title={
+                <div className="tw:flex tw:justify-between tw:items-center">
+                  <span className="tw:font-semibold">Danh sách bài học trong khóa</span>
+                  {ordered.length > 0 && (
+                    <Button type="primary" onClick={handleSaveOrder}>
+                      Lưu thay đổi
+                    </Button>
                   )}
                 </div>
-              </Card>
-            </div>
-
-            {/* Add Lesson Form */}
-            <div>
-              <Card title="Thêm bài học vào khóa">
-                <Form form={addForm} layout="vertical" onFinish={handleAddSelected}>
-                  <Form.Item name={["learningId"]} label="Chọn bài học" rules={[{ required: false }]}>
-                    <Select
-                      allowClear
-                      placeholder="Chọn từ danh sách learnings"
-                      options={selectableOptions}
-                      className="tw:w-full"
-                    />
-                  </Form.Item>
-                  <div className="tw:flex tw:justify-end">
-                    <Button type="primary" onClick={handleAddSelected}>
-                      Thêm vào khóa học
-                    </Button>
-                  </div>
-                </Form>
-                <Divider />
-                <Typography.Paragraph className="tw:text-xs tw:text-gray-500">
-                  Kéo thả các mục bên trái để thay đổi thứ tự, sau đó nhấn "Lưu thay đổi".
-                </Typography.Paragraph>
-              </Card>
-            </div>
+              }
+            >
+              <div className="tw:gap-3 tw:grid tw:grid-cols-1">
+                {ordered.map((row, index) => (
+                  <SortableItem
+                    key={row.id}
+                    row={row}
+                    index={index}
+                    onRemove={handleRemove}
+                    moveItem={moveItem}
+                  />
+                ))}
+                {ordered.length === 0 && (
+                  <Typography.Text type="secondary">Chưa có học liệu nào trong khóa.</Typography.Text>
+                )}
+              </div>
+            </Card>
           </div>
-        </Form>
+
+          {/* Add Lesson Form */}
+          <div>
+            <Card title="Thêm bài học vào khóa">
+              <Form form={addForm} layout="vertical" onFinish={handleAddSelected}>
+                <Form.Item name={["learningId"]} label="Chọn bài học" rules={[{ required: false }]}>
+                  <Select
+                    allowClear
+                    placeholder="Chọn từ danh sách learnings"
+                    options={selectableOptions}
+                    className="tw:w-full"
+                  />
+                </Form.Item>
+                <div className="tw:flex tw:justify-end">
+                  <Button type="primary" onClick={handleAddSelected}>
+                    Thêm vào khóa học
+                  </Button>
+                </div>
+              </Form>
+              <Divider />
+              <Typography.Paragraph className="tw:text-xs tw:text-gray-500">
+                Kéo thả các mục bên trái để thay đổi thứ tự, sau đó nhấn "Lưu thay đổi".
+              </Typography.Paragraph>
+            </Card>
+          </div>
+        </div>
+
       </Edit>
     </DndProvider>
   );

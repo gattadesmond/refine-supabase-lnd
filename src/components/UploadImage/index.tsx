@@ -10,7 +10,6 @@ interface UploadImageProps {
 }
 
 const UploadImage: React.FC<UploadImageProps> = ({ value, onChange, disabled }) => {
-  console.log("🚀 ~ UploadImage ~ value:", value)
   const [uploading, setUploading] = useState(false);
 
   const uploadImage = async (file: File): Promise<string> => {

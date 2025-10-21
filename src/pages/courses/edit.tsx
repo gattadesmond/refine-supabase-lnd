@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState, useRef } from "react";
 import { DeleteButton, Edit, SaveButton, useForm } from "@refinedev/antd";
 import { HttpError, useCreateMany, useDeleteMany, useList, useUpdate } from "@refinedev/core";
-import { Button, Card, Divider, Form, Select, Typography, Input, Switch } from "antd";
+import { Button, Card, Divider, Form, Select, Typography, Input } from "antd";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DragOutlined } from "@ant-design/icons";

@@ -52,7 +52,6 @@ import {
   CoursesList,
   CoursesCreate,
   CoursesEdit,
-  CoursesShow,
 } from "./pages/courses";
 
 import { AppIcon } from "./components/app-icon";
@@ -140,7 +139,6 @@ function App() {
                   list: "/courses",
                   create: "/courses/create",
                   edit: "/courses/edit/:id",
-                  show: "/courses/show/:id",
                   meta: {
                     label: "Courses",
                     icon: <BookOpen size={16} />,
@@ -223,7 +221,6 @@ function App() {
                       <Route index element={<CoursesList />} />
                       <Route path="create" element={<CoursesCreate />} />
                       <Route path="edit/:id" element={<CoursesEdit />} />
-                      <Route path="show/:id" element={<CoursesShow />} />
                     </Route>
 
                     <Route path="*" element={<ErrorComponent />} />

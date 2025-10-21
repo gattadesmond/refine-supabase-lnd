@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState, useRef } from "react";
-import { DeleteButton, Edit, SaveButton, useForm } from "@refinedev/antd";
-import { HttpError, useCreateMany, useDeleteMany, useList, useUpdate, useGo, useDelete } from "@refinedev/core";
+import { Edit, SaveButton, useForm, DeleteButton } from "@refinedev/antd";
+import { HttpError, useCreateMany, useDeleteMany, useList, useUpdate, useGo } from "@refinedev/core";
 import { Button, Card, Divider, Form, Select, Typography, Input } from "antd";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -99,6 +99,7 @@ export const CoursesEdit = () => {
     redirect: false,
   });
 
+
   const courseId = queryResult?.data?.data?.id as number | undefined;
   const [ordered, setOrdered] = useState<CourseLearningRow[]>([]);
   const [addForm] = Form.useForm<{ learningId?: number }>();
@@ -138,6 +139,7 @@ export const CoursesEdit = () => {
   const { mutate: createMany } = useCreateMany();
   const { mutate: deleteMany } = useDeleteMany();
   const { mutate: update } = useUpdate();
+  const go = useGo();
 
   // Sync data from API to local state
   useEffect(() => {
@@ -269,31 +271,10 @@ export const CoursesEdit = () => {
       });
   }, [courseId, ordered, createMany, update, deleteMany, courseLearnings.query, courseLearnings.result?.data]);
 
-  // Handle cascade deletion - xóa course_learnings trước khi xóa course
-  const handleDeleteSuccess = useCallback(async () => {
-    if (!courseId) return;
-
-    try {
-      // Lấy tất cả course_learnings của course này
-      const courseLearningsIds = courseLearnings.result?.data?.map(item => item.id) || [];
-      
-      // Xóa tất cả course_learnings trước
-      if (courseLearningsIds.length > 0) {
-        await new Promise((resolve, reject) => {
-          deleteMany(
-            { resource: "course_learnings", ids: courseLearningsIds },
-            {
-              onSuccess: () => resolve("deleted"),
-              onError: (error: HttpError) => reject(error),
-            }
-          );
-        });
-      }
-    } catch (error) {
-      console.error("❌ Error deleting course_learnings:", error);
-    }
-  }, [courseId, courseLearnings.result?.data, deleteMany]);
-
+  // Handle delete success - redirect to list page
+  const handleDeleteSuccess = useCallback(() => {
+    go({ to: "/courses" });
+  }, [go]);
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -367,11 +348,12 @@ export const CoursesEdit = () => {
             <div>
               <div className="tw:mb-6  tw:flex tw:flex-nowrap tw:gap-4">
                 <DeleteButton 
-                  recordItemId={queryResult?.data?.data?.id}
+                  recordItemId={courseId}
                   onSuccess={handleDeleteSuccess}
                   confirmTitle="Xác nhận xóa khóa học"
                   confirmOkText="Xóa"
                   confirmCancelText="Hủy"
+                  className="tw:flex-shrink-0"
                 />
 
                 <SaveButton {...saveButtonProps} className="tw:w-full">

@@ -142,6 +142,7 @@ function App() {
                   meta: {
                     label: "Courses",
                     icon: <BookOpen size={16} />,
+                    canDelete: true,
                   },
                 }]}
                 options={{

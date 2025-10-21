@@ -1,15 +1,21 @@
 import React, { useCallback, useEffect, useMemo, useState, useRef } from "react";
-import { Edit, useForm } from "@refinedev/antd";
+import { DeleteButton, Edit, SaveButton, useForm } from "@refinedev/antd";
 import { HttpError, useCreateMany, useDeleteMany, useList, useUpdate } from "@refinedev/core";
-import { Button, Card, Divider, Form, Select, Typography } from "antd";
+import { Button, Card, Divider, Form, Select, Typography, Input, Switch } from "antd";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DragOutlined } from "@ant-design/icons";
+import slugify from "slugify";
+import UploadImage from "../../components/UploadImage";
 
 // Types
 type Course = {
   id: number;
   name: string;
+  slug: string;
+  description: string;
+  thumbnail_url: string;
+  published: boolean;
 };
 
 type CourseLearningRow = {
@@ -46,7 +52,7 @@ const SortableItem: React.FC<SortableItemProps> = ({ row, index, onRemove, moveI
     accept: ITEM_TYPE,
     hover: (draggedItem: { id: number; index: number }, monitor) => {
       if (!ref.current) return;
-      
+
       const dragIndex = draggedItem.index;
       const hoverIndex = index;
       if (dragIndex === hoverIndex) return;
@@ -70,9 +76,8 @@ const SortableItem: React.FC<SortableItemProps> = ({ row, index, onRemove, moveI
   return (
     <div
       ref={ref}
-      className={`tw:flex tw:items-center tw:justify-between tw:gap-3 tw:bg-white tw:border tw:border-gray-200 tw:rounded-md tw:px-3 tw:py-2 tw:cursor-move tw:transition-all tw:duration-200 ${
-        isDragging ? "tw:opacity-50" : ""
-      }`}
+      className={`tw:flex tw:items-center tw:justify-between tw:gap-3 tw:bg-white tw:border tw:border-gray-200 tw:rounded-md tw:px-3 tw:py-2 tw:cursor-move tw:transition-all tw:duration-200 ${isDragging ? "tw:opacity-50" : ""
+        }`}
     >
       <div className="tw:flex tw:items-center tw:gap-3 tw:min-w-0">
         <DragOutlined className="tw:text-gray-400 tw:cursor-move tw:hover:text-gray-600" />
@@ -89,14 +94,30 @@ const SortableItem: React.FC<SortableItemProps> = ({ row, index, onRemove, moveI
 
 // Main Component
 export const CoursesEdit = () => {
-  const { saveButtonProps, query } = useForm<Course, HttpError, Course>({
+  const { saveButtonProps, query: queryResult, formProps, form } = useForm<Course, HttpError, Course>({
     resource: "courses",
     redirect: false,
   });
 
-  const courseId = query?.data?.data?.id as number | undefined;
+  const courseId = queryResult?.data?.data?.id as number | undefined;
   const [ordered, setOrdered] = useState<CourseLearningRow[]>([]);
   const [addForm] = Form.useForm<{ learningId?: number }>();
+
+  // Watch name changes and auto-generate slug
+  const name = Form.useWatch("name", form);
+  const slug = Form.useWatch("slug", form);
+
+  useEffect(() => {
+    if (name && form) {
+      const autoSlug = slugify(name, {
+        lower: true,
+        strict: true,
+        locale: "vi",
+        trim: true,
+      });
+      form.setFieldValue("slug", autoSlug);
+    }
+  }, [name, form]);
 
   // API Hooks
   const courseLearnings = useList<CourseLearningRow>({
@@ -202,7 +223,7 @@ export const CoursesEdit = () => {
 
     // Update existing items
     if (existingItems.length > 0) {
-      const updatePromises = existingItems.map(item => 
+      const updatePromises = existingItems.map(item =>
         new Promise((resolve, reject) => {
           update(
             {
@@ -224,7 +245,7 @@ export const CoursesEdit = () => {
     const currentIds = ordered.map(item => item.id);
     const originalIds = courseLearnings.result?.data?.map(item => item.id) || [];
     const itemsToDelete = originalIds.filter(id => !currentIds.includes(id));
-    
+
     if (itemsToDelete.length > 0) {
       const deletePromise = new Promise((resolve, reject) => {
         deleteMany(
@@ -251,63 +272,134 @@ export const CoursesEdit = () => {
   return (
     <DndProvider backend={HTML5Backend}>
       <Edit saveButtonProps={saveButtonProps} footerButtons={<></>} title={<span>Chỉnh sửa khóa học</span>}>
-        <div className="tw:grid tw:grid-cols-[1fr_340px] tw:gap-8">
-          {/* Course Lessons List */}
-          <div>
-            <Card
-              title={
-                <div className="tw:flex tw:justify-between tw:items-center">
-                  <span className="tw:font-semibold">Danh sách bài học trong khóa</span>
-                  {ordered.length > 0 && (
-                    <Button type="primary" onClick={handleSaveOrder}>
-                      Lưu thay đổi
-                    </Button>
-                  )}
+        <Form<Course> {...formProps} layout="vertical">
+
+          <div className="tw:grid tw:grid-cols-[1fr_300px] tw:gap-8 tw:mb-8">
+            {/* Course Basic Info */}
+            <div>
+              <Card title="Thông tin cơ bản" className="tw:mb-6">
+
+                <Form.Item
+                  label="Tên khóa học"
+                  name={["name"]}
+                  rules={[{ required: true, message: "Vui lòng nhập tên khóa học" }]}
+                >
+                  <Input size="large" className="tw:font-semibold" />
+                </Form.Item>
+
+                <div className="tw:text-gray-600 tw:-mt-4 tw:mb-4 tw:text-xs">
+                  URL khóa học: <span className="tw:font-mono">{slug || ""}</span>
                 </div>
-              }
-            >
-              <div className="tw:gap-3 tw:grid tw:grid-cols-1">
-                {ordered.map((row, index) => (
-                  <SortableItem
-                    key={row.id}
-                    row={row}
-                    index={index}
-                    onRemove={handleRemove}
-                    moveItem={moveItem}
-                  />
-                ))}
-                {ordered.length === 0 && (
-                  <Typography.Text type="secondary">Chưa có học liệu nào trong khóa.</Typography.Text>
-                )}
+
+                <Form.Item
+                  label="Trạng thái"
+                  name={["published"]}
+                  valuePropName="checked"
+                  rules={[{ required: false }]}
+                >
+                  <Switch checkedChildren="Xuất bản" unCheckedChildren="Bản nháp" />
+                </Form.Item>
+
+
+                <Form.Item
+                  className="tw:hidden"
+                  label="Đường dẫn khóa học"
+                  name={["slug"]}
+                  rules={[{ required: true }]}
+                  extra="URL slug được tự động tạo từ tên khóa học"
+                >
+                  <Input className="tw:font-mono tw:text-sm" disabled />
+                </Form.Item>
+
+                <Form.Item
+                  label="Mô tả khóa học"
+                  name={["description"]}
+                  rules={[{ required: false }]}
+                >
+                  <Input.TextArea rows={3} placeholder="Nhập mô tả ngắn về khóa học..." />
+                </Form.Item>
+              </Card>
+            </div>
+
+            {/* Course Settings */}
+            <div>
+              <div className="tw:mb-6  tw:flex tw:flex-nowrap tw:gap-4">
+                <DeleteButton recordItemId={queryResult?.data?.data?.id} />
+
+                <SaveButton {...saveButtonProps} className="tw:w-full">
+                  Lưu
+                </SaveButton>
               </div>
-            </Card>
+
+              <Form.Item
+                label="Hình ảnh đại diện"
+                name={["thumbnail_url"]}
+                rules={[{ required: false }]}
+              >
+                <UploadImage />
+              </Form.Item>
+            </div>
           </div>
 
-          {/* Add Lesson Form */}
-          <div>
-            <Card title="Thêm bài học vào khóa">
-              <Form form={addForm} layout="vertical" onFinish={handleAddSelected}>
-                <Form.Item name={["learningId"]} label="Chọn bài học" rules={[{ required: false }]}>
-                  <Select
-                    allowClear
-                    placeholder="Chọn từ danh sách learnings"
-                    options={selectableOptions}
-                    className="tw:w-full"
-                  />
-                </Form.Item>
-                <div className="tw:flex tw:justify-end">
-                  <Button type="primary" onClick={handleAddSelected}>
-                    Thêm vào khóa học
-                  </Button>
+          {/* Course Lessons Management */}
+          <div className="tw:grid tw:grid-cols-[1fr_340px] tw:gap-8">
+            {/* Course Lessons List */}
+            <div>
+              <Card
+                title={
+                  <div className="tw:flex tw:justify-between tw:items-center">
+                    <span className="tw:font-semibold">Danh sách bài học trong khóa</span>
+                    {ordered.length > 0 && (
+                      <Button type="primary" onClick={handleSaveOrder}>
+                        Lưu thay đổi
+                      </Button>
+                    )}
+                  </div>
+                }
+              >
+                <div className="tw:gap-3 tw:grid tw:grid-cols-1">
+                  {ordered.map((row, index) => (
+                    <SortableItem
+                      key={row.id}
+                      row={row}
+                      index={index}
+                      onRemove={handleRemove}
+                      moveItem={moveItem}
+                    />
+                  ))}
+                  {ordered.length === 0 && (
+                    <Typography.Text type="secondary">Chưa có học liệu nào trong khóa.</Typography.Text>
+                  )}
                 </div>
-              </Form>
-              <Divider />
-              <Typography.Paragraph className="tw:text-xs tw:text-gray-500">
-                Kéo thả các mục bên trái để thay đổi thứ tự, sau đó nhấn "Lưu thay đổi".
-              </Typography.Paragraph>
-            </Card>
+              </Card>
+            </div>
+
+            {/* Add Lesson Form */}
+            <div>
+              <Card title="Thêm bài học vào khóa">
+                <Form form={addForm} layout="vertical" onFinish={handleAddSelected}>
+                  <Form.Item name={["learningId"]} label="Chọn bài học" rules={[{ required: false }]}>
+                    <Select
+                      allowClear
+                      placeholder="Chọn từ danh sách learnings"
+                      options={selectableOptions}
+                      className="tw:w-full"
+                    />
+                  </Form.Item>
+                  <div className="tw:flex tw:justify-end">
+                    <Button type="primary" onClick={handleAddSelected}>
+                      Thêm vào khóa học
+                    </Button>
+                  </div>
+                </Form>
+                <Divider />
+                <Typography.Paragraph className="tw:text-xs tw:text-gray-500">
+                  Kéo thả các mục bên trái để thay đổi thứ tự, sau đó nhấn "Lưu thay đổi".
+                </Typography.Paragraph>
+              </Card>
+            </div>
           </div>
-        </div>
+        </Form>
       </Edit>
     </DndProvider>
   );

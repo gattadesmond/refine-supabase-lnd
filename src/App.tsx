@@ -48,6 +48,13 @@ import {
 } from "./pages/learnings";
 import { StoriesList, StoriesCreate, StoriesEdit } from "./pages/stories";
 
+import {
+  CoursesList,
+  CoursesCreate,
+  CoursesEdit,
+  CoursesShow,
+} from "./pages/courses";
+
 import { AppIcon } from "./components/app-icon";
 import { supabaseClient } from "./utility";
 import { ColorModeContextProvider } from "./contexts/color-mode";
@@ -75,68 +82,70 @@ function App() {
                 authProvider={authProvider}
                 routerProvider={routerProvider}
                 notificationProvider={useNotificationProvider}
-                resources={[
-                  {
-                    name: "stories",
-                    list: "/stories",
-                    create: "/stories/create",
-                    edit: "/stories/edit/:id",
-                    meta: {
-                      label: "Stories",
-                      icon: <BookOpen size={16} />,
-                    },
+                resources={[{
+                  name: "stories",
+                  list: "/stories",
+                  create: "/stories/create",
+                  edit: "/stories/edit/:id",
+                  meta: {
+                    label: "Stories",
+                    icon: <BookOpen size={16} />,
                   },
-                  {
-                    name: "categories",
-                    list: "/categories",
-                    create: "/categories/create",
-                    edit: "/categories/edit/:id",
-                    show: "/categories/show/:id",
-                    meta: {
-                      label: "Categories",
-                      icon: <FolderOpen size={16} />,
-                      canDelete: true,
-                    },
+                }, {
+                  name: "categories",
+                  list: "/categories",
+                  create: "/categories/create",
+                  edit: "/categories/edit/:id",
+                  show: "/categories/show/:id",
+                  meta: {
+                    label: "Categories",
+                    icon: <FolderOpen size={16} />,
+                    canDelete: true,
                   },
-                  {
-                    name: "post_types",
+                }, {
+                  name: "post_types",
+                }, {
+                  name: "categories_post_types",
+                }, {
+                  name: "members",
+                  list: "/members",
+                  // create: "/members/create",
+                  edit: "/members/edit/:id",
+                  meta: {
+                    label: "Members",
+                    icon: <Users size={16} />,
                   },
-                  {
-                    name: "categories_post_types",
+                }, {
+                  name: "events",
+                  list: "/events",
+                  create: "/events/create",
+                  edit: "/events/edit/:id",
+                  show: "/events/show/:id",
+                  meta: {
+                    label: "Events",
+                    icon: <Calendar size={16} />,
                   },
-                  {
-                    name: "members",
-                    list: "/members",
-                    // create: "/members/create",
-                    edit: "/members/edit/:id",
-                    meta: {
-                      label: "Members",
-                      icon: <Users size={16} />,
-                    },
+                }, {
+                  name: "learnings",
+                  list: "/learnings",
+                  create: "/learnings/create",
+                  edit: "/learnings/edit/:id",
+                  show: "/learnings/show/:id",
+                  meta: {
+                    label: "Learning Materials",
+                    icon: <GraduationCap size={16} />,
                   },
-                  {
-                    name: "events",
-                    list: "/events",
-                    create: "/events/create",
-                    edit: "/events/edit/:id",
-                    show: "/events/show/:id",
-                    meta: {
-                      label: "Events",
-                      icon: <Calendar size={16} />,
-                    },
+                }, {
+                  name: "courses",
+                  list: "/courses",
+                  create: "/courses/create",
+                  edit: "/courses/edit/:id",
+                  show: "/courses/show/:id",
+                  meta: {
+                    label: "Courses",
+                    icon: <BookOpen size={16} />,
                   },
-                  {
-                    name: "learnings",
-                    list: "/learnings",
-                    create: "/learnings/create",
-                    edit: "/learnings/edit/:id",
-                    show: "/learnings/show/:id",
-                    meta: {
-                      label: "Learning Materials",
-                      icon: <GraduationCap size={16} />,
-                    },
-                  },
-                ]}
+                }]}
                 options={{
                   syncWithLocation: true,
                   warnWhenUnsavedChanges: true,
@@ -209,6 +218,12 @@ function App() {
                       <Route index element={<StoriesList />} />
                       <Route path="create" element={<StoriesCreate />} />
                       <Route path="edit/:id" element={<StoriesEdit />} />
+                    </Route>
+                    <Route path="/courses">
+                      <Route index element={<CoursesList />} />
+                      <Route path="create" element={<CoursesCreate />} />
+                      <Route path="edit/:id" element={<CoursesEdit />} />
+                      <Route path="show/:id" element={<CoursesShow />} />
                     </Route>
 
                     <Route path="*" element={<ErrorComponent />} />

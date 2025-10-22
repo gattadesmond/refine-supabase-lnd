@@ -54,6 +54,13 @@ import {
   CoursesEdit,
 } from "./pages/courses";
 
+import {
+  QuizzesList,
+  QuizzesCreate,
+  QuizzesEdit,
+  QuizzesShow,
+} from "./pages/quizzes";
+
 import { AppIcon } from "./components/app-icon";
 import { supabaseClient } from "./utility";
 import { ColorModeContextProvider } from "./contexts/color-mode";
@@ -65,6 +72,7 @@ import {
   FolderOpen,
   Calendar,
   GraduationCap,
+  HelpCircle,
 } from "lucide-react";
 
 function App() {
@@ -142,6 +150,17 @@ function App() {
                   meta: {
                     label: "Courses",
                     icon: <BookOpen size={16} />,
+                    canDelete: true,
+                  },
+                }, {
+                  name: "quizzes",
+                  list: "/quizzes",
+                  create: "/quizzes/create",
+                  edit: "/quizzes/edit/:id",
+                  show: "/quizzes/show/:id",
+                  meta: {
+                    label: "Quizzes",
+                    icon: <HelpCircle size={16} />,
                     canDelete: true,
                   },
                 }]}
@@ -222,6 +241,12 @@ function App() {
                       <Route index element={<CoursesList />} />
                       <Route path="create" element={<CoursesCreate />} />
                       <Route path="edit/:id" element={<CoursesEdit />} />
+                    </Route>
+                    <Route path="/quizzes">
+                      <Route index element={<QuizzesList />} />
+                      <Route path="create" element={<QuizzesCreate />} />
+                      <Route path="edit/:id" element={<QuizzesEdit />} />
+                      <Route path="show/:id" element={<QuizzesShow />} />
                     </Route>
 
                     <Route path="*" element={<ErrorComponent />} />

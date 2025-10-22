@@ -15,6 +15,7 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
   onCancel,
   onDelete
 }) => {
+  console.log("🚀 ~ QuestionModal ~ question:", question)
   // ============================================================================
   // STATE & FORM
   // ============================================================================
@@ -46,6 +47,13 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
     },
   });
 
+  // Clear options when modal opens for new question
+  useEffect(() => {
+    if (visible && !question?.id) {
+      setOptions([]);
+    }
+  }, [visible, question?.id]);
+
   // ============================================================================
   // EFFECTS
   // ============================================================================
@@ -55,6 +63,8 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
       form.setFieldsValue(question);
     } else {
       form.resetFields();
+      // Clear options when creating new question
+      setOptions([]);
     }
     setNewOptionKey('');
     setNewOptionText('');
@@ -62,12 +72,13 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
 
   // Load options from database when they change
   useEffect(() => {
-    if (existingOptions?.result?.data) {
+    if (question?.id && existingOptions?.result?.data) {
       setOptions(existingOptions.result.data);
-    } else {
+    } else if (!question?.id) {
+      // Clear options when no question ID (new question)
       setOptions([]);
     }
-  }, [existingOptions?.result?.data]);
+  }, [existingOptions?.result?.data, question?.id]);
 
   // ============================================================================
   // HANDLERS
@@ -97,19 +108,19 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
   const handleAddOption = () => {
     if (newOptionKey.trim() && newOptionText.trim() && question?.id) {
       const optionKey = newOptionKey.trim().toUpperCase();
-      
+
       // Check for duplicate option keys
       if (options.some(option => option.option_key === optionKey)) {
         return; // Don't add duplicate keys
       }
-      
+
       const newOption: QuizOption = {
         id: Date.now(), // Temporary ID for new options
         question_id: question.id,
         option_key: optionKey,
         text: newOptionText.trim(),
       };
-      
+
       // Add to database
       createOption({
         resource: "quiz_options",
@@ -119,7 +130,7 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
           text: newOptionText.trim(),
         },
       });
-      
+
       // Add to local state
       setOptions([...options, newOption]);
       setNewOptionKey('');
@@ -133,7 +144,7 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
       resource: "quiz_options",
       id: optionId,
     });
-    
+
     // Remove from local state
     setOptions(options.filter(option => option.id !== optionId));
   };
@@ -147,7 +158,7 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
       title={
         <div className="tw:flex tw:items-center tw:space-x-2">
           <span>{question?.id ? "Sửa câu hỏi" : "Thêm câu hỏi mới"}</span>
-          {question && (
+          {question && question.id !== 0 && (
             <div className="tw:bg-blue-100 tw:text-blue-800 tw:px-2 tw:py-1 tw:rounded tw:text-sm">
               ID: {question.id}
             </div>
@@ -157,33 +168,13 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
       open={visible}
       onCancel={onCancel}
       width={1000}
-      footer={[
-        <Button key="cancel" onClick={onCancel} className="tw:mr-2">
-          Hủy
-        </Button>,
-        question && onDelete && (
-          <Popconfirm
-            key="delete"
-            title="Xóa câu hỏi này?"
-            onConfirm={handleDelete}
-            okText="Xóa"
-            cancelText="Hủy"
-          >
-            <Button danger className="tw:mr-2">
-              Xóa
-            </Button>
-          </Popconfirm>
-        ),
-        <Button key="save" type="primary" onClick={handleSave}>
-          Lưu
-        </Button>,
-      ]}
+      footer={[]}
     >
       <div className="tw:space-y-6">
         {/* ========================================================================
             QUESTION FORM
         ========================================================================== */}
-        <Form form={form} layout="vertical" className="tw:space-y-4">
+        <Form form={form} layout="vertical" className="">
           {/* Question Content */}
           <Form.Item
             label={<span className="tw:font-medium tw:text-gray-700">Câu hỏi</span>}
@@ -197,25 +188,11 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
             />
           </Form.Item>
 
-          {/* Question Settings */}
-          <Row gutter={16}>
 
-            <Col span={12}>
-              <Form.Item
-                label={<span className="tw:font-medium tw:text-gray-700">Đáp án đúng</span>}
-                name="correct_answer"
-              >
-                <Input
-                  placeholder="Nhập đáp án đúng"
-                  className="tw:border-gray-300 focus:tw:border-blue-500"
-                />
-              </Form.Item>
-            </Col>
-          </Row>
 
           {/* Explanation */}
           <Form.Item
-            label={<span className="tw:font-medium tw:text-gray-700">Giải thích</span>}
+            label={<span className="tw:font-medium tw:text-gray-700">Giải thích (nhập sau)</span>}
             name="reason"
           >
             <Input.TextArea
@@ -224,24 +201,56 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
               className="tw:border-gray-300 focus:tw:border-blue-500"
             />
           </Form.Item>
+          <Form.Item
+            label={<span className="tw:font-medium tw:text-gray-700">Đáp án đún  (nhập sau)</span>}
+            name="correct_answer"
+          >
+            <Input
+              placeholder="Nhập đáp án đúng"
+              className="tw:border-gray-300 focus:tw:border-blue-500"
+            />
+          </Form.Item>
+
+          <div className="tw:flex tw:justify-end tw:gap-4">
+            {/* <Button key="cancel" onClick={onCancel} className="tw:mr-2">
+              Hủy
+            </Button> */}
+            {question && onDelete && (
+              <Popconfirm
+                key="delete"
+                title="Xóa câu hỏi này?"
+                onConfirm={handleDelete}
+                okText="Xóa"
+                cancelText="Hủy"
+              >
+                <Button danger className="tw:mr-2">
+                  Delete
+                </Button>
+              </Popconfirm>
+            )}
+            <Button key="save" type="primary" onClick={handleSave}>
+              Save
+            </Button>
+          </div>
         </Form>
 
         {/* ========================================================================
             QUIZ OPTIONS SECTION
         ========================================================================== */}
-        <div className="tw:space-y-4">
-          <div className="tw:flex tw:items-center tw:justify-between">
+        <div className="tw:space-y-4 tw:mt-6">
+          {question?.id !== 0 && <div className="tw:flex tw:items-center tw:justify-between">
             <Typography.Title level={5} className="tw:!mb-0">
-              Tùy chọn câu trả lời
+              Danh sách đáp án trắc nghiệm
             </Typography.Title>
-          </div>
+          </div>}
+
 
           {/* Add New Option */}
-          {question?.id && (
+          {question?.id !== 0 && (
             <Card className="tw:bg-gray-50">
               <div className="tw:space-y-3">
                 <Typography.Text className="tw:font-medium tw:text-gray-700">
-                  Thêm tùy chọn mới
+                  Câu
                 </Typography.Text>
                 <Row gutter={12}>
                   <Col span={8}>
@@ -254,7 +263,7 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
                   </Col>
                   <Col span={12}>
                     <Input
-                      placeholder="Nội dung tùy chọn"
+                      placeholder="Nội dung "
                       value={newOptionText}
                       onChange={(e) => setNewOptionText(e.target.value)}
                       className="tw:border-gray-300 focus:tw:border-blue-500"
@@ -266,8 +275,8 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
                       icon={<PlusOutlined />}
                       onClick={handleAddOption}
                       disabled={
-                        !newOptionKey.trim() || 
-                        !newOptionText.trim() || 
+                        !newOptionKey.trim() ||
+                        !newOptionText.trim() ||
                         options.some(option => option.option_key === newOptionKey.trim().toUpperCase())
                       }
                       className="tw:w-full"
@@ -280,17 +289,11 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
             </Card>
           )}
 
-          {!question?.id && (
-            <Card className="tw:bg-yellow-50 tw:border-yellow-200">
-              <Typography.Text type="secondary">
-                Lưu câu hỏi trước để có thể thêm tùy chọn câu trả lời.
-              </Typography.Text>
-            </Card>
-          )}
+
 
           {/* Options List */}
           {options.length > 0 && (
-            <Card>
+            <div className="tw:mt-3">
               <List
                 dataSource={options}
                 renderItem={(option) => (
@@ -327,16 +330,10 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
                   </List.Item>
                 )}
               />
-            </Card>
+            </div>
           )}
 
-          {options.length === 0 && (
-            <Card className="tw:text-center tw:py-8">
-              <Typography.Text type="secondary">
-                Chưa có tùy chọn nào. Hãy thêm tùy chọn cho câu hỏi này.
-              </Typography.Text>
-            </Card>
-          )}
+
         </div>
       </div>
     </Modal>

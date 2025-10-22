@@ -8,7 +8,7 @@ import { QuestionsList } from './QuestionsList';
 import { QuestionModal } from './QuestionModal';
 
 // Types
-import type { QuizQuestionsProps, QuizQuestion, QuizOption } from './types';
+import type { QuizQuestionsProps, QuizQuestion } from './types';
 import { Button, Tag } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
@@ -77,7 +77,7 @@ export const QuizQuestions = ({ quizId }: QuizQuestionsProps) => {
       setEditingQuestion(question);
     } else {
       const newQuestion: QuizQuestion = {
-        id: Date.now(),
+        id: 0,
         quiz_id: quizId,
         question: "",
         correct_answer: "",

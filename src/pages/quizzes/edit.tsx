@@ -42,7 +42,7 @@ export const QuizzesEdit = () => {
         >
           <Input.TextArea
             placeholder="Nhập mô tả quiz (tùy chọn)"
-            rows={4}
+            rows={2}
           />
         </Form.Item>
 

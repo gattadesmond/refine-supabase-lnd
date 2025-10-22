@@ -33,6 +33,7 @@ export interface SortableListItemProps extends React.ComponentProps<typeof impor
   itemKey: number;
 }
 
-// Import and re-export QuizQuestion type
-import type { QuizQuestion as BaseQuizQuestion } from '../../types/quiz';
+// Import and re-export QuizQuestion and QuizOption types
+import type { QuizQuestion as BaseQuizQuestion, QuizOption as BaseQuizOption } from '../../types/quiz';
 export type QuizQuestion = BaseQuizQuestion;
+export type QuizOption = BaseQuizOption;

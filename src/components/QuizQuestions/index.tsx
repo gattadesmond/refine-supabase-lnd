@@ -8,7 +8,7 @@ import { QuestionsList } from './QuestionsList';
 import { QuestionModal } from './QuestionModal';
 
 // Types
-import type { QuizQuestionsProps, QuizQuestion } from './types';
+import type { QuizQuestionsProps, QuizQuestion, QuizOption } from './types';
 import { Button, Tag } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
@@ -126,7 +126,7 @@ export const QuizQuestions = ({ quizId }: QuizQuestionsProps) => {
       }
 
       closeModal();
-    } catch (error) {
+    } catch {
       // Refine sẽ tự động hiển thị error notification
     }
   };
@@ -142,10 +142,11 @@ export const QuizQuestions = ({ quizId }: QuizQuestionsProps) => {
       // Remove from local state
       setQuestions(questions.filter(q => q.id !== questionId));
 
-    } catch (error) {
+    } catch {
       // Refine sẽ tự động hiển thị error notification
     }
   };
+
 
   // ============================================================================
   // DRAG & DROP HANDLERS

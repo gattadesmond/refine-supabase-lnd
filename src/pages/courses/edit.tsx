@@ -1,10 +1,19 @@
-import React, { useCallback, useEffect, useMemo, useState, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useState, createContext, useContext } from "react";
 import { Edit, SaveButton, useForm, DeleteButton } from "@refinedev/antd";
 import { HttpError, useCreateMany, useDeleteMany, useList, useUpdate, useGo } from "@refinedev/core";
-import { Button, Card, Divider, Form, Select, Typography, Input } from "antd";
-import { DndProvider, useDrag, useDrop } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { DragOutlined } from "@ant-design/icons";
+import { Button, Card, Divider, Form, Select, Typography, Input, List } from "antd";
+import { HolderOutlined } from "@ant-design/icons";
+import type { DragEndEvent, DraggableAttributes } from '@dnd-kit/core';
+import { DndContext } from '@dnd-kit/core';
+import type { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
+import {
+  arrayMove,
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import slugify from "slugify";
 import UploadImage from "../../components/UploadImage";
 
@@ -29,66 +38,89 @@ type CourseLearningRow = {
   };
 };
 
-const ITEM_TYPE = "COURSE_LEARNING";
+// ============================================================================
+// SORTABLE LIST ITEM CONTEXT
+// ============================================================================
 
-// Sortable Item Component
-interface SortableItemProps {
-  row: CourseLearningRow;
-  index: number;
-  onRemove: (rowId: number) => void;
-  moveItem: (dragIndex: number, hoverIndex: number) => void;
+interface SortableListItemContextProps {
+  setActivatorNodeRef?: (element: HTMLElement | null) => void;
+  listeners?: SyntheticListenerMap;
+  attributes?: DraggableAttributes;
 }
 
-const SortableItem: React.FC<SortableItemProps> = ({ row, index, onRemove, moveItem }) => {
-  const ref = useRef<HTMLDivElement>(null);
+const SortableListItemContext = createContext<SortableListItemContextProps>({});
 
-  const [{ isDragging }, drag] = useDrag({
-    type: ITEM_TYPE,
-    item: () => ({ id: row.id, index }),
-    collect: (monitor) => ({ isDragging: monitor.isDragging() }),
-  });
+// ============================================================================
+// DRAG HANDLE COMPONENT
+// ============================================================================
 
-  const [, drop] = useDrop({
-    accept: ITEM_TYPE,
-    hover: (draggedItem: { id: number; index: number }, monitor) => {
-      if (!ref.current) return;
+const DragHandle: React.FC = () => {
+  const { setActivatorNodeRef, listeners, attributes } = useContext(SortableListItemContext);
+  
+  return (
+    <Button
+      type="text"
+      size="small"
+      icon={<HolderOutlined />}
+      style={{ cursor: 'move' }}
+      ref={setActivatorNodeRef}
+      {...attributes}
+      {...listeners}
+    />
+  );
+};
 
-      const dragIndex = draggedItem.index;
-      const hoverIndex = index;
-      if (dragIndex === hoverIndex) return;
+// ============================================================================
+// SORTABLE LIST ITEM COMPONENT
+// ============================================================================
 
-      const hoverBoundingRect = ref.current.getBoundingClientRect();
-      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-      const clientOffset = monitor.getClientOffset();
-      const hoverClientY = (clientOffset?.y || 0) - hoverBoundingRect.top;
+interface SortableListItemProps {
+  row: CourseLearningRow;
+  onRemove: (rowId: number) => void;
+}
 
-      // Only move when mouse crosses 50% of item height
-      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return;
-      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return;
+const SortableListItem: React.FC<SortableListItemProps> = ({ row, onRemove }) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    setActivatorNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: row.id });
 
-      moveItem(dragIndex, hoverIndex);
-      draggedItem.index = hoverIndex;
-    },
-  });
+  const listStyle: React.CSSProperties = {
+    transform: CSS.Translate.toString(transform),
+    transition,
+    ...(isDragging ? { position: 'relative', zIndex: 9999 } : {}),
+  };
 
-  drag(drop(ref));
+  const memoizedValue = useMemo<SortableListItemContextProps>(
+    () => ({ setActivatorNodeRef, listeners, attributes }),
+    [setActivatorNodeRef, listeners, attributes],
+  );
 
   return (
-    <div
-      ref={ref}
-      className={`tw:flex tw:items-center tw:justify-between tw:gap-3 tw:bg-white tw:border tw:border-gray-200 tw:rounded-md tw:px-3 tw:py-2 tw:cursor-move tw:transition-all tw:duration-200 ${isDragging ? "tw:opacity-50" : ""
-        }`}
-    >
-      <div className="tw:flex tw:items-center tw:gap-3 tw:min-w-0">
-        <DragOutlined className="tw:text-gray-400 tw:cursor-move tw:hover:text-gray-600" />
-        <span className="tw-truncate tw:font-medium">
-          {row.learnings?.title || `Learning #${row.learnings_id}`}
-        </span>
-      </div>
-      <Button size="small" danger onClick={() => onRemove(row.id)}>
-        Xóa
-      </Button>
-    </div>
+    <SortableListItemContext.Provider value={memoizedValue}>
+      <List.Item
+        ref={setNodeRef}
+        style={listStyle}
+        className={`tw:border-b tw:border-gray-100 tw:last:border-b-0 ${isDragging ? "tw:opacity-50" : ""}`}
+        actions={[
+          <Button key="remove" size="small" danger onClick={() => onRemove(row.id)}>
+            Xóa
+          </Button>
+        ]}
+      >
+        <div className="tw:flex tw:items-center tw:gap-3 tw:min-w-0">
+          <DragHandle />
+          <span className="tw-truncate tw:font-medium">
+            {row.learnings?.title || `Learning #${row.learnings_id}`}
+          </span>
+        </div>
+      </List.Item>
+    </SortableListItemContext.Provider>
   );
 };
 
@@ -185,14 +217,17 @@ export const CoursesEdit = () => {
     setOrdered(prev => prev.filter(item => item.id !== rowId));
   }, []);
 
-  const moveItem = useCallback((dragIndex: number, hoverIndex: number) => {
-    setOrdered(prev => {
-      const newOrdered = [...prev];
-      const draggedItem = newOrdered[dragIndex];
-      newOrdered.splice(dragIndex, 1);
-      newOrdered.splice(hoverIndex, 0, draggedItem);
-      return newOrdered;
-    });
+  const onDragEnd = useCallback(({ active, over }: DragEndEvent) => {
+    if (!active || !over) {
+      return;
+    }
+    if (active.id !== over.id) {
+      setOrdered((prevState) => {
+        const activeIndex = prevState.findIndex((item) => item.id === active.id);
+        const overIndex = prevState.findIndex((item) => item.id === over.id);
+        return arrayMove(prevState, activeIndex, overIndex);
+      });
+    }
   }, []);
 
   const handleSaveOrder = useCallback(() => {
@@ -277,8 +312,7 @@ export const CoursesEdit = () => {
   }, [go]);
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <Edit saveButtonProps={saveButtonProps} footerButtons={<></>} title={<span>Chỉnh sửa khóa học</span>}>
+    <Edit saveButtonProps={saveButtonProps} footerButtons={<></>} title={<span>Chỉnh sửa khóa học</span>}>
         <Form<Course> {...formProps} layout="vertical">
 
           <div className="tw:grid tw:grid-cols-[1fr_300px] tw:gap-8 tw:mb-8">
@@ -387,20 +421,33 @@ export const CoursesEdit = () => {
                 </div>
               }
             >
-              <div className="tw:gap-3 tw:grid tw:grid-cols-1">
-                {ordered.map((row, index) => (
-                  <SortableItem
-                    key={row.id}
-                    row={row}
-                    index={index}
-                    onRemove={handleRemove}
-                    moveItem={moveItem}
+              <DndContext
+                modifiers={[restrictToVerticalAxis]}
+                onDragEnd={onDragEnd}
+                id="course-learnings-drag-sorting"
+              >
+                <SortableContext items={ordered.map((item) => item.id)} strategy={verticalListSortingStrategy}>
+                  <List
+                    dataSource={ordered}
+                    renderItem={(row) => (
+                      <SortableListItem
+                        key={row.id}
+                        row={row}
+                        onRemove={handleRemove}
+                      />
+                    )}
+                    locale={{
+                      emptyText: (
+                        <div className="tw:text-center tw:py-8">
+                          <Typography.Text type="secondary">
+                            Chưa có bài viết nào trong khóa.
+                          </Typography.Text>
+                        </div>
+                      )
+                    }}
                   />
-                ))}
-                {ordered.length === 0 && (
-                  <Typography.Text type="secondary">Chưa có học liệu nào trong khóa.</Typography.Text>
-                )}
-              </div>
+                </SortableContext>
+              </DndContext>
             </Card>
           </div>
 
@@ -431,6 +478,5 @@ export const CoursesEdit = () => {
         </div>
 
       </Edit>
-    </DndProvider>
   );
 };

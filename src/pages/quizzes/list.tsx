@@ -96,7 +96,7 @@ export const QuizzesList = () => {
           dataIndex="description"
           title="Mô tả"
           render={(value: string) => (
-            <div className="tw:max-w-[300px]">
+            <div className="tw:max-w-[500px]">
               <Typography.Text
                 ellipsis={{ tooltip: value }}
                 className="tw:text-gray-600"

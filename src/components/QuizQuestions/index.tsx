@@ -201,10 +201,9 @@ export const QuizQuestions = ({ quizId }: QuizQuestionsProps) => {
         </div>
 
         <Button
-          type="primary"
+          type="default"
           icon={<PlusOutlined />}
           onClick={() => openModal()}
-          className="tw:bg-blue-600 tw:border-blue-600 hover:tw:bg-blue-700"
         >
           Thêm câu hỏi
         </Button>

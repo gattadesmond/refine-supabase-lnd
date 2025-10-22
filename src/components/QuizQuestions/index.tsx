@@ -4,7 +4,6 @@ import type { DragEndEvent } from '@dnd-kit/core';
 import { arrayMove } from '@dnd-kit/sortable';
 
 // Components
-import { QuestionsHeader } from './QuestionsHeader';
 import { QuestionsList } from './QuestionsList';
 import { QuestionModal } from './QuestionModal';
 

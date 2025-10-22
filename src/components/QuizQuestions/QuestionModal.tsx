@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import {  useEffect } from "react";
 import { Form, Input, Row, Col, Button, Modal, Popconfirm } from "antd";
 import type { QuestionModalProps } from './types';
 
@@ -6,12 +6,12 @@ import type { QuestionModalProps } from './types';
 // QUESTION MODAL COMPONENT
 // ============================================================================
 
-export const QuestionModal: React.FC<QuestionModalProps> = ({ 
-  visible, 
-  question, 
-  onSave, 
-  onCancel, 
-  onDelete 
+export const QuestionModal: React.FC<QuestionModalProps> = ({
+  visible,
+  question,
+  onSave,
+  onCancel,
+  onDelete
 }) => {
   // ============================================================================
   // STATE & FORM
@@ -103,35 +103,21 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
         ========================================================================== */}
         <Form form={form} layout="vertical" className="tw:space-y-4">
           {/* Question Content */}
-          <div className="tw:bg-gray-50 tw:p-4 tw:rounded-lg">
-            <Form.Item
-              label={<span className="tw:font-medium tw:text-gray-700">Câu hỏi</span>}
-              name="question"
-              rules={[{ required: true, message: "Vui lòng nhập câu hỏi" }]}
-            >
-              <Input.TextArea
-                rows={3}
-                placeholder="Nhập câu hỏi..."
-                className="tw:border-gray-300 focus:tw:border-blue-500"
-              />
-            </Form.Item>
-          </div>
+          <Form.Item
+            label={<span className="tw:font-medium tw:text-gray-700">Câu hỏi</span>}
+            name="question"
+            rules={[{ required: true, message: "Vui lòng nhập câu hỏi" }]}
+          >
+            <Input.TextArea
+              rows={3}
+              placeholder="Nhập câu hỏi..."
+              className="tw:border-gray-300 focus:tw:border-blue-500"
+            />
+          </Form.Item>
 
           {/* Question Settings */}
           <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                label={<span className="tw:font-medium tw:text-gray-700">Thứ tự</span>}
-                name="order_index"
-                rules={[{ required: true, message: "Vui lòng nhập thứ tự" }]}
-              >
-                <Input
-                  type="number"
-                  placeholder="Thứ tự hiển thị"
-                  className="tw:border-gray-300 focus:tw:border-blue-500"
-                />
-              </Form.Item>
-            </Col>
+
             <Col span={12}>
               <Form.Item
                 label={<span className="tw:font-medium tw:text-gray-700">Đáp án đúng</span>}

@@ -1,6 +1,6 @@
 import { Create, useForm } from "@refinedev/antd";
-import { Form, Input, Select, Upload, Button, Card, Typography, Row, Col, Avatar, Space } from "antd";
-import { UserOutlined, UploadOutlined, MailOutlined, PhoneOutlined, TeamOutlined } from "@ant-design/icons";
+import { Form, Input, Select, Row, Col, Avatar} from "antd";
+import { UserOutlined, MailOutlined } from "@ant-design/icons";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 

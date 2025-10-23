@@ -58,7 +58,6 @@ import {
   QuizzesList,
   QuizzesCreate,
   QuizzesEdit,
-  QuizzesShow,
 } from "./pages/quizzes";
 
 import { AppIcon } from "./components/app-icon";
@@ -157,7 +156,6 @@ function App() {
                   list: "/quizzes",
                   create: "/quizzes/create",
                   edit: "/quizzes/edit/:id",
-                  show: "/quizzes/show/:id",
                   meta: {
                     label: "Quizzes",
                     icon: <HelpCircle size={16} />,
@@ -246,7 +244,6 @@ function App() {
                       <Route index element={<QuizzesList />} />
                       <Route path="create" element={<QuizzesCreate />} />
                       <Route path="edit/:id" element={<QuizzesEdit />} />
-                      <Route path="show/:id" element={<QuizzesShow />} />
                     </Route>
 
                     <Route path="*" element={<ErrorComponent />} />

@@ -32,7 +32,12 @@ type CourseLearningRow = {
   position: number;
   learnings_id: number;
   course_id: number;
+  quiz_id?: number;
   learnings?: {
+    id: number;
+    title: string;
+  };
+  quiz?: {
     id: number;
     title: string;
   };
@@ -77,9 +82,11 @@ const DragHandle: React.FC = () => {
 interface SortableListItemProps {
   row: CourseLearningRow;
   onRemove: (rowId: number) => void;
+  onQuizChange: (rowId: number, quizId: number | undefined) => void;
+  quizOptions: { label: string; value: number }[];
 }
 
-const SortableListItem: React.FC<SortableListItemProps> = ({ row, onRemove }) => {
+const SortableListItem: React.FC<SortableListItemProps> = ({ row, onRemove, onQuizChange, quizOptions }) => {
   const {
     attributes,
     listeners,
@@ -113,11 +120,24 @@ const SortableListItem: React.FC<SortableListItemProps> = ({ row, onRemove }) =>
           </Button>
         ]}
       >
-        <div className="tw:flex tw:items-center tw:gap-3 tw:min-w-0">
+        <div className="tw:flex tw:items-center tw:gap-3 tw:min-w-0 tw:w-full">
           <DragHandle />
-          <span className="tw-truncate tw:font-medium">
-            {row.learnings?.title || `Learning #${row.learnings_id}`}
-          </span>
+          <div className="tw:flex-1 tw:min-w-0">
+            <div className="tw:font-medium tw:mb-2">
+              {row.learnings?.title || `Learning #${row.learnings_id}`}
+            </div>
+            <Select
+              size="small"
+              className="tw:max-w-[250px]"
+              placeholder="Chọn quiz (tùy chọn)"
+              value={row.quiz_id || undefined}
+              onChange={(value) => onQuizChange(row.id, value)}
+              allowClear
+              options={[
+                ...quizOptions
+              ]}
+            />
+          </div>
         </div>
       </List.Item>
     </SortableListItemContext.Provider>
@@ -157,12 +177,19 @@ export const CoursesEdit = () => {
     resource: "course_learnings",
     filters: [{ field: "course_id", operator: "eq", value: courseId }],
     sorters: [{ field: "position", order: "asc" }],
-    meta: { select: "id,position,learnings_id,course_id,learnings:learnings_id(id,title)" },
+    meta: { select: "id,position,learnings_id,course_id,quiz_id,learnings:learnings_id(id,title),quiz:quiz_id(id,title)" },
     queryOptions: { enabled: !!courseId },
   });
 
   const availableLearnings = useList<{ id: number; title: string }>({
     resource: "learnings",
+    pagination: { pageSize: 1000 },
+    sorters: [{ field: "created_at", order: "desc" }],
+    meta: { select: "id,title" },
+  });
+
+  const availableQuizzes = useList<{ id: number; title: string }>({
+    resource: "quizzes",
     pagination: { pageSize: 1000 },
     sorters: [{ field: "created_at", order: "desc" }],
     meta: { select: "id,title" },
@@ -192,6 +219,11 @@ export const CoursesEdit = () => {
       .map(l => ({ label: l.title, value: l.id }));
   }, [availableLearnings.result?.data, selectedLearningIds]);
 
+  const quizOptions = useMemo(() => {
+    const list = availableQuizzes.result?.data ?? [];
+    return list.map(q => ({ label: q.title, value: q.id }));
+  }, [availableQuizzes.result?.data]);
+
   // Event Handlers
   const handleAddSelected = useCallback(() => {
     const values = addForm.getFieldsValue();
@@ -215,6 +247,14 @@ export const CoursesEdit = () => {
 
   const handleRemove = useCallback((rowId: number) => {
     setOrdered(prev => prev.filter(item => item.id !== rowId));
+  }, []);
+
+  const handleQuizChange = useCallback((rowId: number, quizId: number | undefined) => {
+    setOrdered(prev => prev.map(item => 
+      item.id === rowId 
+        ? { ...item, quiz_id: quizId }
+        : item
+    ));
   }, []);
 
   const onDragEnd = useCallback(({ active, over }: DragEndEvent) => {
@@ -246,6 +286,7 @@ export const CoursesEdit = () => {
             values: newItems.map(item => ({
               course_id: courseId,
               learnings_id: item.learnings_id,
+              quiz_id: item.quiz_id || null,
               position: ordered.indexOf(item) + 1,
             })),
           },
@@ -266,7 +307,10 @@ export const CoursesEdit = () => {
             {
               resource: "course_learnings",
               id: item.id,
-              values: { position: ordered.indexOf(item) + 1 },
+              values: { 
+              position: ordered.indexOf(item) + 1,
+              quiz_id: item.quiz_id || null
+            },
             },
             {
               onSuccess: () => resolve(item),
@@ -434,6 +478,8 @@ export const CoursesEdit = () => {
                         key={row.id}
                         row={row}
                         onRemove={handleRemove}
+                        onQuizChange={handleQuizChange}
+                        quizOptions={quizOptions}
                       />
                     )}
                     locale={{

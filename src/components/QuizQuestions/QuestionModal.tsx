@@ -202,7 +202,7 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
             />
           </Form.Item>
           <Form.Item
-            label={<span className="tw:font-medium tw:text-gray-700">Đáp án đún  (nhập sau)</span>}
+            label={<span className="tw:font-medium tw:text-gray-700">Đáp án đúng  (nhập sau)</span>}
             name="correct_answer"
           >
             <Input

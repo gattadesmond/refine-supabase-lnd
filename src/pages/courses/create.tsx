@@ -12,7 +12,7 @@ type Course = {
   slug: string;
   description: string;
   thumbnail_url: string;
-  published: boolean;
+  status: boolean;
 };
 
 // Course learnings management sẽ được xử lý trong edit page
@@ -70,7 +70,7 @@ export const CoursesCreate = () => {
 
               <Form.Item
                 label="Trạng thái"
-                name={["published"]}
+                name={["status"]}
                 rules={[
                   {
                     required: false,

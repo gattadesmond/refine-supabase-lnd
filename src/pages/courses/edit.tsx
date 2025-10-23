@@ -24,7 +24,7 @@ type Course = {
   slug: string;
   description: string;
   thumbnail_url: string;
-  published: string;
+  status: string;
 };
 
 type CourseLearningRow = {
@@ -388,7 +388,7 @@ export const CoursesEdit = () => {
 
                 <Form.Item
                   label="Trạng thái"
-                  name={["published"]}
+                  name={["status"]}
                   rules={[
                     {
                       required: false,

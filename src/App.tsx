@@ -263,6 +263,8 @@ function App() {
                       element={
                         <AuthPage
                           type="login"
+                          registerLink={<></>}
+                          forgotPasswordLink={<></>}
                           formProps={{
                             initialValues: {
                               email: "hung.nguyen9@mservice.com.vn",
@@ -272,14 +274,8 @@ function App() {
                         />
                       }
                     />
-                    <Route
-                      path="/register"
-                      element={<AuthPage type="register" />}
-                    />
-                    <Route
-                      path="/forgot-password"
-                      element={<AuthPage type="forgotPassword" />}
-                    />
+                   
+                 
                   </Route>
                 </Routes>
 

@@ -108,7 +108,7 @@ export const CoursesList = () => {
           )}
         />
         <Table.Column
-          dataIndex="published"
+          dataIndex="status"
           title="Trạng thái"
           render={(value: string) => <PostStatus status={value} />}
         />
